@@ -116,15 +116,12 @@ const populateInvoiceList = async(result) => {
     for(let j=0; j < result.docs.length; j++) {
         const docSnap = result.docs[j];
         const invoiceOrders = docSnap.data().orders;
-        console.log('MIDDLE', invoiceOrders);
         let orderData = [];
         for (let i = 0; invoiceOrders && i < invoiceOrders.length; i++) {
             const orderId = invoiceOrders[i];
-            console.log('LOOP', orderId);
             const orderRef = db.doc(`/orders/${orderId}`);
             const orderSnap = await orderRef.get();
             if(orderSnap.exists) {
-                console.log('IN IF', orderSnap.data());
                 orderData.push(orderSnap.data());
             }
         }

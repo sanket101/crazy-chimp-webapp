@@ -83,6 +83,7 @@ exports.getOrder = (request, response) => {
             if(productSnap.exists) {
                 return response.json({
                     orderId: doc.id,
+                    productId: doc.data().productId,
                     product: productSnap.data(),
                     quantity: doc.data().quantity,
                     size: doc.data().size,
@@ -101,23 +102,49 @@ exports.getOrder = (request, response) => {
         });
 };
 
+const populateOrdersList = async(result) => {
+    let orders = [];
+
+    for(let j=0; j < result.docs.length; j++) {
+        const docSnap = result.docs[j];
+        const productId = docSnap.data().productId;
+        const productRef = db.doc(`/products/${productId}`);
+        const productSnap = await productRef.get();
+        if(productSnap.exists) {
+            orders.push({
+                orderId: docSnap.id,
+                productId: docSnap.data().productId,
+                product: productSnap.data(),
+                quantity: docSnap.data().quantity,
+                size: docSnap.data().size,
+                color: docSnap.data().color,
+                status: docSnap.data().status
+            });
+        }
+        else {
+            orders.push({
+                orderId: docSnap.id,
+                productId: docSnap.data().productId,
+                product: { error : 'No product exists'},
+                quantity: docSnap.data().quantity,
+                size: docSnap.data().size,
+                color: docSnap.data().color,
+                status: docSnap.data().status
+            });
+        }
+    };
+
+    return orders;
+};
+
+// TODO: Need to push product data in orders array instead of id
 exports.getOrdersByUserId = (request, response) => {
     db
 		.collection('orders')
 		.where('userId', '==', request.uid)
 		.get()
-		.then((data) => {
-			let orders = [];
-			data.forEach((doc) => {
-				orders.push({
-                    orderId: doc.id,
-                    productId: doc.data().productId,
-                    quantity: doc.data().quantity,
-                    size: doc.data().size,
-                    color: doc.data().color,
-                    status: doc.data().status
-				});
-			});
+		.then(async(data) => {
+			let orders = await populateOrdersList(data);
 			return response.json(orders);
 		})
 		.catch((err) => {
@@ -126,6 +153,7 @@ exports.getOrdersByUserId = (request, response) => {
 		});
 };
 
+// TODO: Need to push product data in orders array instead of id
 exports.getOrdersByProductId = (request, response) => {
     db
 		.collection('orders')
