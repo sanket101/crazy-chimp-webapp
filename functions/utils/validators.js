@@ -108,13 +108,14 @@ exports.validateProductData = (data) => {
 	if(isEmpty(data.description)) errors.description = "Must not be empty";
 	if(!data.actualPrice) errors.actualPrice = "Must not be empty";
 	else if(isNaN(data.actualPrice)) errors.actualPrice = "Must be a number";
+	if(isEmpty(data.productCode)) errors.productCode = "Must not be empty";
 	if(isEmpty(data.productCategory)) errors.productCategory = "Must not be empty";
 	if(isEmpty(data.genreCategory)) errors.genreCategory = "Must not be empty";
 	if(isEmpty(data.productDomain)) errors.productDomain = "Must not be empty";
 	if(!data.weightInGms) errors.weightInGms = "Must not be empty";
 	else if(isNaN(data.weightInGms)) errors.weightInGms = "Must be number";
 
-	// checks for sizeAvailable, colorsAvailable, images
+	//TODO: checks for sizeAvailable, colorsAvailable, images
 	return {
 		errors,
 		valid: Object.keys(errors).length === 0 ? true : false

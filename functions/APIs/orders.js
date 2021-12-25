@@ -137,7 +137,6 @@ const populateOrdersList = async(result) => {
     return orders;
 };
 
-// TODO: Need to push product data in orders array instead of id
 exports.getOrdersByUserId = (request, response) => {
     db
 		.collection('orders')
@@ -153,18 +152,24 @@ exports.getOrdersByUserId = (request, response) => {
 		});
 };
 
-// TODO: Need to push product data in orders array instead of id
 exports.getOrdersByProductId = (request, response) => {
     db
 		.collection('orders')
 		.where('productId', '==', request.params.productId)
 		.get()
-		.then((data) => {
-			let orders = [];
+		.then(async (data) => {
+            const productRef = db.doc(`/products/${request.params.productId}`);
+            const productSnap = await productRef.get();
+            let productData = {};
+            if(productSnap.exists) {
+                productData = productSnap.data()
+            }
+            let orders = [];
 			data.forEach((doc) => {
 				orders.push({
                     orderId: doc.id,
                     productId: doc.data().productId,
+                    product: productData,
                     quantity: doc.data().quantity,
                     size: doc.data().size,
                     color: doc.data().color,

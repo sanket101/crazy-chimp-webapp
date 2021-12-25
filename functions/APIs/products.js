@@ -12,12 +12,15 @@ exports.addProduct = (request, response) => {
 		name: request.body.name,
 		description: request.body.description,
 		actualPrice: request.body.actualPrice,
-		productDomain: request.body.productDomain,
+        productDomain: request.body.productDomain,
+        productCode: request.body.productCode,
 		productCategory: request.body.productCategory,
 		genreCategory: request.body.genreCategory,
-		isAvailable: request.body.isAvailable || false,
+        isAvailable: request.body.isAvailable || false,
+        //TODO: Mapping colors and sizes with their availability
 		sizeAvailable: request.body.sizeAvailable,
-		colorsAvailable: request.body.colorsAvailable,
+        colorsAvailable: request.body.colorsAvailable,
+        //TODO: List of images needs to be fetched dynamically
 		images: request.body.images,
 		weightInGms: request.body.weightInGms,
 		salePrice: request.body.salePrice || '',
