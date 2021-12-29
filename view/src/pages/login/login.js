@@ -1,5 +1,7 @@
 // Material UI components
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { setUserDetails } from '../../redux/User/user.actions';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -15,6 +17,7 @@ import styles from './login.style';
 import axios from 'axios';
 import NavigationBar from '../../components/NavigationBar/navigation-bar';
 import Footer from '../../components/Footer/footer';
+import apiConfig from '../../api/api-config';
 
 const Login = (props) => {
     const { classes } = props;
@@ -33,7 +36,7 @@ const Login = (props) => {
 			password: localState.password
 		};
 		axios
-			.post('/login', userData)
+			.post(apiConfig.loginApi, userData)
 			.then((response) => {
 				localStorage.setItem('AuthToken', `Bearer ${response.data.token}`);
 				setLocalState(prevState => {return {...prevState, loading: false }});	
@@ -124,4 +127,14 @@ const Login = (props) => {
     );
 };
 
-export default withStyles(styles)(Login);
+const mapStateToProps = () => {
+	return {};
+};
+  
+const mapDispatchToProps = dispatch => {
+	return {
+		setUserDetails: (userDetails) => dispatch(setUserDetails(userDetails))
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Login));
