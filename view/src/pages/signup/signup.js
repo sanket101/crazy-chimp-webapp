@@ -14,6 +14,8 @@ import styles from './signup.style';
 import axios from 'axios';
 import NavigationBar from '../../components/NavigationBar/navigation-bar';
 import Footer from '../../components/Footer/footer';
+import apiConfig from '../../api/api-config';
+import VALIDATION_ERROR from '../../constants/validation-errors';
 
 const Signup = (props) => {
 	const { classes } = props;
@@ -22,13 +24,22 @@ const Signup = (props) => {
 		lastName: '',
 		phoneNumber: '',
 		country: '',
-		username: '',
 		email: '',
 		password: '',
 		confirmPassword: '',
-		errors: [],
+		errors: {
+			firstName: '',
+			lastName: '',
+			phoneNumber: '',
+			country: '',
+			email: '',
+			password: '',
+			confirmPassword: '',
+			general: ''
+		},
 		loading: false
 	});
+	const [isFormValid, setFormValid] = useState(false);
 
 	const handleChange = (event) => {
 		setLocalState(prevState => {
@@ -46,27 +57,159 @@ const Signup = (props) => {
 			lastName: localState.lastName,
 			phoneNumber: localState.phoneNumber,
 			country: localState.country,
-			username: localState.username,
 			email: localState.email,
 			password: localState.password,
 			confirmPassword: localState.confirmPassword
 		};
 		axios
-			.post('/signup', newUserData)
+			.post(apiConfig.signUpApi, newUserData)
 			.then((response) => {
-				localStorage.setItem('AuthToken', `${response.data.token}`);
+				localStorage.setItem('AuthToken', `${response.token}`);
 				setLocalState(prevState => {
 					return {...prevState, loading: false};
 				});	
 				props.history.push('/');
 			})
 			.catch((error) => {
+				const exactError = error.response.data;
+				const newErrors = {...localState.errors, ...exactError};
 				setLocalState(prevState => {
-					return {...prevState, errors: error.response.data, loading: false};
+					return {...prevState, errors: newErrors, loading: false};
 				});
 			});
 	};
 
+	const checkFieldValidation = (fieldName, value) => {
+
+		let exactError = { [fieldName]: '' };
+
+		let newErrors = {};
+
+        if(fieldName === "email") {
+            if(!value || value.trim() === "") {
+				exactError[fieldName] = VALIDATION_ERROR.FIELD_LEFT_BLANK;
+				newErrors = {...localState.errors, ...exactError};
+				setLocalState(prevState => {
+					return {...prevState, errors: newErrors};
+				});
+                return false;
+            }
+            const pattern = new RegExp("[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$");
+            if(!pattern.test(value)) {
+				exactError[fieldName] = VALIDATION_ERROR.FIELD_INVALID;
+				newErrors = {...localState.errors, ...exactError};
+				setLocalState(prevState => {
+					return {...prevState, errors: newErrors};
+				});
+                return false;
+            }
+            exactError[fieldName] = '';
+			newErrors = {...localState.errors, ...exactError};
+			setLocalState(prevState => {
+				return {...prevState, errors: newErrors};
+			});
+            return true;
+		}
+		
+        if(fieldName === "phoneNumber") {
+            if(!value || value.trim() === "") {
+                exactError[fieldName] = VALIDATION_ERROR.FIELD_LEFT_BLANK;
+				newErrors = {...localState.errors, ...exactError};
+				setLocalState(prevState => {
+					return {...prevState, errors: newErrors};
+				});
+                return false;
+            }
+            const pattern = new RegExp("^[6-9][0-9]{9}$");
+            if(value.length !== 10 || !pattern.test(value)) {
+                exactError[fieldName] = VALIDATION_ERROR.FIELD_INVALID;
+				newErrors = {...localState.errors, ...exactError};
+				setLocalState(prevState => {
+					return {...prevState, errors: newErrors};
+				});
+                return false;
+            }
+            exactError[fieldName] = '';
+			newErrors = {...localState.errors, ...exactError};
+			setLocalState(prevState => {
+				return {...prevState, errors: newErrors};
+			});
+            return true;
+        }
+        
+        if(fieldName === "firstName" || fieldName === "lastName" || fieldName === "country") {
+            if(!value || value.trim() === "") {
+				exactError[fieldName] = VALIDATION_ERROR.FIELD_LEFT_BLANK;
+				newErrors = {...localState.errors, ...exactError};
+				setLocalState(prevState => {
+					return {...prevState, errors: newErrors};
+				});
+                return false;
+            }
+            const pattern = new RegExp('^[a-zA-Z ]{2,30}$');
+            if(!pattern.test(value)) {
+                exactError[fieldName] = VALIDATION_ERROR.FIELD_INVALID;
+				newErrors = {...localState.errors, ...exactError};
+				setLocalState(prevState => {
+					return {...prevState, errors: newErrors};
+				});
+                return false;
+            }
+            exactError[fieldName] = '';
+			newErrors = {...localState.errors, ...exactError};
+			setLocalState(prevState => {
+				return {...prevState, errors: newErrors};
+			});
+            return true;
+        }
+
+        if(fieldName === "password" || fieldName === "confirmPassword") {
+            if(!value || value.trim() === "") {
+                exactError[fieldName] = VALIDATION_ERROR.FIELD_LEFT_BLANK;
+				newErrors = {...localState.errors, ...exactError};
+				setLocalState(prevState => {
+					return {...prevState, errors: newErrors};
+				});
+                return false;
+			}
+			if(fieldName === "confirmPassword" && localState.password !== localState.confirmPassword) {
+				exactError[fieldName] = VALIDATION_ERROR.PASSWORD_DO_NOT_MATCH;
+				newErrors = {...localState.errors, ...exactError};
+				setLocalState(prevState => {
+					return {...prevState, errors: newErrors};
+				});
+                return false;
+			}
+            exactError[fieldName] = '';
+			newErrors = {...localState.errors, ...exactError};
+			setLocalState(prevState => {
+				return {...prevState, errors: newErrors};
+			});
+            return true;
+        }
+	};
+
+	const checkFormValidity = () => {
+		if(!localState.firstName || !localState.lastName || !localState.phoneNumber || !localState.country || !localState.email || !localState.password || !localState.confirmPassword) {
+			return false;
+		}
+		const formError = localState.errors;
+		if(formError.firstName || formError.lastName || formError.phoneNumber || formError.country || formError.email || formError.password || formError.confirmPassword){
+			return false;
+		}
+		return true;
+	};
+
+	const onBlur = (fieldName, value) => {
+        const isValid = checkFieldValidation(fieldName, value);
+        if(isValid && checkFormValidity()) {
+            setFormValid(true);
+        }
+        else {
+            setFormValid(false);
+        }
+    };
+	
     return (
 		<>
 			<NavigationBar />
@@ -93,6 +236,7 @@ const Signup = (props) => {
 									helperText={localState.errors.firstName}
 									error={localState.errors.firstName ? true : false}
 									onChange={handleChange}
+									onBlur={(event) => onBlur("firstName", event.target.value)}
 								/>
 							</Grid>
 							<Grid item xs={12} sm={6}>
@@ -107,25 +251,11 @@ const Signup = (props) => {
 									helperText={localState.errors.lastName}
 									error={localState.errors.lastName ? true : false}
 									onChange={handleChange}
+									onBlur={(event) => onBlur("lastName", event.target.value)}
 								/>
 							</Grid>
 
-							<Grid item xs={12} sm={6}>
-								<TextField
-									variant="outlined"
-									required
-									fullWidth
-									id="username"
-									label="User Name"
-									name="username"
-									autoComplete="username"
-									helperText={localState.errors.username}
-									error={localState.errors.username ? true : false}
-									onChange={handleChange}
-								/>
-							</Grid>
-
-							<Grid item xs={12} sm={6}>
+							<Grid item xs={12}>
 								<TextField
 									variant="outlined"
 									required
@@ -134,10 +264,10 @@ const Signup = (props) => {
 									label="Phone Number"
 									name="phoneNumber"
 									autoComplete="phoneNumber"
-									pattern="[7-9]{1}[0-9]{9}"
 									helperText={localState.errors.phoneNumber}
 									error={localState.errors.phoneNumber ? true : false}
 									onChange={handleChange}
+									onBlur={(event) => onBlur("phoneNumber", event.target.value)}
 								/>
 							</Grid>
 
@@ -153,6 +283,7 @@ const Signup = (props) => {
 									helperText={localState.errors.email}
 									error={localState.errors.email ? true : false}
 									onChange={handleChange}
+									onBlur={(event) => onBlur("email", event.target.value)}
 								/>
 							</Grid>
 
@@ -168,6 +299,7 @@ const Signup = (props) => {
 									helperText={localState.errors.country}
 									error={localState.errors.country ? true : false}
 									onChange={handleChange}
+									onBlur={(event) => onBlur("country", event.target.value)}
 								/>
 							</Grid>
 
@@ -184,6 +316,7 @@ const Signup = (props) => {
 									helperText={localState.errors.password}
 									error={localState.errors.password ? true : false}
 									onChange={handleChange}
+									onBlur={(event) => onBlur("password", event.target.value)}
 								/>
 							</Grid>
 							<Grid item xs={12}>
@@ -196,7 +329,10 @@ const Signup = (props) => {
 									type="password"
 									id="confirmPassword"
 									autoComplete="current-password"
+									helperText={localState.errors.confirmPassword}
+									error={localState.errors.confirmPassword ? true : false}
 									onChange={handleChange}
+									onBlur={(event) => onBlur("confirmPassword", event.target.value)}
 								/>
 							</Grid>
 						</Grid>
@@ -207,14 +343,7 @@ const Signup = (props) => {
 							color="primary"
 							className={classes.submit}
 							onClick={handleSubmit}
-                            disabled={localState.loading || 
-                                !localState.email || 
-                                !localState.password ||
-                                !localState.firstName || 
-                                !localState.lastName ||
-                                !localState.country || 
-                                !localState.username || 
-                                !localState.phoneNumber}
+                            disabled={localState.loading || isFormValid}
 						>
 							Sign Up
 							{localState.loading && <CircularProgress size={30} className={classes.progess} />}
@@ -226,6 +355,11 @@ const Signup = (props) => {
 								</Link>
 							</Grid>
 						</Grid>
+						{localState.errors.general && (
+							<Typography variant="body2" className={classes.customError}>
+								{localState.errors.general}
+							</Typography>
+						)}
 					</form>
 				</div>
 			</Container>

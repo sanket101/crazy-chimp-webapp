@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
-import { AppBar, IconButton, Toolbar, Typography, Drawer, List, ListItem, ListItemIcon, ListItemText, Divider } from '@material-ui/core';
+import { connect } from 'react-redux';
+import { setProductsData } from '../../redux/Products/products.actions';
+import { AppBar, IconButton, Toolbar, Typography, Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, Button } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -12,12 +14,15 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import styles from './navigation-bar.style';
 import logo from '../../assets/Logo_Dark.png';
 import ROUTES from '../../constants/routes-name';
+import axios from 'axios';
+import apiConfig from '../../api/api-config';
 
 const NavigationBar = (props) => {
 	const [showDrawer, setShowDrawer] = useState(false);
 	const listOne = ['Home', 'Shop', 'Cart'];
 	const listTwo = ['Account', 'Logout'];
 	const { classes } = props;
+	const isLoggedIn = localStorage.getItem('AuthToken');
 	let history = useHistory();
 
 	const closeDrawer = () => {
@@ -30,7 +35,7 @@ const NavigationBar = (props) => {
 				history.push(ROUTES.HOME);
 				break;
 			case 'Shop':
-				history.push(ROUTES.SHOP);
+				callProductsDataApi();
 				break;
 			case 'Cart':
 				break;
@@ -77,19 +82,38 @@ const NavigationBar = (props) => {
 			  </ListItem>
 			))}
 		  </List>
-		  <Divider />
-		  <List>
-			{listTwo.map((text, index) => (
-			  <ListItem button key={text} onClick={() => redirectToRoute(text)}>
-				<ListItemIcon>
-				  {getIcon(text)}
-				</ListItemIcon>
-				<ListItemText primary={text} />
-			  </ListItem>
-			))}
-		  </List>
+		  {isLoggedIn ?
+		  	<>
+		  	  <Divider />
+			  <List>
+				{listTwo.map((text, index) => (
+				  <ListItem button key={text} onClick={() => redirectToRoute(text)}>
+					<ListItemIcon>
+					  {getIcon(text)}
+					</ListItemIcon>
+					<ListItemText primary={text} />
+				  </ListItem>
+				))}
+			  </List>
+			</>
+			:
+			<></>
+		  }
 		</Box>
 	);
+
+	const callProductsDataApi = async () => {
+		try {
+			const response = await axios.get(apiConfig.productData);
+			if(response && response.data && response.data.numberOfProducts) {
+				props.setProductsData(response.data.numberOfProducts);
+			}
+			history.push(ROUTES.SHOP);
+		}
+		catch(err) {
+			// redirect to error page
+		}
+	};
 
     return (
         <>
@@ -98,7 +122,7 @@ const NavigationBar = (props) => {
 					<AppBar position="fixed" className={classes.appBar}>
 						<Toolbar className={classes.toolBar}>
 							<div className={classes.leftNavbar} onClick={() => history.push(ROUTES.HOME)}>
-								<img src={logo} width="50px" height="50px" />
+								<img src={logo} alt="Crazy Chimp Logo" width="50px" height="50px" />
 								<Typography variant="h6" noWrap>
 									Crazy Chimp
 								</Typography>
@@ -109,7 +133,9 @@ const NavigationBar = (props) => {
 									Home
 								</Typography>
 
-								<Typography variant="h6" className={classes.navigationTypographyH6} onClick={() => history.push(ROUTES.SHOP)}>
+								<Typography variant="h6" className={classes.navigationTypographyH6} onClick={() => {
+									callProductsDataApi();
+								}}>
 									Shop
 								</Typography>
 
@@ -117,9 +143,13 @@ const NavigationBar = (props) => {
 									<ShoppingCartIcon />
 								</IconButton>
 
-								<IconButton className={classes.navigationIconButton}>
-									<AccountCircleIcon />
-								</IconButton>
+								{isLoggedIn ? 
+									<IconButton className={classes.navigationIconButton}>
+										<AccountCircleIcon />
+									</IconButton>
+									:
+									<div className={classes.navigationIconButton}><Button variant="outlined" onClick={() => history.push(ROUTES.LOGIN)}>LOGIN</Button></div>
+								}
 							</div>
 						</Toolbar>
 					</AppBar>
@@ -153,9 +183,13 @@ const NavigationBar = (props) => {
 									<ShoppingCartIcon />
 								</IconButton>
 
-								<IconButton className={classes.navigationIconButton}>
-									<AccountCircleIcon />
-								</IconButton>
+								{isLoggedIn ? 
+									<IconButton className={classes.navigationIconButton}>
+										<AccountCircleIcon />
+									</IconButton>
+									:
+									<div className={classes.navigationIconButton}><Button variant="outlined" className={classes.navigationIconButton} onClick={() => history.push(ROUTES.LOGIN)}>LOGIN</Button></div>
+								}
 							</div>
 						</Toolbar>
 					</AppBar>
@@ -173,4 +207,14 @@ const NavigationBar = (props) => {
     );
 };
 
-export default withStyles(styles)(NavigationBar);
+const mapStateToProps = () => {
+	return {};
+};
+  
+const mapDispatchToProps = dispatch => {
+	return {
+		setProductsData: (productData) => dispatch(setProductsData(productData))
+	};
+};
+
+export default  connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(NavigationBar));

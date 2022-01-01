@@ -18,14 +18,16 @@ const ProductCard = (props) => {
                 />
                 <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" component="div">
-                        {product.title}
+                        {product.name}
                     </Typography>
-                    <Typography variant="body1" color="text.secondary">
-                        <del>{`Rs.${product.actualPrice}`}</del>
-                    </Typography>
-                    <Typography variant="body1" color="text.secondary">
-                        {`Rs.${product.salePrice}`}
-                    </Typography> 
+                    <div className={classes.priceContent}>
+                        <Typography variant="body1">
+                            <del>{`Rs.${product.actualPrice}`}</del>
+                        </Typography>
+                        <Typography variant="body1">
+                            {`Rs.${product.salePrice}`}
+                        </Typography> 
+                    </div>
                 </CardContent>
             </CardActionArea>
         </Card>

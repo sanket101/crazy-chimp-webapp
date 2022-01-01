@@ -6,7 +6,6 @@ import VALIDATION_ERROR from '../../constants/validation-errors';
 
 const CustomerInformationSection = (props) => {
     const { classes, customerInformation } = props;
-    console.log('CUST', customerInformation);
     const [emailId, setEmailId] = useState(customerInformation.emailId);
     const [phoneNumber, setPhoneNumber] = useState(customerInformation.phoneNumber);
     const [firstName, setFirstName] = useState(customerInformation.firstName);

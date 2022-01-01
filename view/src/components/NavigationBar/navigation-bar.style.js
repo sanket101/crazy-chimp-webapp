@@ -27,7 +27,13 @@ const styles = (theme) => ({
         cursor: 'pointer'
 	},
 	navigationIconButton: {
-		color: CSSConstants.FONT_PRIMARY
+		color: CSSConstants.FONT_PRIMARY,
+		'& .MuiButton-root': {
+			color: CSSConstants.FONT_PRIMARY,
+		},
+		'& .MuiButton-outlined': {
+			border: `1px solid ${CSSConstants.FONT_PRIMARY}`
+		}
 	},
 	hideForDesktop: {
 		'@media (min-width: 540px)' : {

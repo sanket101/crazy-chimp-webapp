@@ -12,6 +12,12 @@ const styles = (theme) => ({
     cardContent: {
         backgroundColor: CSSConstants.BACKGROUND_PRIMARY,
         color: CSSConstants.FONT_PRIMARY
+    },
+    priceContent: {
+        display: 'flex',
+        '& .MuiTypography-body1': {
+            marginRight: '10px'
+        }
     }
 });
 

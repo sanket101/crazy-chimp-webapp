@@ -18,13 +18,18 @@ import axios from 'axios';
 import NavigationBar from '../../components/NavigationBar/navigation-bar';
 import Footer from '../../components/Footer/footer';
 import apiConfig from '../../api/api-config';
+import VALIDATION_ERROR from '../../constants/validation-errors';
 
 const Login = (props) => {
     const { classes } = props;
     const [localState, setLocalState] = useState({
         email: '',
         password: '',
-        errors: [],
+        errors: {
+			email: '',
+			password: '',
+			general: ''
+		},
         loading: false
     });
 
@@ -38,12 +43,14 @@ const Login = (props) => {
 		axios
 			.post(apiConfig.loginApi, userData)
 			.then((response) => {
-				localStorage.setItem('AuthToken', `Bearer ${response.data.token}`);
+				localStorage.setItem('AuthToken', `Bearer ${response.token}`);
 				setLocalState(prevState => {return {...prevState, loading: false }});	
 				props.history.push('/');
 			})
 			.catch((error) => {
-                setLocalState(prevState => {return {...prevState, errors: error.response.data, loading: false }});				
+				const exactError = error.response.data;
+				const newErrors = {...localState.errors, ...exactError};
+                setLocalState(prevState => {return {...prevState, errors: newErrors, loading: false }});				
 			});
 	};
 
@@ -51,6 +58,29 @@ const Login = (props) => {
 		setLocalState(prevState => {
 			return {...prevState, [event.target.name]: event.target.value};
 		});
+	};
+
+	const onEmailFieldBlur = (value) => {
+
+		let exactError = { email: '' };
+		const pattern = new RegExp("[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$");
+		let newErrors = {};
+
+		if(!value || value.trim() === "") {
+			exactError.email = VALIDATION_ERROR.FIELD_LEFT_BLANK;
+			newErrors = {...localState.errors, ...exactError};
+			setLocalState(prevState => {return {...prevState, errors: newErrors }});
+		}
+		else if(!pattern.test(value)) {
+			exactError.email = VALIDATION_ERROR.FIELD_INVALID;
+			newErrors = {...localState.errors, ...exactError};
+			setLocalState(prevState => {return {...prevState, errors: newErrors }});
+		}
+		else {
+			newErrors = {...localState.errors, ...exactError};
+			setLocalState(prevState => {return {...prevState, errors: newErrors }});
+		}
+
 	};
 
     return(
@@ -79,6 +109,7 @@ const Login = (props) => {
 							helperText={localState.errors.email}
 							error={localState.errors.email ? true : false}
 							onChange={handleChange}
+							onBlur={(event) => onEmailFieldBlur(event.target.value)}
 						/>
 						<TextField
 							variant="outlined"
@@ -101,7 +132,7 @@ const Login = (props) => {
 							color="primary"
 							className={classes.submit}
 							onClick={handleSubmit}
-							disabled={localState.loading || !localState.email || !localState.password}
+							disabled={localState.loading || (!localState.email || localState.errors.email) || !localState.password}
 						>
 							Sign In
 							{localState.loading && <CircularProgress size={30} className={classes.progess} />}

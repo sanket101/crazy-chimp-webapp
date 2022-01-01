@@ -1,72 +1,63 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useHistory } from "react-router-dom";
+import { connect } from 'react-redux';
+import { setProductsData, setProductCategories, setGenreCategories } from '../redux/Products/products.actions';
 import NavigationBar from '../components/NavigationBar/navigation-bar';
 import LandingSection from '../components/LandingSection/landing-section';
-import withStyles from '@material-ui/core/styles/withStyles';
 import CollabSection from '../components/CollabSection/collab-section';
 import AboutUsSection from '../components/AboutUsSection/about-us-section';
 import ContactUsSection from '../components/ContactUsSection/contact-us-section';
 import Footer from '../components/Footer/footer';
-
-const drawerWidth = 240;
-
-const styles = (theme) => ({
-	root: {
-		display: 'flex'
-	},
-	appBar: {
-		zIndex: theme.zIndex.drawer + 1,
-		backgroundColor: '#000000'
-	},
-	toolBar: {
-		display: 'flex',
-		justifyContent: 'space-between'
-	},
-	rightNavbar: {
-		display: 'flex',
-		alignItems: 'center'
-	},
-	navigationTypographyH6: {
-		margin: '0 10px'
-	},
-	navigationIconButton: {
-		color: '#ffffff'
-	},
-	drawer: {
-		width: drawerWidth,
-		flexShrink: 0
-	},
-	drawerPaper: {
-		width: drawerWidth
-	},
-	content: {
-		flexGrow: 1,
-		padding: theme.spacing(3)
-	},
-	avatar: {
-		height: 110,
-		width: 100,
-		flexShrink: 0,
-		flexGrow: 0,
-		marginTop: 20
-	},
-	uiProgess: {
-		position: 'fixed',
-		zIndex: '1000',
-		height: '31px',
-		width: '31px',
-		left: '50%',
-		top: '35%'
-	},
-	toolbar: theme.mixins.toolbar
-});
+import axios from 'axios';
+import apiConfig from '../api/api-config';
+import ROUTES from '../constants/routes-name';
 
 const Home = (props) => {
-	const { classes } = props;
+	let history = useHistory();
+
+	const onClickShopNow = async () => {
+		try {
+			const response = await axios.get(apiConfig.productData);
+			if(response && response.data && response.data.numberOfProducts) {
+				props.setProductsData(response.data.numberOfProducts);
+			}
+			history.push(ROUTES.SHOP);
+		}
+		catch(err) {
+			// redirect to error page
+		}
+	};
+
+	const getProductAndGenreCategories = async () => {
+		try {
+			if(props.productCategories.length <= 0 || props.genreCategories.length <= 0) {
+				const responseProductCategories = await axios.get(apiConfig.getProductCategories);
+
+				const responseGenreCategories = await axios.get(apiConfig.getGenreCategories);
+
+				if((responseProductCategories && responseProductCategories.data && responseProductCategories.data.length > 0) &&
+				(responseGenreCategories && responseGenreCategories.data && responseGenreCategories.data.length > 0)) {
+					
+					setProductCategories(responseProductCategories.data);
+					setGenreCategories(responseGenreCategories.data);
+
+				}
+			}
+		}
+		catch(err) {
+			// redirect to error page
+		}
+	};
+
+	useEffect(() => {
+		getProductAndGenreCategories();
+	}, []);
+
     return(
 		<div>
 			<NavigationBar />
 				
-			<LandingSection />
+			<LandingSection onClickShopNow={onClickShopNow}/>
 			
 			<CollabSection />
 
@@ -79,4 +70,20 @@ const Home = (props) => {
 	);
 };
 
-export default withStyles(styles)(Home);
+const mapStateToProps = (state) => {
+	const reduxState = state.productDetails.toJS();
+	return {
+		productCategories: reduxState.productCategories,
+		genreCategories: reduxState.genreCategories
+	};
+};
+  
+const mapDispatchToProps = dispatch => {
+	return {
+		setProductsData: (productData) => dispatch(setProductsData(productData)),
+		setProductCategories: (productCategories) => dispatch(setProductCategories(productCategories)),
+		setGenreCategories: (genreCategories) => dispatch(setGenreCategories(genreCategories))
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
