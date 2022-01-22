@@ -11,12 +11,6 @@
   width: auto;
 }
 
-@media (max-width: 540px) {
-  .container {
-    width: fit-content;
-  }
-}
-
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

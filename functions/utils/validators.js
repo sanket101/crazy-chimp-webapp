@@ -91,10 +91,13 @@ exports.validateProductCategoryData = (data) => {
 exports.validateOrderData = (data) => {
 	let errors = {};
 	if(isEmpty(data.productId)) errors.productId = "Must not be empty";
-	if(isEmpty(data.quantity)) errors.quantity = "Must not be empty";
+	if(!data.quantity) errors.quantity = "Must not be empty";
+	else if(isNaN(data.quantity)) errors.quantity = "Must be a number";
 	if(isEmpty(data.size)) errors.size = "Must not be empty";
 	if(isEmpty(data.color)) errors.color = "Must not be empty";
-
+	if(isEmpty(data.productName)) errors.productName = "Must not be empty";
+	if(isEmpty(data.productImage)) errors.productImage = "Must not be empty";
+	
 	return {
 		errors,
 		valid: Object.keys(errors).length === 0 ? true : false
@@ -105,7 +108,7 @@ exports.validateProductData = (data) => {
 	let errors = {};
 
 	if(isEmpty(data.name)) errors.name = "Must not be empty";
-	if(isEmpty(data.description)) errors.description = "Must not be empty";
+	// if(isEmpty(data.description)) errors.description = "Must not be empty";
 	if(!data.actualPrice) errors.actualPrice = "Must not be empty";
 	else if(isNaN(data.actualPrice)) errors.actualPrice = "Must be a number";
 	if(isEmpty(data.productCode)) errors.productCode = "Must not be empty";
@@ -114,6 +117,10 @@ exports.validateProductData = (data) => {
 	if(isEmpty(data.productDomain)) errors.productDomain = "Must not be empty";
 	if(!data.weightInGms) errors.weightInGms = "Must not be empty";
 	else if(isNaN(data.weightInGms)) errors.weightInGms = "Must be number";
+	if(!data.colorsAvailable) errors.colorsAvailable = "Must not be empty";	
+	else if (data.colorsAvailable.length <= 0) errors.colorsAvailable = "Must not be empty";
+	if(!data.sizeAvailable) errors.sizeAvailable = "Must not be empty";	
+	else if (data.sizeAvailable.length <= 0) errors.sizeAvailable = "Must not be empty";
 
 	//TODO: checks for sizeAvailable, colorsAvailable, images
 	return {
@@ -126,14 +133,18 @@ exports.validateInvoiceData = (data) => {
 
 	let errors = {};
 
-	if(!data.totalAmount) errors.totalAmount = "Must not be empty";
-	else if(isNaN(data.totalAmount)) errors.totalAmount = "Must be number";
+	if(!data.productTotalAmount) errors.productTotalAmount = "Must not be empty";
+	else if(isNaN(data.productTotalAmount)) errors.productTotalAmount = "Must be number";
 
 	if(!data.shippingAmount) errors.shippingAmount = "Must not be empty";
 	else if(isNaN(data.shippingAmount)) errors.shippingAmount = "Must be number";
 	
 	if(!data.orders || (data.orders && data.orders.length <= 0)) errors.orders = "Must have atleast one order";
- 
+	
+	if(!data.addressId) errors.addressId = "Must not be empty";
+
+	if(!data.paymentMethod) errors.paymentMethod = "Must not be empty";
+
 	return {
 		errors,
 		valid: Object.keys(errors).length === 0 ? true : false

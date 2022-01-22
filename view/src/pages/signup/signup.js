@@ -64,7 +64,7 @@ const Signup = (props) => {
 		axios
 			.post(apiConfig.signUpApi, newUserData)
 			.then((response) => {
-				localStorage.setItem('AuthToken', `${response.token}`);
+				localStorage.setItem('AuthToken', `Bearer ${response.data.token}`);
 				setLocalState(prevState => {
 					return {...prevState, loading: false};
 				});	
@@ -343,7 +343,7 @@ const Signup = (props) => {
 							color="primary"
 							className={classes.submit}
 							onClick={handleSubmit}
-                            disabled={localState.loading || isFormValid}
+                            disabled={localState.loading || !isFormValid}
 						>
 							Sign Up
 							{localState.loading && <CircularProgress size={30} className={classes.progess} />}

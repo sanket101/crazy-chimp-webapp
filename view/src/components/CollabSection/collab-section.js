@@ -1,59 +1,64 @@
-import React from 'react';
-import Carousel from 'react-material-ui-carousel';
-import { ImageListItem, ImageListItemBar, IconButton, Typography } from '@material-ui/core';
-import InfoIcon from '@material-ui/icons/Info';
+import React, { useState, useEffect, useRef } from 'react';
+import { connect } from 'react-redux';
+import { setCollaborationData } from '../../redux/General/general.actions';
+import { Typography, Box, CircularProgress } from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
 import styles from './collab-section.style';
+import { Rerousel } from 'rerousel';
 
 const CollabSection = (props) => {
-    const items = [
-        {
-            img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-            title: 'Burger',
-            author: '@rollelflex_graphy726',
-          },
-          {
-            img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-            title: 'Camera',
-            author: '@helloimnik',
-          }
-    ];
+    const collabRef = useRef(null);
+
+    const items = props.collaborationData;
 
     const { classes } = props;
 
     return (
        <div className={classes.collabSectionWrapper}>
-           <Typography variant="h3">Our Collaborations</Typography>
-            <Carousel 
-                autoPlay={true}
-                stopAutoPlayOnHover={true}
-                interval={4000}
-                animation={'fade'}
-                duration={500}
-                cycleNavigation={true}
-                className={classes.carouselWrapper}
-            >
-                {
-                    items.map((item, i) =>  {
-                        return (
-                            <div key={i}>
-                                <img
-                                    src={`${item.img}?w=248&fit=crop&auto=format`}
-                                    srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                                    height="500px"
-                                    width="600px"
-                                    alt={item.title}
-                                    loading="lazy"
-                                />
-                                <Typography variant="h6" className={classes.headingTypographyH6}>{item.title}</Typography>
-                                <Typography variant="h6" className={classes.headingTypographyH6}>{item.author}</Typography>
-                            </div>
-                        );                
-                    })
-                }
-            </Carousel>
+           <Typography variant="h3" className={classes.headerMargin}>Our Collaborations</Typography>
+           {
+               items.length <= 0 ?
+
+               <Box sx={{textAlign: 'center'}}>
+                    <CircularProgress />
+                </Box>
+                :
+                <Rerousel itemRef={collabRef}>
+                    {
+                       items.map((item, i) =>  {
+                            return (
+                                <div key={i} className={classes.collabItem} ref={collabRef}>
+                                    <img
+                                        src={`${item.imgURL}&w=248&fit=crop&auto=format`}
+                                        srcSet={`${item.imgURL}&w=248&fit=crop&auto=format&dpr=2 2x`}
+                                        height="600px"
+                                        // width="500px"
+                                        alt={item.title}
+                                        loading="lazy"
+                                    />
+                                    <Typography variant="h6" className={classes.headingTypographyH6}>{item.title}</Typography>
+                                    <Typography variant="h6" className={classes.headingTypographyH6}>{`Insta Id : ${item.author}`}</Typography>
+                                </div>
+                            );                
+                        })
+                    }
+                </Rerousel>
+            }    
        </div>
     );
 };
 
-export default withStyles(styles)(CollabSection);
+const mapStateToProps = (state) => {
+	const reduxState = state.generalDetails.toJS();
+	return {
+		collaborationData: reduxState.collaborationData
+	};
+};
+  
+const mapDispatchToProps = dispatch => {
+	return {
+		setCollaborationData: (collaborationData) => dispatch(setCollaborationData(collaborationData))
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(CollabSection));

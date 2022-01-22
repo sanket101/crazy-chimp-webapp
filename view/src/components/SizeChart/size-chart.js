@@ -39,12 +39,12 @@ const SizeChart = (props) => {
                                 key={row.size}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
-                                <TableCell component="th" scope="row">
+                                <TableCell component="th" scope="row" align="center">
                                 {row.size}
                                 </TableCell>
-                                <TableCell align="right">{row.chest}</TableCell>
-                                <TableCell align="right">{row.sleeve}</TableCell>
-                                <TableCell align="right">{row.length}</TableCell>
+                                <TableCell align="center">{row.chest}</TableCell>
+                                <TableCell align="center">{row.sleeve}</TableCell>
+                                <TableCell align="center">{row.length}</TableCell>
                             </TableRow>
                             ))}
                         </TableBody>

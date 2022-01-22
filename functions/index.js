@@ -4,6 +4,10 @@ const auth = require('./utils/auth');
 const verifyAdmin = require('./utils/verify-admin');
 
 const {
+  getAllCollaborations
+} = require('./APIs/collaboration');
+
+const {
   getInvoice,
   editInvoice,
   deleteInvoice,
@@ -61,14 +65,23 @@ const {
   loginUser,
   signUpUser,
   getUserDetail,
-  updateUserDetails
+  updateUserDetails,
+  logoutUser
 } = require('./APIs/users');
+const { checkIfAdmin } = require('./APIs/admin');
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  next();
+});
 
 // Users
 app.post('/login', loginUser);
 app.post('/signup', signUpUser);
 app.get('/user', auth, getUserDetail);
 app.post('/user', auth, updateUserDetails);
+app.get('/logout', auth, logoutUser);
 
 // todos
 app.get('/todos', getAllTodos);
@@ -83,13 +96,13 @@ app.delete('/address/:addressId', auth, deleteAddress);
 app.put('/address/:addressId', auth, editAddress);
 
 // genre-category
-app.get('/genre-categories', auth, getAllGenreCategories);
+app.get('/genre-categories', getAllGenreCategories);
 app.post('/genre-category', verifyAdmin, addGenreCategory);
 app.delete('/genre-category/:genreCategoryId', verifyAdmin, deleteGenreCategory);
 app.put('/genre-category/:genreCategoryId', verifyAdmin, editGenreCategory);
 
 // product-category
-app.get('/product-categories', auth, getAllProductCategories);
+app.get('/product-categories', getAllProductCategories);
 app.post('/product-category', verifyAdmin, addProductCategory);
 app.delete('/product-category/:productCategoryId', verifyAdmin, deleteProductCategory);
 app.put('/product-category/:productCategoryId', verifyAdmin, editProductCategory);
@@ -117,4 +130,10 @@ app.post('/add-product', verifyAdmin, addProduct);
 app.put('/edit-product', verifyAdmin, editProduct);
 app.delete('/delete-product', verifyAdmin, deleteProduct);
 
-exports.api = functions.https.onRequest(app);
+// Collaborations
+app.get('/get-collaboration-data', getAllCollaborations);
+
+// Admin User
+app.get('/admin-authentication', verifyAdmin, checkIfAdmin);
+
+exports.api = functions.region('asia-south1').https.onRequest(app);

@@ -1,31 +1,24 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Carousel from 'react-material-ui-carousel';
-import { Typography, InputLabel, Select, MenuItem, Button, Divider, ButtonGroup } from '@material-ui/core';
+import { Typography, InputLabel, Select, MenuItem, Button, Divider, ButtonGroup, FormHelperText } from '@material-ui/core';
 import styles from './product-details-section.style';
 import SizeChart from '../SizeChart/size-chart';
+import ROUTES from '../../constants/routes-name';
 
 const ProductDetailsSection = (props) => {
-    const { classes } = props;
+    const { classes, productDetails } = props;
     const [qty, setQty] = useState(1);
     const [color, setColor] = useState('');
     const [size, setSize] = useState('');
-    const items = [
-        {
-            img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-            title: 'Burger',
-            author: '@rollelflex_graphy726',
-          },
-          {
-            img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-            title: 'Camera',
-            author: '@helloimnik',
-          }
-    ];
+    const [addToCartTriggered, setAddToCartTriggered] = useState(false);
+    let history = useHistory();
 
     const onAddToCart = () => {
+        setAddToCartTriggered(true);
         if(color && size) {
-            props.setAddToCart(true);
+            props.setAddToCart(color, size, qty);
         }
     };
 
@@ -41,15 +34,15 @@ const ProductDetailsSection = (props) => {
                     cycleNavigation={true}
                 >
                     {
-                        items.map((item, i) =>  {
+                        productDetails.images.map((item, i) =>  {
                             return (
                                 <div key={i}>
                                     <img
-                                        src={`${item.img}?w=248&fit=crop&auto=format`}
-                                        srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                                        height="400px"
-                                        width="500px"
-                                        alt={item.title}
+                                        src={`${item}&w=248&fit=crop&auto=format`}
+                                        srcSet={`${item}&w=248&fit=crop&auto=format&dpr=2 2x`}
+                                        height="500px"
+                                        // width="400px"
+                                        alt={productDetails.name}
                                         loading="lazy"
                                     />
                                 </div>
@@ -60,15 +53,18 @@ const ProductDetailsSection = (props) => {
             </div>
 
             <div className={classes.productContainer}>
-                <Typography variant="h3">Hokage T-shirt</Typography>
-
-                <Typography variant="h4" className={classes.secondaryFont}>Rs.449</Typography>
+                <Typography variant="h3">{productDetails.name}</Typography>
+                
+                <div className={classes.priceWrapper}>
+                    <Typography variant="h4" className={classes.secondaryFont}>₹ <del>{`${productDetails.actualPrice}`}</del>{` ${productDetails.salePrice}`}</Typography>
+                    {/* <Typography variant="h4" className={classes.secondaryFont}></Typography> */}
+                </div>
                 
                 <div className={classes.dividerWrapper}>
                     <Divider />
                 </div>
                 
-                <Typography variant="body1" className={classes.secondaryFont}>Shipping Charges will be calculated at checkout</Typography>
+                <Typography variant="body1" className={classes.secondaryFont}>Shipping charges will be calculated at checkout.</Typography>
                 
                 <div className={classes.productFieldsWrapper}>
                     <div className={classes.dropdownWidget}>
@@ -80,11 +76,15 @@ const ProductDetailsSection = (props) => {
                             label="Color"
                             className={classes.selectLabel}
                             onChange={(event) => { setColor(event.target.value); }}
+							error={addToCartTriggered && !color ? true : false}
                         >
-                            <MenuItem value={'red'}>Red</MenuItem>
-                            <MenuItem value={'navyblue'}>Navy Blue</MenuItem>
-                            <MenuItem value={'maroon'}>Maroon</MenuItem>
+                            {
+                                productDetails.colorsAvailable.map((color, index) => {
+                                    return (<MenuItem key={index} value={color}>{color}</MenuItem>)
+                                })
+                            }
                         </Select>
+                        {addToCartTriggered && !color ? <FormHelperText>*Required</FormHelperText> : <></>}
                     </div>
 
                     <div className={classes.dropdownWidget}>
@@ -96,28 +96,32 @@ const ProductDetailsSection = (props) => {
                             label="Size"
                             className={classes.selectLabel}
                             onChange={(event) => { setSize(event.target.value); }}
+                            error={addToCartTriggered && !size ? true : false}
                         >
-                            <MenuItem value={'XS'}>XS</MenuItem>
-                            <MenuItem value={'S'}>S</MenuItem>
-                            <MenuItem value={'M'}>M</MenuItem>
-                            <MenuItem value={'L'}>L</MenuItem>
-                            <MenuItem value={'XL'}>XL</MenuItem>
-                            <MenuItem value={'XXL'}>XXL</MenuItem>
+                            {
+                                productDetails.sizeAvailable.map((size, index) => {
+                                    return (<MenuItem key={index} value={size}>{size}</MenuItem>)
+                                })
+                            }
                         </Select>
+                        {addToCartTriggered && !size ? <FormHelperText>*Required</FormHelperText> : <></>}
                     </div>
 
                     <div className={classes.qtyWrapper}>
                         <InputLabel id="demo-simple-select-label" className={classes.inputLabel}>Quantity</InputLabel>
                         <ButtonGroup variant="outlined" aria-label="outlined button group" className={classes.buttonWrapper}>
-                            <Button onClick={() => setQty(qty + 1)}>+</Button>
-                            <Button disabled>{qty}</Button>
                             {qty === 1 ? <Button disabled>-</Button> : <Button onClick={() => setQty(qty - 1)}>-</Button>}
+                            <Button disabled>{qty}</Button>
+                            <Button onClick={() => setQty(qty + 1)}>+</Button>
                         </ButtonGroup>
                     </div>
                 </div>
 
                 <Button variant="contained" className={classes.addToCartButton} onClick={onAddToCart}>ADD TO CART</Button>
-                {/* <Button variant="outlined" className={classes.addToCartButton} >View Cart</Button> */}
+                
+                {(props.cart && props.cart.length > 0) && <div className={classes.addToCartButtonWrapper}>
+                    <Button variant="outlined" className={classes.addToCartButton} onClick={() => history.push(ROUTES.CART)}>View Cart</Button>
+                </div>}
 
                 <div className={classes.dividerWrapper}>
                     <Divider />

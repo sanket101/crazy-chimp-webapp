@@ -13,11 +13,17 @@ exports.addInvoice = (request, response) => {
 
     const newInvoiceItem = {
         userId: request.uid,
+        addressId: request.body.addressId,
         orders: request.body.orders,
-        totalAmount: request.body.totalAmount,
+        paymentMethod: request.body.paymentMethod,
+        productTotalAmount: request.body.productTotalAmount,
         shippingAmount: request.body.shippingAmount,
+        codAmount: request.body.codAmount ? request.body.codAmount : '',
+        discountAmount: request.body.discountAmount ? request.body.discountAmount : '',
         discountCode: request.body.discountCode ? request.body.discountCode : '',
-        createdAt: currentDate.toISOString()
+        createdAt: currentDate.toISOString(),
+        status: 'PROCESSING',
+        trackingLink: ''
     };
 
     db.collection('invoices')
@@ -125,13 +131,22 @@ const populateInvoiceList = async(result) => {
                 orderData.push(orderSnap.data());
             }
         }
+        const addressId = docSnap.data().addressId;
+        const addressRef = db.doc(`/addresses/${addressId}`);
+        const addressSnap = await addressRef.get();
 
         invoices.push({
             orders: orderData,
-            totalAmount: docSnap.data().totalAmount,
+            productTotalAmount: docSnap.data().productTotalAmount,
             shippingAmount: docSnap.data().shippingAmount,
             discountCode: docSnap.data().discountCode,
-            createdAt: docSnap.data().createdAt
+            createdAt: docSnap.data().createdAt,
+            paymentMethod: docSnap.data().paymentMethod,
+            codAmount: docSnap.data().codAmount,
+            discountAmount: docSnap.data().discountAmount,
+            status: docSnap.data().status,
+            shippingAddress : addressSnap.exists ? addressSnap.data() : {},
+            trackingLink: docSnap.data().trackingLink
         });
     };
 

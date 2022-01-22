@@ -3,7 +3,7 @@ import CSSConstants from '../../constants/css-constants';
 const styles = (theme) => ({
     cardWrapper: {
         height: 'fit-content',
-        maxWidth: '350px',
+        maxWidth: '250px',
         margin: '20px',
         '@media (max-width: 540px)': {
             margin: '20px 0'

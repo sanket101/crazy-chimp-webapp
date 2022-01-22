@@ -8,7 +8,9 @@ const INITIAL_STATE = Immutable.fromJS({
     productType: '',
     genreType: '',
     productCategories: [],
-    genreCategories: []
+    genreCategories: [],
+    productDetails: {},
+    cart: []
 });
 
 const reducer = (state = INITIAL_STATE, action) => {
@@ -28,6 +30,15 @@ const reducer = (state = INITIAL_STATE, action) => {
             return state.set("productCategories", action.payload);
         case productActionTypes.SET_GENRE_CATEGORIES:
             return state.set("genreCategories", action.payload);
+        case productActionTypes.SET_PRODUCT_DETAILS:
+            return state.set("productDetails", action.payload);
+        case productActionTypes.ADD_TO_CART:
+            const _state = state.toJS();
+            let newCartArray = [..._state.cart];
+            newCartArray.push(action.payload);
+            return state.set("cart", newCartArray);
+        case productActionTypes.UPDATE_CART:
+            return state.set("cart", action.payload);
         default: 
             return state;
     }

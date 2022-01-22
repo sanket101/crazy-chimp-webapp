@@ -40,6 +40,12 @@ const styles = (theme) => ({
     },
     paymentWrapper: {
         margin: '20px'
+    },
+    paymentDescription: {
+        padding: '0 15px',
+        '& .MuiTypography-colorPrimary': {
+            color: CSSConstants.FONT_HIGHLIGHT
+        }
     }
 });
 

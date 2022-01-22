@@ -119,3 +119,16 @@ exports.updateUserDetails = (request, response) => {
         });
     });
 };
+
+exports.logoutUser = (request, response) => {
+    firebase.auth().signOut()
+    .then((data) => {
+        return response.json({ message: 'Logout successfully'})
+    })
+    .catch((err) => {
+        console.error(error);
+        return response.status(500).json({ 
+            message: "Something went wrong!"
+        });
+    });
+};

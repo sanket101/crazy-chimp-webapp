@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import NavigationBar from '../../components/NavigationBar/navigation-bar';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Footer from '../../components/Footer/footer';
@@ -6,6 +7,7 @@ import ProductDetailsSection from '../../components/ProductDetailsSection/produc
 import styles from './product-details.style';
 import { Typography, Snackbar } from '@material-ui/core';
 import MuiAlert from '@mui/material/Alert';
+import { addToCart } from '../../redux/Products/products.actions';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -13,7 +15,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 const ProductDetails = (props) => {
     const [addToCart, setAddToCart] = useState(false);
-    const { classes } = props;
+    const { classes, productDetails } = props;
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -23,6 +25,17 @@ const ProductDetails = (props) => {
         setAddToCart(false);
     };
 
+    const addToCartButtonHandler = (color, size, qty) => {
+        const newOrder = {
+            color,
+            size,
+            qty,
+            productDetails
+        };
+        props.addToCart(newOrder);
+        setAddToCart(true);
+    };
+
     return (
         <>
             <NavigationBar />
@@ -30,7 +43,7 @@ const ProductDetails = (props) => {
             <div className={classes.productDetailsWrapper}>
 
                 <div className={classes.productDetailsContainer}>
-                    <ProductDetailsSection setAddToCart={setAddToCart} />
+                    <ProductDetailsSection productDetails={productDetails} cart={props.cart} setAddToCart={addToCartButtonHandler} />
                 </div>
 
                 <div className={classes.productDescriptionWrapper}>
@@ -62,4 +75,18 @@ const ProductDetails = (props) => {
     );
 };
 
-export default withStyles(styles)(ProductDetails);
+const mapStateToProps = (state) => {
+    const reduxState = state.productDetails.toJS();
+	return {
+        productDetails: reduxState.productDetails,
+        cart: reduxState.cart
+    };
+};
+  
+const mapDispatchToProps = dispatch => {
+	return {
+        addToCart: (cartItem) => dispatch(addToCart(cartItem))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ProductDetails));

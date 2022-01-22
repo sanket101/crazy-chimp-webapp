@@ -30,6 +30,7 @@ const styles = (themes) => ({
     },
     productFeature: {
         padding: '20px',
+        textAlign: 'center'
     }
 });
 

@@ -19,6 +19,14 @@ import NavigationBar from '../../components/NavigationBar/navigation-bar';
 import Footer from '../../components/Footer/footer';
 import apiConfig from '../../api/api-config';
 import VALIDATION_ERROR from '../../constants/validation-errors';
+import { setLoginError } from '../../redux/General/general.actions';
+import MuiAlert from '@mui/material/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+import { handleApiError } from '../../utils/error-handling';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const Login = (props) => {
     const { classes } = props;
@@ -43,14 +51,14 @@ const Login = (props) => {
 		axios
 			.post(apiConfig.loginApi, userData)
 			.then((response) => {
-				localStorage.setItem('AuthToken', `Bearer ${response.token}`);
+				localStorage.setItem('AuthToken', `Bearer ${response.data.token}`);
 				setLocalState(prevState => {return {...prevState, loading: false }});	
 				props.history.push('/');
 			})
 			.catch((error) => {
 				const exactError = error.response.data;
 				const newErrors = {...localState.errors, ...exactError};
-                setLocalState(prevState => {return {...prevState, errors: newErrors, loading: false }});				
+                setLocalState(prevState => {return {...prevState, errors: newErrors, loading: false }});			
 			});
 	};
 
@@ -82,6 +90,14 @@ const Login = (props) => {
 		}
 
 	};
+
+	const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        props.setLoginError('');
+    };
 
     return(
 		<>
@@ -151,20 +167,29 @@ const Login = (props) => {
 						)}
 					</form>
 				</div>
+				{props.loginError && <Snackbar open={props.loginError ? true : false} autoHideDuration={4000} onClose={handleClose}>
+                    <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+                        {props.loginError}
+                    </Alert>
+                </Snackbar>}
 			</Container>
-
+			
 			<Footer />
 		</>
     );
 };
 
-const mapStateToProps = () => {
-	return {};
+const mapStateToProps = (state) => {
+	const reduxStateGeneral = state.generalDetails.toJS();
+	return {
+		loginError: reduxStateGeneral.loginError
+	};
 };
   
 const mapDispatchToProps = dispatch => {
 	return {
-		setUserDetails: (userDetails) => dispatch(setUserDetails(userDetails))
+		setUserDetails: (userDetails) => dispatch(setUserDetails(userDetails)),
+		setLoginError: (msg) => dispatch(setLoginError(msg))
 	};
 };
 

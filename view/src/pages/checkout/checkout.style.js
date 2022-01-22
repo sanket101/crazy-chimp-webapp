@@ -14,7 +14,7 @@ const styles = (theme) => ({
     },
     multiStep: {
         padding: '30px',
-        flex: '3 1',
+        flex: '4 1',
         '& .MuiPaper-root': {
             backgroundColor: CSSConstants.BACKGROUND_SECONDARY
         },
@@ -57,7 +57,7 @@ const styles = (theme) => ({
     },
     shoppingCart: {
         padding: '30px',
-        flex: '1 1',
+        flex: '2 1',
         borderLeft: `1px solid ${CSSConstants.FONT_SECONDARY}`,
         color: CSSConstants.FONT_PRIMARY,
         '@media (max-width: 540px)': {

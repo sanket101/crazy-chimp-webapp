@@ -48,3 +48,24 @@ export const setGenreCategories = (genreCategories) => {
         payload: genreCategories
     }
 };
+
+export const setProductDetails = (productDetails) => {
+    return {
+        type: productActionTypes.SET_PRODUCT_DETAILS,
+        payload: productDetails
+    }
+};
+
+export const addToCart = (cartItem) => {
+    return {
+        type: productActionTypes.ADD_TO_CART,
+        payload: cartItem
+    }
+}
+
+export const updateCart = (newCart) => {
+    return {
+        type: productActionTypes.UPDATE_CART,
+        payload: newCart
+    }
+}

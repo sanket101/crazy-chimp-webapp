@@ -1,7 +1,6 @@
 import React from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Typography, Card, CardContent, CardMedia, CardActionArea } from '@material-ui/core';
-import background from '../../assets/bg.jpg';
 import styles from './product-card.style';
 
 const ProductCard = (props) => {
@@ -12,9 +11,10 @@ const ProductCard = (props) => {
             <CardActionArea>
                 <CardMedia
                     component="img"
-                    height="250"
-                    image={background}
-                    alt="product"
+                    height="300"
+                    image={product.images[0]}
+                    alt={product.name}
+                    loading='lazy'
                 />
                 <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" component="div">
@@ -22,11 +22,8 @@ const ProductCard = (props) => {
                     </Typography>
                     <div className={classes.priceContent}>
                         <Typography variant="body1">
-                            <del>{`Rs.${product.actualPrice}`}</del>
+                            ₹{' '}<del>{`${product.actualPrice}`}</del>{` ${product.salePrice}`}
                         </Typography>
-                        <Typography variant="body1">
-                            {`Rs.${product.salePrice}`}
-                        </Typography> 
                     </div>
                 </CardContent>
             </CardActionArea>

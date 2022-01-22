@@ -1,6 +1,10 @@
 const { db } = require('../utils/admin');
 const { validateProductData } = require('../utils/validators');
 
+const getImageURL = (productCategory, productCode, color) => {
+    return `https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2F${productCategory}%2F${productCode}%2F${productCode}_${color}.Webp?alt=media`;
+};
+
 exports.addProduct = (request, response) => {
     const { valid, errors } = validateProductData(request.body);
 
@@ -8,11 +12,23 @@ exports.addProduct = (request, response) => {
         return response.status(400).json(errors);
     }
 
+    const colorsAvailable = request.body.colorsAvailable;
+    
+    let images = [];
+
+    colorsAvailable.forEach((color) => {
+        const colorSuffix = color.toString().toUpperCase().replace(' ', '');
+        images.push(getImageURL(request.body.productCategory, request.body.productCode, colorSuffix));
+    });
+
+    const currentDate = new Date();
+
     const newProductItem = {
 		name: request.body.name,
-		description: request.body.description,
+		description: request.body.description || '',
 		actualPrice: request.body.actualPrice,
         productDomain: request.body.productDomain,
+        // MMMYY_genreCategory_name_count(001/002)
         productCode: request.body.productCode,
 		productCategory: request.body.productCategory,
 		genreCategory: request.body.genreCategory,
@@ -21,9 +37,10 @@ exports.addProduct = (request, response) => {
 		sizeAvailable: request.body.sizeAvailable,
         colorsAvailable: request.body.colorsAvailable,
         //TODO: List of images needs to be fetched dynamically
-		images: request.body.images,
+		images: images,
 		weightInGms: request.body.weightInGms,
 		salePrice: request.body.salePrice || '',
+        createdAt: currentDate.toISOString(),
 		ratings: '',
 		numReviews: '' 
 	};
@@ -184,11 +201,15 @@ exports.getAllProducts = (request, response) => {
                         products.push({
                             productId: doc.id,
                             name: doc.data().name,
+                            description: doc.data().description,
                             actualPrice: doc.data().actualPrice,
                             salePrice: doc.data().salePrice,
                             productCategory: doc.data().productCategory,
                             genreCategory: doc.data().genreCategory,
-                            images: doc.data().images[0],
+                            colorsAvailable: doc.data().colorsAvailable,
+                            sizeAvailable: doc.data().sizeAvailable,
+                            images: doc.data().images,
+                            weightInGms: doc.data().weightInGms
                         });
                     });
                     return response.json(products);
@@ -213,7 +234,10 @@ exports.getAllProducts = (request, response) => {
                             salePrice: doc.data().salePrice,
                             productCategory: doc.data().productCategory,
                             genreCategory: doc.data().genreCategory,
-                            images: doc.data().images[0],
+                            colorsAvailable: doc.data().colorsAvailable,
+                            sizeAvailable: doc.data().sizeAvailable,
+                            images: doc.data().images,
+                            weightInGms: doc.data().weightInGms
                         });
                     });
                     return response.json(products);
@@ -238,7 +262,10 @@ exports.getAllProducts = (request, response) => {
                             salePrice: doc.data().salePrice,
                             productCategory: doc.data().productCategory,
                             genreCategory: doc.data().genreCategory,
-                            images: doc.data().images[0],
+                            colorsAvailable: doc.data().colorsAvailable,
+                            sizeAvailable: doc.data().sizeAvailable,
+                            images: doc.data().images,
+                            weightInGms: doc.data().weightInGms
                         });
                     });
                     return response.json(products);
@@ -262,7 +289,10 @@ exports.getAllProducts = (request, response) => {
                             salePrice: doc.data().salePrice,
                             productCategory: doc.data().productCategory,
                             genreCategory: doc.data().genreCategory,
-                            images: doc.data().images[0],
+                            colorsAvailable: doc.data().colorsAvailable,
+                            sizeAvailable: doc.data().sizeAvailable,
+                            images: doc.data().images,
+                            weightInGms: doc.data().weightInGms
                         });
                     });
                     return response.json(products);
@@ -300,7 +330,10 @@ exports.getAllProducts = (request, response) => {
                                 salePrice: doc.data().salePrice,
                                 productCategory: doc.data().productCategory,
                                 genreCategory: doc.data().genreCategory,
-                                images: doc.data().images[0],
+                                colorsAvailable: doc.data().colorsAvailable,
+                                sizeAvailable: doc.data().sizeAvailable,
+                                images: doc.data().images,
+                                weightInGms: doc.data().weightInGms
                             });
                         });
                         return response.json(products);
@@ -339,7 +372,10 @@ exports.getAllProducts = (request, response) => {
                                 salePrice: doc.data().salePrice,
                                 productCategory: doc.data().productCategory,
                                 genreCategory: doc.data().genreCategory,
-                                images: doc.data().images[0],
+                                colorsAvailable: doc.data().colorsAvailable,
+                                sizeAvailable: doc.data().sizeAvailable,
+                                images: doc.data().images,
+                                weightInGms: doc.data().weightInGms
                             });
                         });
                         return response.json(products);
@@ -378,7 +414,10 @@ exports.getAllProducts = (request, response) => {
                                 salePrice: doc.data().salePrice,
                                 productCategory: doc.data().productCategory,
                                 genreCategory: doc.data().genreCategory,
-                                images: doc.data().images[0],
+                                colorsAvailable: doc.data().colorsAvailable,
+                                sizeAvailable: doc.data().sizeAvailable,
+                                images: doc.data().images,
+                                weightInGms: doc.data().weightInGms
                             });
                         });
                         return response.json(products);
@@ -415,7 +454,10 @@ exports.getAllProducts = (request, response) => {
                                 salePrice: doc.data().salePrice,
                                 productCategory: doc.data().productCategory,
                                 genreCategory: doc.data().genreCategory,
-                                images: doc.data().images[0],
+                                colorsAvailable: doc.data().colorsAvailable,
+                                sizeAvailable: doc.data().sizeAvailable,
+                                images: doc.data().images,
+                                weightInGms: doc.data().weightInGms
                             });
                         });
                         return response.json(products);

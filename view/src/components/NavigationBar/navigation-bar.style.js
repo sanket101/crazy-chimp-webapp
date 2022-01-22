@@ -44,6 +44,13 @@ const styles = (theme) => ({
 		'@media (max-width: 540px)' : {
 			visibility: 'hidden'
 		}
+	},
+	crazyChimpWrapper: {
+		fontFamily: `Bangers, cursive`,
+		fontSize: '2rem',
+		'@media (max-width: 540px)' : {
+			fontSize: '1.5rem'
+		}
 	}
 });
 

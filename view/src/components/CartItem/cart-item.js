@@ -5,35 +5,48 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import styles from './cart-item.style';
 
 const CartItem = (props) => {
-    const { item, classes } = props;
-    const [qty, setQty] = useState(item.quantity);
+    const { itemKey, item, classes } = props;
+    const [qty, setQty] = useState(item.qty);
+
+    const updateCartItemQty = (type) => {
+        if(type === "INCREMENT") {
+            setQty(prevQty => { 
+                return prevQty + 1;
+            }, props.updateCart(itemKey, 'qty', qty + 1));
+        }
+        else {
+            setQty(prevQty => { 
+                return prevQty - 1;
+            }, props.updateCart(itemKey, 'qty', qty - 1));
+        }
+    };
 
     return (
         <div className={classes.cartItemWrapper}>
             <div className={classes.cartItemAttribute}>
-                <img src="https://images.unsplash.com/photo-1551782450-a2132b4ba21d" width="100px" />
+                <img src={item.productDetails.images[0]} alt={item.productDetails.name} width="100px" loading="lazy" />
             </div>
 
             <div className={classes.cartItemAttribute}>
-                <Typography variant="h6">{item.name}</Typography>
+                <Typography variant="h6">{item.productDetails.name}</Typography>
 
                 <Typography variant="body1" className={classes.secondaryFont}>{`${item.color} / ${item.size}`}</Typography>
             </div>
 
             <div className={classes.cartItemAttribute}>
                 <ButtonGroup variant="outlined" aria-label="outlined button group" className={classes.buttonWrapper}>
-                    <Button onClick={() => setQty(qty + 1)}>+</Button>
+                    <Button onClick={() => updateCartItemQty('INCREMENT')}>+</Button>
                     <Button disabled>{qty}</Button>
-                    {qty === 1 ? <Button disabled>-</Button> : <Button onClick={() => setQty(qty - 1)}>-</Button>}
+                    {qty === 1 ? <Button disabled>-</Button> : <Button onClick={() => updateCartItemQty('DECREMENT')}>-</Button>}
                 </ButtonGroup>
             </div>
 
             <div className={classes.cartItemAttribute}>
-                <Typography variant="h6">{`Rs.${item.price}`}</Typography>
+                <Typography variant="h6">{`₹ ${item.productDetails.salePrice}`}</Typography>
             </div>
 
             <div className={classes.removeIconButton}>
-                <IconButton>
+                <IconButton onClick={() => props.deleteCartItem(itemKey)}>
 					<ClearIcon />
 				</IconButton>
             </div>

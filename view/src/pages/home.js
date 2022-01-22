@@ -11,21 +11,14 @@ import Footer from '../components/Footer/footer';
 import axios from 'axios';
 import apiConfig from '../api/api-config';
 import ROUTES from '../constants/routes-name';
+import { handleApiError } from '../utils/error-handling';
+import DiscountSection from '../components/DiscountSection/discount-section';
 
 const Home = (props) => {
 	let history = useHistory();
 
-	const onClickShopNow = async () => {
-		try {
-			const response = await axios.get(apiConfig.productData);
-			if(response && response.data && response.data.numberOfProducts) {
-				props.setProductsData(response.data.numberOfProducts);
-			}
-			history.push(ROUTES.SHOP);
-		}
-		catch(err) {
-			// redirect to error page
-		}
+	const onClickShopNow = () => {
+		history.push(ROUTES.SHOP);
 	};
 
 	const getProductAndGenreCategories = async () => {
@@ -38,14 +31,15 @@ const Home = (props) => {
 				if((responseProductCategories && responseProductCategories.data && responseProductCategories.data.length > 0) &&
 				(responseGenreCategories && responseGenreCategories.data && responseGenreCategories.data.length > 0)) {
 					
-					setProductCategories(responseProductCategories.data);
-					setGenreCategories(responseGenreCategories.data);
+					props.setProductCategories(responseProductCategories.data);
+					props.setGenreCategories(responseGenreCategories.data);
 
 				}
 			}
 		}
 		catch(err) {
 			// redirect to error page
+			handleApiError(history, err);
 		}
 	};
 
@@ -59,6 +53,8 @@ const Home = (props) => {
 				
 			<LandingSection onClickShopNow={onClickShopNow}/>
 			
+			<DiscountSection />
+
 			<CollabSection />
 
 			<AboutUsSection />
@@ -80,7 +76,6 @@ const mapStateToProps = (state) => {
   
 const mapDispatchToProps = dispatch => {
 	return {
-		setProductsData: (productData) => dispatch(setProductsData(productData)),
 		setProductCategories: (productCategories) => dispatch(setProductCategories(productCategories)),
 		setGenreCategories: (genreCategories) => dispatch(setGenreCategories(genreCategories))
 	};

@@ -3,7 +3,7 @@ import CSSConstants from '../../constants/css-constants';
 const styles = (themes) => ({
     productListWrapper: {
         backgroundColor: CSSConstants.BACKGROUND_SECONDARY,
-        height: '100vh',
+        minHeight: '100vh',
         paddingTop: '80px',
         '@media (max-width: 540px)': {
             height: 'auto'
@@ -26,7 +26,9 @@ const styles = (themes) => ({
         padding: '30px',
         flexWrap: 'wrap',
         '@media (max-width: 540px)': {
-            padding: '30px 20px'
+            padding: '30px 20px',
+            flexDirection: 'column',
+            alignContent: 'center'
         }
     },
     selectWrapper: {
@@ -34,6 +36,15 @@ const styles = (themes) => ({
         '& .MuiFormLabel-root': {
             color: CSSConstants.FONT_PRIMARY,
             padding: '20px 0'
+        },
+        '& .MuiInputBase-root': {
+            color: CSSConstants.FONT_SECONDARY
+        },
+        '& .MuiSelect-icon': {
+            color: CSSConstants.FONT_SECONDARY
+        },
+        '& .MuiInput-underline:before': {
+            borderBottom: `1px solid ${CSSConstants.FONT_SECONDARY}`
         }
     },
     selectWrapperMobile: {

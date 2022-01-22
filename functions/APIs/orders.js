@@ -11,6 +11,8 @@ exports.addOrder = (request, response) => {
     const newOrderItem = {
         userId: request.uid,
         productId: request.body.productId,
+        productName: request.body.productName,
+        productImage: request.body.productImage,
         quantity: request.body.quantity,
         size: request.body.size,
         color: request.body.color,

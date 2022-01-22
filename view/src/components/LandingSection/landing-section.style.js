@@ -15,7 +15,7 @@ const styles = (theme) => ({
         justifyContent: 'center',
 
         '@media (max-width: 540px)' : {
-            height: '150vh',
+            height: '100vh',
         }
     },
     titleSection : {
