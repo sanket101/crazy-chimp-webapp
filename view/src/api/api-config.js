@@ -15,7 +15,8 @@ const apiConfig = {
     addInvoice: `${baseURL}/add-invoice`,
     getUserInvoices: `${baseURL}/invoices`,
     adminAuthentication: `${baseURL}/admin-authentication`,
-    addProduct: `${baseURL}/add-product`
+    addProduct: `${baseURL}/add-product`,
+    getInvoiceByDate: `${baseURL}/invoices-bydate`
 };
 
 export default apiConfig;

@@ -15,15 +15,20 @@ import { connect } from "react-redux";
 import { setAdminAuthentication  } from "../../redux/Admin/admin.actions";
 import { setGenreCategories, setProductCategories } from "../../redux/Products/products.actions";
 import AddProduct from "../../components/admin/AddProduct/add-product";
+import ShowOrders from "../../components/admin/ShowOrders/show-orders";
 
 const AdminPanel = (props) => {
     const [isLoading, setLoading] = useState(true);
-    const [activeItem, setActiveItem] = useState('');
+    const [activeItem, setActiveItem] = useState('check-orders');
 
     let history = useHistory();
     const { classes } = props;
 
     const listItems = [
+        {
+            key: 'check-orders',
+            title: 'Check Orders'
+        },
         {
             key: 'add-product',
             title: 'Add Product'
@@ -40,6 +45,8 @@ const AdminPanel = (props) => {
 
     const getIcon = (key) => {
         switch (key) {
+            case 'check-orders':
+                return <NotesIcon />
             case 'add-product':
                 return <NotesIcon />;
             case 'account':
@@ -57,6 +64,8 @@ const AdminPanel = (props) => {
 
     const renderListItem = () => {
         switch (activeItem) {
+            case 'check-orders':
+                return <ShowOrders />;
             case 'add-product':
                 return <AddProduct  productCategories={props.productCategories} genreCategories={props.genreCategories} />;
             default:
@@ -110,7 +119,7 @@ const AdminPanel = (props) => {
         </Box>
         :
 
-        <div className={classes.root}>
+        <>
 		    <CssBaseline />
 		    <AppBar position="fixed" className={classes.appBar}>
 			    <Toolbar>
@@ -119,39 +128,40 @@ const AdminPanel = (props) => {
 				    </Typography>
 			    </Toolbar>
 		    </AppBar>
-		    <Drawer
-			    className={classes.drawer}
-			    variant="permanent"
-			    classes={{
-				    paper: classes.drawerPaper
-			    }}
-		    >
-			    <div className={classes.toolbar} />
-			    <Divider />
-			    <center>
-				    <Avatar src='' className={classes.avatar} />
-				    <p>
-					    {' '}
-					    {'Welcome'} {'Admin'}
-				    </p>
-			    </center>
-			    <Divider />
-			    <List>
-                    {listItems.map((item, i) => {
-                        return (
-                            <ListItem button key={item.key} onClick={() => onClickHandler(item.key)}>
-                                <ListItemIcon>
-                                    {' '}{getIcon(item.key)}{' '}
-                                </ListItemIcon>
-                                <ListItemText primary={item.title} />
-                            </ListItem>
-                        )
-                    })}
-			    </List>
-		    </Drawer>
-
-		    <div>{renderListItem()}</div>
-	    </div>
+            <div className={classes.root}>
+                <Drawer
+                    className={classes.drawer}
+                    variant="permanent"
+                    classes={{
+                        paper: classes.drawerPaper
+                    }}
+                >
+                    <div className={classes.toolbar} />
+                    <Divider />
+                    <center>
+                        <Avatar src='' className={classes.avatar} />
+                        <p>
+                            {' '}
+                            {'Welcome'} {'Admin'}
+                        </p>
+                    </center>
+                    <Divider />
+                    <List>
+                        {listItems.map((item, i) => {
+                            return (
+                                <ListItem button key={item.key} onClick={() => onClickHandler(item.key)}>
+                                    <ListItemIcon>
+                                        {' '}{getIcon(item.key)}{' '}
+                                    </ListItemIcon>
+                                    <ListItemText primary={item.title} />
+                                </ListItem>
+                            )
+                        })}
+                    </List>
+                </Drawer>
+                <div className={classes.listItemWrapper}>{renderListItem()}</div>
+            </div>
+	    </>
     );
 };
 

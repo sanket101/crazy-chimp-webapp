@@ -289,6 +289,11 @@ const Checkout = (props) => {
        callUserDetailsApi(); 
     }, []);
 
+    if(props.cart.length === 0) {
+        history.push(ROUTES.HOME);
+        return <></>;
+    }
+
     return (
         <>
             <NavigationBar />

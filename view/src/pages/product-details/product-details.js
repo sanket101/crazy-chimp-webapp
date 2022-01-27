@@ -8,6 +8,8 @@ import styles from './product-details.style';
 import { Typography, Snackbar } from '@material-ui/core';
 import MuiAlert from '@mui/material/Alert';
 import { addToCart } from '../../redux/Products/products.actions';
+import { useHistory } from 'react-router-dom';
+import ROUTES from '../../constants/routes-name';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -16,6 +18,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 const ProductDetails = (props) => {
     const [addToCart, setAddToCart] = useState(false);
     const { classes, productDetails } = props;
+    let history = useHistory();
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -34,6 +37,11 @@ const ProductDetails = (props) => {
         };
         props.addToCart(newOrder);
         setAddToCart(true);
+    };
+
+    if(Object.keys(productDetails).length === 0) {
+        history.push(ROUTES.HOME);
+        return <></>;
     };
 
     return (

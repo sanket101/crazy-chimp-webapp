@@ -18,10 +18,10 @@ exports.addInvoice = (request, response) => {
         paymentMethod: request.body.paymentMethod,
         productTotalAmount: request.body.productTotalAmount,
         shippingAmount: request.body.shippingAmount,
-        codAmount: request.body.codAmount ? request.body.codAmount : '',
-        discountAmount: request.body.discountAmount ? request.body.discountAmount : '',
+        codAmount: request.body.codAmount ? request.body.codAmount : 0,
+        discountAmount: request.body.discountAmount ? request.body.discountAmount : 0,
         discountCode: request.body.discountCode ? request.body.discountCode : '',
-        createdAt: currentDate.toISOString(),
+        createdAt: currentDate.toISOString().split('T')[0],
         status: 'PROCESSING',
         trackingLink: ''
     };
@@ -136,6 +136,7 @@ const populateInvoiceList = async(result) => {
         const addressSnap = await addressRef.get();
 
         invoices.push({
+            id: docSnap.id,
             orders: orderData,
             productTotalAmount: docSnap.data().productTotalAmount,
             shippingAmount: docSnap.data().shippingAmount,
@@ -156,6 +157,25 @@ const populateInvoiceList = async(result) => {
 exports.getInvoicesByUserId = (request, response) => {
     db.collection('invoices')
     .where('userId', '==', request.uid)
+	.get()
+	.then(async(result) => {
+        let invoices = await populateInvoiceList(result);
+        return invoices;
+	})
+    .then((invoices) => {
+        return response.json(invoices);
+    })
+	.catch((err) => {
+		console.error(err);
+		return response.status(500).json({ error: err.code});
+	});
+};
+
+exports.getInvoicesByDate = (request, response) => {
+    const requestDate = new Date(request.body.date).toISOString().split('T')[0];
+
+    db.collection('invoices')
+    .where('createdAt', '==', requestDate)
 	.get()
 	.then(async(result) => {
         let invoices = await populateInvoiceList(result);

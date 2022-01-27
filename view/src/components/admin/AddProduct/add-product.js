@@ -16,7 +16,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 const defaultSizes = [{key: 'XS', selected: false}, {key: 'S', selected: false}, {key: 'M', selected: false}, {key: 'L', selected: false}, {key: 'XL', selected: false}, {key: '2XL', selected: false}, {key: '3XL', selected: false}, {key: '4XL', selected: false}];
-const defaultColors = [{key: 'Navy Blue', selected: false}, {key: 'Black', selected: false}, {key: 'White', selected: false}, {key: 'Baby Blue', selected: false}, {key: 'Golden Yellow', selected: false}, {key: 'Iris Lavender', selected: false}, {key: 'Light Pink', selected: false}, {key: 'Maroon', selected: false}, {key: 'Melange Grey', selected: false}, {key: 'Mint Green', selected: false}, {key: 'Olive Green', selected: false}, {key: 'Red', selected: false}];
+const defaultColors = [{key: 'Navy Blue', selected: false}, {key: 'Black', selected: false}, {key: 'White', selected: false}, {key: 'Baby Blue', selected: false}, {key: 'Golden Yellow', selected: false}, {key: 'Iris Lavender', selected: false}, {key: 'Light Pink', selected: false}, {key: 'Maroon', selected: false}, {key: 'Melange Grey', selected: false}, {key: 'Mint Green', selected: false}, {key: 'Olive Green', selected: false}, {key: 'Red', selected: false}, {key: 'Sky Blue', selected: false}];
 
 const AddProduct = (props) => {
     const { classes } = props;
@@ -45,7 +45,7 @@ const AddProduct = (props) => {
 	let history = useHistory();
 
 	const generateProductCode = () => {
-		const productCodeGenerated = `${productCategory.toUpperCase()}_${genreCategory.toUpperCase()}_${name.toUpperCase()}_001`;
+		const productCodeGenerated = `${productCategory.toUpperCase()}_${genreCategory.toUpperCase()}_${name.replaceAll(' ', '').toUpperCase()}_001`;
 		setProductCode(productCodeGenerated);
 	};
 

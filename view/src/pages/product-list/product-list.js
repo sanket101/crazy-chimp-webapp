@@ -131,7 +131,7 @@ const ProductList = (props) => {
     };
 
     const callProductsApi = async (productType = '', genreType = '') => {
-        try { 
+        try {
             const productCategory = (productType === "" || productType === defaultProductType) ? "" : productType;
             const genreCategory = (genreType === "" || genreType === defaultGenreType) ? "" : genreType;
 
@@ -141,6 +141,8 @@ const ProductList = (props) => {
             if((response && response.data && response.data.length > 0) && (responseProductData && responseProductData.data && responseProductData.data.numberOfProducts)) {
                 props.setProductList(response.data);
                 props.setProductsData(responseProductData.data.numberOfProducts);
+                // Image Loading logic
+                cacheImages(response.data);
             }
             setLoading(false);
         }
@@ -150,9 +152,33 @@ const ProductList = (props) => {
         }
     };
 
+    const cacheImages = async (srcArray) => {
+        const promises = await srcArray.map((src) => {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+
+                img.src = src.images[0];
+                img.onload = resolve();
+                img.onerror = reject();
+            });
+        });
+
+        await Promise.all(promises);
+    };
+
     useEffect(() => {
-        callProductsApi();
+        if(props.productList.length === 0) {
+            callProductsApi();
+        }
+        else {
+            setLoading(false);
+        }
     }, []);
+
+    if(props.productCategories.length === 0 || props.genreCategories.length === 0) {
+        history.push(ROUTES.HOME);
+        return <></>;
+    }
 
     return (
         <>

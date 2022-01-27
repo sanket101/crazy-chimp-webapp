@@ -12,7 +12,8 @@ const {
   editInvoice,
   deleteInvoice,
   addInvoice,
-  getInvoicesByUserId
+  getInvoicesByUserId,
+  getInvoicesByDate
 } = require('./APIs/invoices');
 
 const {
@@ -121,6 +122,7 @@ app.post('/add-invoice', auth, addInvoice);
 app.put('/edit-invoice/:invoiceId', verifyAdmin, editInvoice);
 app.delete('/delete-invoice/:invoiceId', verifyAdmin, deleteInvoice);
 app.get('/invoices', auth, getInvoicesByUserId);
+app.post('/invoices-bydate', verifyAdmin, getInvoicesByDate);
 
 // Products
 app.get('/get-products-data', getProductsData);

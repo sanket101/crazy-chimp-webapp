@@ -133,10 +133,10 @@ exports.validateInvoiceData = (data) => {
 
 	let errors = {};
 
-	if(!data.productTotalAmount) errors.productTotalAmount = "Must not be empty";
+	if(!data.hasOwnProperty("productTotalAmount")) errors.productTotalAmount = "Must not be empty";
 	else if(isNaN(data.productTotalAmount)) errors.productTotalAmount = "Must be number";
 
-	if(!data.shippingAmount) errors.shippingAmount = "Must not be empty";
+	if(!data.hasOwnProperty("shippingAmount")) errors.shippingAmount = "Must not be empty";
 	else if(isNaN(data.shippingAmount)) errors.shippingAmount = "Must be number";
 	
 	if(!data.orders || (data.orders && data.orders.length <= 0)) errors.orders = "Must have atleast one order";

@@ -34,7 +34,12 @@ const styles = (theme) => ({
 		left: '50%',
 		top: '35%'
 	},
-	toolbar: theme.mixins.toolbar
+	toolbar: theme.mixins.toolbar,
+	listItemWrapper: {
+		width: '80%',
+		float: 'right',
+		textAlign: 'center'
+	}
 });
 
 export default styles;

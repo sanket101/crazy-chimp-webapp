@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, useHistory } from 'react-router-dom';
 import Login from './pages/login/login';
 import Signup from './pages/signup/signup';
 import Home from './pages/home';
@@ -23,7 +23,16 @@ const theme = createTheme({
     ].join(','),
 },});
 
-function App() {
+const App = () => {
+
+  const pageAccessedByReload = (
+    (window.performance.navigation && window.performance.navigation.type === 1) ||
+      window.performance
+        .getEntriesByType('navigation')
+        .map((nav) => nav.type)
+        .includes('reload')
+  );
+
   return (
     <ThemeProvider theme={theme}>
       <Router>
