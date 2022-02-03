@@ -3,7 +3,7 @@ import CSSConstants from '../../constants/css-constants';
 const styles = (themes) => ({
     productDetailsWrapper: {
         backgroundColor: CSSConstants.BACKGROUND_SECONDARY,
-        // height: '100vh',
+        minHeight: '100vh',
         paddingTop: '80px',
         
         '@media (max-width: 540px)': {

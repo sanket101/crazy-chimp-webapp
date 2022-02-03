@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from "react-router-dom";
+import { Route, useHistory } from "react-router-dom";
 import { connect } from 'react-redux';
 import { setProductsData } from '../../redux/Products/products.actions';
 import { AppBar, IconButton, Toolbar, Typography, Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, Button, Badge, Menu, MenuItem } from '@material-ui/core';
@@ -18,13 +18,14 @@ import axios from 'axios';
 import apiConfig from '../../api/api-config';
 import { authMiddleWare } from '../../utils/auth';
 import { handleApiError } from '../../utils/error-handling';
+import CollectionsIcon from '@mui/icons-material/Collections';
 
 const NavigationBar = (props) => {
 	const [showDrawer, setShowDrawer] = useState(false);
 	const [anchorEl, setAnchorEl] = useState(null);
 
-	const listOne = ['Home', 'Apparel', 'Cart'];
-	const listTwo = ['Account', 'Logout'];
+	const listOne = ['Home', 'Apparel', 'Gallery', 'Cart'];
+	const listTwo = ['My Orders', 'Logout'];
 	const { classes, cart } = props;
 	const isLoggedIn = localStorage.getItem('AuthToken');
 	let history = useHistory();
@@ -44,11 +45,14 @@ const NavigationBar = (props) => {
 			case 'Cart':
 				history.push(ROUTES.CART)
 				break;
-			case 'Account':
+			case 'My Orders':
 				history.push(ROUTES.ACCOUNT);
 				break;
 			case 'Logout': 
 				callLogoutApi();
+				break;
+			case 'Gallery':
+				history.push(ROUTES.GALLERY);
 				break;
 			default:
 				break;
@@ -63,10 +67,12 @@ const NavigationBar = (props) => {
 				return <ShopIcon />;
 			case 'Cart':
 				return <ShoppingCartIcon />;
-			case 'Account':
+			case 'My Orders':
 				return <AccountCircleIcon />;
 			case 'Logout': 
-				return <LogoutIcon />
+				return <LogoutIcon />;
+			case 'Gallery':
+				return <CollectionsIcon />;
 			default:
 				return <></>;
 		}
@@ -173,6 +179,10 @@ const NavigationBar = (props) => {
 									Apparel
 								</Typography>
 
+								<Typography variant="h6" className={classes.navigationTypographyH6} onClick={() => history.push(ROUTES.GALLERY)}>
+									Gallery
+								</Typography>
+
 								<IconButton className={classes.navigationIconButton} onClick={() => history.push(ROUTES.CART)}>
 									<Badge color="primary" badgeContent={cart.length}>
 										<ShoppingCartIcon />
@@ -199,7 +209,7 @@ const NavigationBar = (props) => {
 											open={Boolean(anchorEl)}
 											onClose={handleClose}
 										>
-											<MenuItem onClick={() => history.push(ROUTES.ACCOUNT)}>My account</MenuItem>
+											<MenuItem onClick={() => history.push(ROUTES.ACCOUNT)}>My orders</MenuItem>
 											<MenuItem onClick={() => callLogoutApi()}>Logout</MenuItem>
 										</Menu>
 									</>

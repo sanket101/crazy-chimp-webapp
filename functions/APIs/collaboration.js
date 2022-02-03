@@ -20,7 +20,7 @@ exports.getAllCollaborations = (request, response) => {
         return collaborationData;
     })
     .then((collaborationData) => {
-        return db.collection('discounts').get();
+        return db.collection('discount-images').get();
     })
     .then((data) => {
         for (let index = 0; index < data.docs.length; index++) {
@@ -35,6 +35,26 @@ exports.getAllCollaborations = (request, response) => {
     })
     .then(result => {
         return response.json({ collaborations: collaborationData, discounts: result});
+    })
+    .catch((err) => {
+        console.error(err);
+        return response.status(500).json({ error: err.code});
+    });
+};
+
+exports.getAllCustomerGalleryImages = (request, response) => {
+    let customerGallery = [];
+
+    db.collection('customer-gallery')
+    .get()
+    .then((data) => {
+        data.forEach((doc) => {
+            customerGallery.push({
+                img: doc.data().img
+            });
+        });
+
+        return response.json(customerGallery);
     })
     .catch((err) => {
         console.error(err);

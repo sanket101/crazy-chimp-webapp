@@ -16,7 +16,11 @@ const apiConfig = {
     getUserInvoices: `${baseURL}/invoices`,
     adminAuthentication: `${baseURL}/admin-authentication`,
     addProduct: `${baseURL}/add-product`,
-    getInvoiceByDate: `${baseURL}/invoices-bydate`
+    getInvoiceByDate: `${baseURL}/invoices-bydate`,
+    getCustomerGallery: `${baseURL}/get-customer-gallery`,
+    getDiscountCodes: `${baseURL}/get-discount-vouchers`,
+    addDiscount: `${baseURL}/add-discount-voucher`,
+    getStockAvailability: `${baseURL}/stock-availability`
 };
 
 export default apiConfig;

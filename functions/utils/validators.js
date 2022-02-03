@@ -150,3 +150,34 @@ exports.validateInvoiceData = (data) => {
 		valid: Object.keys(errors).length === 0 ? true : false
 	};
 }
+
+exports.validateDiscountData = (data) => {
+	let errors = {};
+
+	if(isEmpty(data.code)) errors.code = "Must not be empty";
+	if(isEmpty(data.description)) errors.description = "Must not be empty";
+	if(isEmpty(data.discountType)) errors.discountType = "Must not be empty";
+
+	if(!data.hasOwnProperty("discount")) errors.discount = "Must not be empty";
+	else if(isNaN(data.discount)) errors.discount = "Must be number";
+
+	if(!data.hasOwnProperty("isEnabled")) errors.isEnabled = "Must not be empty";
+
+	if(isEmpty(data.validFrom)) errors.validFrom = "Must not be empty";
+	if(isEmpty(data.validUntil)) errors.validUntil = "Must not be empty";
+
+	if(!data.hasOwnProperty("frequencyPerUser")) errors.frequencyPerUser = "Must not be empty";
+
+	if(!data.hasOwnProperty("cartMinValue")) errors.cartMinValue = "Must not be empty";
+
+	if(!data.hasOwnProperty("cartMaxValue")) errors.cartMaxValue = "Must not be empty";
+
+	if(!data.hasOwnProperty("cartMinItems")) errors.cartMinItems = "Must not be empty";
+
+	if(!data.hasOwnProperty("cartMaxItems")) errors.cartMaxItems = "Must not be empty";
+
+	return {
+		errors,
+		valid: Object.keys(errors).length === 0 ? true : false
+	};
+};

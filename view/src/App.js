@@ -14,6 +14,7 @@ import Account from './pages/account/account';
 import './App.css';
 import { ThemeProvider, createTheme } from '@material-ui/core/styles';
 import AdminPanel from './pages/admin-panel/admin-panel';
+import Gallery from './pages/gallery/gallery';
 
 const theme = createTheme({
   typography: {
@@ -49,6 +50,7 @@ const App = () => {
                 <Route exact path="/error" component={TechincalErrorPage} />
                 <Route exact path="/account" component={Account} />
                 <Route exact path="/admin-panel" component={AdminPanel} />
+                <Route exact path="/gallery" component={Gallery} />
                 <Route exact path="/" component={Home} />
             </Switch>
           </div>

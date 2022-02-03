@@ -2,7 +2,14 @@ import CSSConstants from '../../constants/css-constants';
 
 const styles = (themes) => ({
     imageContainer: {
+        display: 'block',
         padding: '30px'
+    },
+    imageAttributes: {
+        height: '500px',
+        '@media (max-width: 540px)': {
+            height: '350px'
+        }
     },
     productContainer: {
         color: CSSConstants.FONT_PRIMARY,
@@ -44,6 +51,11 @@ const styles = (themes) => ({
         }
     },
     addToCartButtonWrapper: {
+        '& .MuiButton-contained.Mui-disabled': {
+            backgroundColor: CSSConstants.FONT_SECONDARY
+        }
+    },
+    viewCartButtonWrapper: {
         margin: '10px 0',
         '& .MuiButton-outlined': {
             border: `1px solid ${CSSConstants.FONT_PRIMARY}`
@@ -87,6 +99,9 @@ const styles = (themes) => ({
     },
     priceWrapper: {
         display: 'flex'
+    },
+    errorFont: {
+        color: CSSConstants.ERROR
     }
 });
 

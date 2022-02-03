@@ -9,7 +9,8 @@ const RouteName = {
     TNC: '/tnc',
     PRIVACY_POLICY: '/privacy-policy',
     ERROR: '/error',
-    ACCOUNT: '/account'
+    ACCOUNT: '/account',
+    GALLERY: '/gallery'
 };
 
 export default RouteName;

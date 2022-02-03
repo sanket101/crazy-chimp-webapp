@@ -6,6 +6,9 @@ import styles from './product-card.style';
 const ProductCard = (props) => {
     const  { classes, product } = props;
 
+    if(!product.isAvailable) {
+        return <></>;
+    }
     return (
         <Card className={classes.cardWrapper}>
             <CardActionArea>

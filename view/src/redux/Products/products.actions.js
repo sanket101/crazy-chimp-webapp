@@ -61,11 +61,18 @@ export const addToCart = (cartItem) => {
         type: productActionTypes.ADD_TO_CART,
         payload: cartItem
     }
-}
+};
 
 export const updateCart = (newCart) => {
     return {
         type: productActionTypes.UPDATE_CART,
         payload: newCart
     }
-}
+};
+
+export const setStockAvailability = (data) => {
+    return {
+        type: productActionTypes.SET_STOCK_AVAILABILITY,
+        payload: data
+    }
+};

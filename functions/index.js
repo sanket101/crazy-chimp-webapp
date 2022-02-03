@@ -3,8 +3,11 @@ const app = require('express')();
 const auth = require('./utils/auth');
 const verifyAdmin = require('./utils/verify-admin');
 
+const { getDiscountCodes, addDiscountVoucher } = require('./APIs/discount');
+
 const {
-  getAllCollaborations
+  getAllCollaborations,
+  getAllCustomerGalleryImages
 } = require('./APIs/collaboration');
 
 const {
@@ -22,7 +25,8 @@ const {
   deleteProduct,
   getProduct,
   getAllProducts,
-  getProductsData
+  getProductsData,
+  getStockAvailability
 } = require('./APIs/products');
 
 const {
@@ -56,13 +60,6 @@ const {
 } = require('./APIs/addresses');
 
 const {
-    getAllTodos,
-    postOneTodo,
-    deleteTodo,
-    editTodo
-} = require('./APIs/todos');
-
-const {
   loginUser,
   signUpUser,
   getUserDetail,
@@ -83,12 +80,6 @@ app.post('/signup', signUpUser);
 app.get('/user', auth, getUserDetail);
 app.post('/user', auth, updateUserDetails);
 app.get('/logout', auth, logoutUser);
-
-// todos
-app.get('/todos', getAllTodos);
-app.post('/todo', postOneTodo);
-app.delete('/todo/:todoId', deleteTodo);
-app.put('/todo/:todoId', editTodo);
 
 // address
 app.get('/addresses', auth, getAllAddresses);
@@ -125,6 +116,7 @@ app.get('/invoices', auth, getInvoicesByUserId);
 app.post('/invoices-bydate', verifyAdmin, getInvoicesByDate);
 
 // Products
+app.get('/stock-availability', getStockAvailability);
 app.get('/get-products-data', getProductsData);
 app.get('/products/:paginationId', getAllProducts);
 app.get('/product/:productId', getProduct);
@@ -134,8 +126,13 @@ app.delete('/delete-product', verifyAdmin, deleteProduct);
 
 // Collaborations
 app.get('/get-collaboration-data', getAllCollaborations);
+app.get('/get-customer-gallery', getAllCustomerGalleryImages);
 
 // Admin User
 app.get('/admin-authentication', verifyAdmin, checkIfAdmin);
+
+// Discount
+app.get('/get-discount-vouchers', auth, getDiscountCodes);
+app.post('/add-discount-voucher', verifyAdmin, addDiscountVoucher);
 
 exports.api = functions.region('asia-south1').https.onRequest(app);

@@ -16,6 +16,7 @@ import { setAdminAuthentication  } from "../../redux/Admin/admin.actions";
 import { setGenreCategories, setProductCategories } from "../../redux/Products/products.actions";
 import AddProduct from "../../components/admin/AddProduct/add-product";
 import ShowOrders from "../../components/admin/ShowOrders/show-orders";
+import AddDiscount from "../../components/admin/AddDiscount/add-discount";
 
 const AdminPanel = (props) => {
     const [isLoading, setLoading] = useState(true);
@@ -34,6 +35,10 @@ const AdminPanel = (props) => {
             title: 'Add Product'
         },
         {
+            key: 'add-discount',
+            title: 'Add Discount'
+        },
+        {
             key: 'account',
             title: 'Account'
         },
@@ -48,6 +53,8 @@ const AdminPanel = (props) => {
             case 'check-orders':
                 return <NotesIcon />
             case 'add-product':
+                return <NotesIcon />;
+            case 'add-discount':
                 return <NotesIcon />;
             case 'account':
                 return <AccountBoxIcon />;
@@ -64,6 +71,8 @@ const AdminPanel = (props) => {
 
     const renderListItem = () => {
         switch (activeItem) {
+            case 'add-discount':
+                return <AddDiscount />
             case 'check-orders':
                 return <ShowOrders />;
             case 'add-product':

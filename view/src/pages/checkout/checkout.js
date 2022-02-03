@@ -16,8 +16,9 @@ import ROUTES from '../../constants/routes-name';
 import { authMiddleWare } from '../../utils/auth';
 import { addNewAddress, setSelectedAddress, setUserAddresses } from '../../redux/User/user.actions';
 import { updateCart } from '../../redux/Products/products.actions';
-import { setLoginError } from '../../redux/General/general.actions';
+import { setDiscountCodes, setLoginError } from '../../redux/General/general.actions';
 import { handleApiError } from '../../utils/error-handling';
+import { checkDiscountCodeConstraints } from '../../utils/discount-check';
 
 const Checkout = (props) => {
     const { classes, cart } = props;
@@ -37,6 +38,7 @@ const Checkout = (props) => {
     const [discountCode, setDiscountCode] = useState('');
     const [discountCodeError, setDiscountCodeError] = useState('');
     const [addDiscount, setAddDiscount] = useState(false);
+    const [discountAmount, setDiscountAmount] = useState(0);
     const [paymentMethod, setPaymentMethod] = useState('');
     const [isLoading, setLoading] = useState(true);
     const [addAddressApiTriggered, setAddAddressApiTriggered] = useState(false);
@@ -152,15 +154,41 @@ const Checkout = (props) => {
         return getProductTotal() + getShippingAmount() - getDiscount();
     };
 
+    const getNumberOfCartItems = () => {
+        let cartItemsTotal = 0;
+
+        cartItems.reduce(element => {
+            return cartItemsTotal + element.qty;
+        }, cartItemsTotal);
+
+        return cartItemsTotal;
+    };
+
+    const checkDiscountCodeValidity = () => {
+        const discountCodeName = discountCode.toUpperCase();
+        const applicableCodes = props.discountCodes.filter((discountCode, i) => discountCode.code === discountCodeName);
+        if(applicableCodes.length > 0) {
+            const isValid = checkDiscountCodeConstraints(applicableCodes[0], getProductTotal(), getNumberOfCartItems());
+            if(isValid) {
+                if(applicableCodes[0].discountType === "FLAT") {
+                    setDiscountAmount(applicableCodes[0].discount);
+                }
+                return true;
+            }
+        }
+        return false;
+    };
+
     const applyDiscount = () => {
         if(!discountCode || discountCode.trim() === "") {
             setDiscountCodeError(VALIDATION_ERROR.FIELD_LEFT_BLANK);
             setAddDiscount(false);
         }
         // check discount code validation
-        // else if() {
-
-        // }
+        else if(!checkDiscountCodeValidity()) {
+            setDiscountCodeError(VALIDATION_ERROR.FIELD_INVALID);
+            setAddDiscount(false);
+        }
         else {
             setDiscountCodeError(''); 
             setAddDiscount(true);
@@ -169,7 +197,7 @@ const Checkout = (props) => {
 
     const getDiscount = () => {
         if(addDiscount) {
-            return 50;
+            return discountAmount;
         }
         else {
             return 0;
@@ -184,6 +212,12 @@ const Checkout = (props) => {
             const response = await axios.get(apiConfig.getAllSavedAddress);
             if(response && response.data && response.data.length > 0) {
                 props.setUserAddresses(response.data);
+
+                const discountVouchers = await axios.get(apiConfig.getDiscountCodes);
+
+                if(discountVouchers && discountVouchers.data && discountVouchers.data.length > 0) {
+                    props.setDiscountCodes(discountVouchers.data);
+                }
             }
             setLoading(false);
         }
@@ -432,11 +466,13 @@ const Checkout = (props) => {
 const mapStateToProps = (state) => {
 	const reduxState = state.productDetails.toJS();
     const reduxStateUser = state.userDetails.toJS();
+    const reduxStateGeneral = state.generalDetails.toJS();
 
 	return {
 		cart: reduxState.cart,
         userAddresses: reduxStateUser.userAddresses,
-        selectedAddressIndex: reduxStateUser.selectedAddressIndex
+        selectedAddressIndex: reduxStateUser.selectedAddressIndex,
+        discountCodes: reduxStateGeneral.discountCodes
 	};
 };
   
@@ -446,7 +482,8 @@ const mapDispatchToProps = dispatch => {
         setSelectedAddress: (index) => dispatch(setSelectedAddress(index)),
         addNewAddress: (address) => dispatch(addNewAddress(address)),
         updateCart: (newCart) => dispatch(updateCart(newCart)),
-        setLoginError: (msg) => dispatch(setLoginError(msg))
+        setLoginError: (msg) => dispatch(setLoginError(msg)),
+        setDiscountCodes: (discountCodes) => dispatch(setDiscountCodes(discountCodes))
 	};
 };
 

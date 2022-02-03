@@ -13,6 +13,8 @@ const ProductDetailsSection = (props) => {
     const [color, setColor] = useState('');
     const [size, setSize] = useState('');
     const [addToCartTriggered, setAddToCartTriggered] = useState(false);
+    const [outOfStockError, setOutOfStockError] = useState(false);
+
     let history = useHistory();
 
     const onAddToCart = () => {
@@ -22,11 +24,33 @@ const ProductDetailsSection = (props) => {
         }
     };
 
+    const checkStockAvailability = (color, size) => {
+        if(color && size) {
+            const isAvailable = props.checkStockAvailability(color, size);
+            if(!isAvailable) {
+                setOutOfStockError(true);
+            }
+            else {
+                setOutOfStockError(false);
+            }
+        }
+    };
+
+    const onSizeChange = (event) => {
+        setSize(event.target.value);
+        checkStockAvailability(color, event.target.value);
+    };
+
+    const onColorChange = (event) => {
+        setColor(event.target.value);
+        checkStockAvailability(event.target.value, size);
+    };
+
     return (
         <>
             <div className={classes.imageContainer}>
                 <Carousel 
-                    autoPlay={true}
+                    autoPlay={false}
                     stopAutoPlayOnHover={true}
                     interval={4000}
                     animation={'fade'}
@@ -40,8 +64,7 @@ const ProductDetailsSection = (props) => {
                                     <img
                                         src={`${item}&w=248&fit=crop&auto=format`}
                                         srcSet={`${item}&w=248&fit=crop&auto=format&dpr=2 2x`}
-                                        height="500px"
-                                        // width="400px"
+                                        className={classes.imageAttributes}
                                         alt={productDetails.name}
                                         loading="lazy"
                                     />
@@ -75,7 +98,7 @@ const ProductDetailsSection = (props) => {
                             value={color}
                             label="Color"
                             className={classes.selectLabel}
-                            onChange={(event) => { setColor(event.target.value); }}
+                            onChange={onColorChange}
 							error={addToCartTriggered && !color ? true : false}
                         >
                             {
@@ -95,7 +118,7 @@ const ProductDetailsSection = (props) => {
                             value={size}
                             label="Size"
                             className={classes.selectLabel}
-                            onChange={(event) => { setSize(event.target.value); }}
+                            onChange={onSizeChange}
                             error={addToCartTriggered && !size ? true : false}
                         >
                             {
@@ -116,10 +139,13 @@ const ProductDetailsSection = (props) => {
                         </ButtonGroup>
                     </div>
                 </div>
-
-                <Button variant="contained" className={classes.addToCartButton} onClick={onAddToCart}>ADD TO CART</Button>
                 
-                {(props.cart && props.cart.length > 0) && <div className={classes.addToCartButtonWrapper}>
+                {outOfStockError && <Typography variant="body1" className={classes.errorFont}>Selected product is OUT OF STOCK.</Typography>}
+                <div className={classes.addToCartButtonWrapper}>
+                    <Button variant="contained" className={classes.addToCartButton} onClick={onAddToCart} disabled={!color || !size || outOfStockError}>ADD TO CART</Button>
+                </div>
+                
+                {(props.cart && props.cart.length > 0) && <div className={classes.viewCartButtonWrapper}>
                     <Button variant="outlined" className={classes.addToCartButton} onClick={() => history.push(ROUTES.CART)}>View Cart</Button>
                 </div>}
 

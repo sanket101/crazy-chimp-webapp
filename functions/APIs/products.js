@@ -1,5 +1,6 @@
 const { db } = require('../utils/admin');
 const { validateProductData } = require('../utils/validators');
+const gaxios = require('gaxios');
 
 const getImageURL = (productCategory, productCode, color) => {
     return `https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2F${productCategory}%2F${productCode}%2F${productCode}_${color}.Webp?alt=media`;
@@ -209,7 +210,8 @@ exports.getAllProducts = (request, response) => {
                             colorsAvailable: doc.data().colorsAvailable,
                             sizeAvailable: doc.data().sizeAvailable,
                             images: doc.data().images,
-                            weightInGms: doc.data().weightInGms
+                            weightInGms: doc.data().weightInGms,
+                            isAvailable: doc.data().isAvailable
                         });
                     });
                     return response.json(products);
@@ -237,7 +239,8 @@ exports.getAllProducts = (request, response) => {
                             colorsAvailable: doc.data().colorsAvailable,
                             sizeAvailable: doc.data().sizeAvailable,
                             images: doc.data().images,
-                            weightInGms: doc.data().weightInGms
+                            weightInGms: doc.data().weightInGms,
+                            isAvailable: doc.data().isAvailable
                         });
                     });
                     return response.json(products);
@@ -265,7 +268,8 @@ exports.getAllProducts = (request, response) => {
                             colorsAvailable: doc.data().colorsAvailable,
                             sizeAvailable: doc.data().sizeAvailable,
                             images: doc.data().images,
-                            weightInGms: doc.data().weightInGms
+                            weightInGms: doc.data().weightInGms,
+                            isAvailable: doc.data().isAvailable
                         });
                     });
                     return response.json(products);
@@ -292,7 +296,8 @@ exports.getAllProducts = (request, response) => {
                             colorsAvailable: doc.data().colorsAvailable,
                             sizeAvailable: doc.data().sizeAvailable,
                             images: doc.data().images,
-                            weightInGms: doc.data().weightInGms
+                            weightInGms: doc.data().weightInGms,
+                            isAvailable: doc.data().isAvailable
                         });
                     });
                     return response.json(products);
@@ -333,7 +338,8 @@ exports.getAllProducts = (request, response) => {
                                 colorsAvailable: doc.data().colorsAvailable,
                                 sizeAvailable: doc.data().sizeAvailable,
                                 images: doc.data().images,
-                                weightInGms: doc.data().weightInGms
+                                weightInGms: doc.data().weightInGms,
+                                isAvailable: doc.data().isAvailable
                             });
                         });
                         return response.json(products);
@@ -375,7 +381,8 @@ exports.getAllProducts = (request, response) => {
                                 colorsAvailable: doc.data().colorsAvailable,
                                 sizeAvailable: doc.data().sizeAvailable,
                                 images: doc.data().images,
-                                weightInGms: doc.data().weightInGms
+                                weightInGms: doc.data().weightInGms,
+                                isAvailable: doc.data().isAvailable
                             });
                         });
                         return response.json(products);
@@ -417,7 +424,8 @@ exports.getAllProducts = (request, response) => {
                                 colorsAvailable: doc.data().colorsAvailable,
                                 sizeAvailable: doc.data().sizeAvailable,
                                 images: doc.data().images,
-                                weightInGms: doc.data().weightInGms
+                                weightInGms: doc.data().weightInGms,
+                                isAvailable: doc.data().isAvailable
                             });
                         });
                         return response.json(products);
@@ -457,7 +465,8 @@ exports.getAllProducts = (request, response) => {
                                 colorsAvailable: doc.data().colorsAvailable,
                                 sizeAvailable: doc.data().sizeAvailable,
                                 images: doc.data().images,
-                                weightInGms: doc.data().weightInGms
+                                weightInGms: doc.data().weightInGms,
+                                isAvailable: doc.data().isAvailable
                             });
                         });
                         return response.json(products);
@@ -478,3 +487,92 @@ exports.getAllProducts = (request, response) => {
         return response.status(400).json({ error: 'Invalid Request : No pagination id'})
     }
 };
+
+const extractStockInformation = (list) => {
+    let result;
+
+    for (let index = 0; index < list.length; index++) {
+        const element = list[index];
+        let colorKeyName = element.color;
+        colorKeyName = colorKeyName.replace(/ /g, '').toUpperCase();
+        if(result && result.hasOwnProperty(colorKeyName)) {
+            const tempObject = result[colorKeyName];
+            const newTempObject = {...tempObject, [element.size] : element.stock_status === "in_stock" ? true : false};
+            result = {...result, [colorKeyName]: newTempObject};
+        }
+        else {
+            result = {...result, [colorKeyName] : { [element.size] : element.stock_status === "in_stock" ? true : false }};
+        }
+    }
+
+    return result;
+};
+
+const populateStockData = async (token) => {
+    const productList = [{ name: 'HST', code: '460'}, { name: 'FST', code: '461'}, {name: 'HOODIES', code: '463'}, {name: 'SWTS', code: '1012'}];
+    // gaxios.instance.defaults = {
+    //     baseURL: 'https://api.printrove.com',
+    //     "Content-Type": "application/json",
+    //     Accept: "application/json",
+    //     Authorization: `Bearer ${token}`
+    // };
+
+    let result = {};
+
+    for (let index = 0; index < productList.length; index++) {
+        const element = productList[index];
+
+        const response = await gaxios.request({ 
+            url: `/api/external/categories/25/products/${element.code}`, 
+            method: 'GET',
+            baseURL: 'https://api.printrove.com',
+            headers: {
+                'Content-Type': "application/json",
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`
+            }
+        });
+        
+        if(response && response.data && response.data.status === "success") {
+            const stockObject = extractStockInformation(response.data.product.variants);
+            // const stockObject = response.data.product.variants;
+            result = {...result, [element.name] : stockObject };
+        }
+    }
+
+    return result;
+};
+
+exports.getStockAvailability = (request, response) => {
+    gaxios.instance.defaults = {
+        baseURL: 'https://api.printrove.com',
+        "Content-Type": "application/json",
+        Accept: "application/json",
+    };
+
+    gaxios.request({
+        url: '/api/external/token',
+        method: 'POST',
+        data: {
+            email: 'crazychimpofficial@gmail.com',
+            password: 'mahajangandu'
+        }
+    })
+    .then(res => {
+        if(res && res.data && res.data.status === "success") {
+            const result = populateStockData(res.data.access_token);
+            return result;
+        }
+        else {
+            console.log('Issue in fetching printrove details');
+            return {};
+        }
+    })
+    .then(data => {
+        return response.json({ status: 'success', stock: data});
+    })
+    .catch(err => {
+        console.error(err);
+        return response.status(500).json({ error: err.code});
+    });    
+}

@@ -20,3 +20,17 @@ export const setDiscountData = (data) => {
         payload: data
     };
 };
+
+export const setCustomerGallery = (data) => {
+    return {
+        type: generalActionTypes.SET_CUSTOMER_GALLERY,
+        payload: data
+    };
+};
+
+export const setDiscountCodes = (data) => {
+    return {
+        type: generalActionTypes.SET_DISCOUNT_CODES,
+        payload: data
+    };
+};
