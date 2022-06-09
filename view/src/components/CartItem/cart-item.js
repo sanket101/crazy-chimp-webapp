@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Typography, ButtonGroup, Button, IconButton } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -20,6 +20,10 @@ const CartItem = (props) => {
             }, props.updateCart(itemKey, 'qty', qty - 1));
         }
     };
+
+    useEffect(() => {
+        setQty(item.qty);
+    }, [item.qty]);
 
     return (
         <div className={classes.cartItemWrapper}>

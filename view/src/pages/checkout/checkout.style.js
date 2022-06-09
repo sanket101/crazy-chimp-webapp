@@ -13,7 +13,7 @@ const styles = (theme) => ({
         }
     },
     multiStep: {
-        padding: '30px',
+        padding: '30px 0',
         flex: '4 1',
         '& .MuiPaper-root': {
             backgroundColor: CSSConstants.BACKGROUND_SECONDARY
@@ -109,6 +109,11 @@ const styles = (theme) => ({
             margin: '20px 0px'
         }
     },
+    checkoutCta: {
+        '& .MuiButton-outlined': {
+            border: `1px solid ${CSSConstants.FONT_SECONDARY}`
+        }
+    }
 });
 
 export default styles;

@@ -137,7 +137,7 @@ exports.getProductsData = (request, response) => {
 		    return response.status(500).json({ error: err.code });
         });
     }
-    if(productCategory) {
+    else if(productCategory) {
         db.collection('products')
         .where('productCategory', '==', productCategory)
         .get()
@@ -153,7 +153,7 @@ exports.getProductsData = (request, response) => {
 		    return response.status(500).json({ error: err.code });
         });
     }
-    if(genreCategory) {
+    else if(genreCategory) {
         db.collection('products')
         .where('genreCategory', '==', genreCategory)
         .get()
@@ -169,7 +169,8 @@ exports.getProductsData = (request, response) => {
 		    return response.status(500).json({ error: err.code });
         });
     }
-    db.collection('products')
+    else {
+        db.collection('products')
         .get()
         .then((data) => {
             docsLength = data.docs.length;
@@ -182,6 +183,7 @@ exports.getProductsData = (request, response) => {
             console.error(err);
 		    return response.status(500).json({ error: err.code });
         });
+    }
 };
 
 exports.getAllProducts = (request, response) => {
@@ -199,7 +201,7 @@ exports.getAllProducts = (request, response) => {
                 .then((data) => {
                     let products = [];
                     data.forEach((doc) => {
-                        products.push({
+                        products.push({ 
                             productId: doc.id,
                             name: doc.data().name,
                             description: doc.data().description,
@@ -510,12 +512,6 @@ const extractStockInformation = (list) => {
 
 const populateStockData = async (token) => {
     const productList = [{ name: 'HST', code: '460'}, { name: 'FST', code: '461'}, {name: 'HOODIES', code: '463'}, {name: 'SWTS', code: '1012'}];
-    // gaxios.instance.defaults = {
-    //     baseURL: 'https://api.printrove.com',
-    //     "Content-Type": "application/json",
-    //     Accept: "application/json",
-    //     Authorization: `Bearer ${token}`
-    // };
 
     let result = {};
 
@@ -544,15 +540,13 @@ const populateStockData = async (token) => {
 };
 
 exports.getStockAvailability = (request, response) => {
-    gaxios.instance.defaults = {
-        baseURL: 'https://api.printrove.com',
-        "Content-Type": "application/json",
-        Accept: "application/json",
-    };
-
     gaxios.request({
         url: '/api/external/token',
         method: 'POST',
+        baseURL: 'https://api.printrove.com',
+        headers: {
+            "Content-Type": "application/json",
+        },
         data: {
             email: 'crazychimpofficial@gmail.com',
             password: 'mahajangandu'

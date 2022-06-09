@@ -13,7 +13,7 @@ exports.addInvoice = (request, response) => {
 
     const newInvoiceItem = {
         userId: request.uid,
-        addressId: request.body.addressId,
+        shippingAddress: request.body.shippingAddress,
         orders: request.body.orders,
         paymentMethod: request.body.paymentMethod,
         productTotalAmount: request.body.productTotalAmount,
@@ -22,7 +22,7 @@ exports.addInvoice = (request, response) => {
         discountAmount: request.body.discountAmount ? request.body.discountAmount : 0,
         discountCode: request.body.discountCode ? request.body.discountCode : '',
         createdAt: currentDate.toISOString().split('T')[0],
-        status: 'PROCESSING',
+        status: 'RECEIVED',
         trackingLink: ''
     };
 
@@ -121,23 +121,10 @@ const populateInvoiceList = async(result) => {
     
     for(let j=0; j < result.docs.length; j++) {
         const docSnap = result.docs[j];
-        const invoiceOrders = docSnap.data().orders;
-        let orderData = [];
-        for (let i = 0; invoiceOrders && i < invoiceOrders.length; i++) {
-            const orderId = invoiceOrders[i];
-            const orderRef = db.doc(`/orders/${orderId}`);
-            const orderSnap = await orderRef.get();
-            if(orderSnap.exists) {
-                orderData.push(orderSnap.data());
-            }
-        }
-        const addressId = docSnap.data().addressId;
-        const addressRef = db.doc(`/addresses/${addressId}`);
-        const addressSnap = await addressRef.get();
 
         invoices.push({
             id: docSnap.id,
-            orders: orderData,
+            orders: docSnap.data().orders,
             productTotalAmount: docSnap.data().productTotalAmount,
             shippingAmount: docSnap.data().shippingAmount,
             discountCode: docSnap.data().discountCode,
@@ -146,7 +133,7 @@ const populateInvoiceList = async(result) => {
             codAmount: docSnap.data().codAmount,
             discountAmount: docSnap.data().discountAmount,
             status: docSnap.data().status,
-            shippingAddress : addressSnap.exists ? addressSnap.data() : {},
+            shippingAddress : docSnap.data().shippingAddress,
             trackingLink: docSnap.data().trackingLink
         });
     };
@@ -176,6 +163,25 @@ exports.getInvoicesByDate = (request, response) => {
 
     db.collection('invoices')
     .where('createdAt', '==', requestDate)
+	.get()
+	.then(async(result) => {
+        let invoices = await populateInvoiceList(result);
+        return invoices;
+	})
+    .then((invoices) => {
+        return response.json(invoices);
+    })
+	.catch((err) => {
+		console.error(err);
+		return response.status(500).json({ error: err.code});
+	});
+};
+
+exports.getAllInvoices = (request, response) => {
+    const { paginationId } = request.params;
+    
+    db
+    .collection('invoices')
 	.get()
 	.then(async(result) => {
         let invoices = await populateInvoiceList(result);

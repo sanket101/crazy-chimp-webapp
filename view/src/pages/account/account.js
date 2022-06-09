@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 import NavigationBar from '../../components/NavigationBar/navigation-bar';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Footer from '../../components/Footer/footer';
-import { Typography, Button, Box, CircularProgress, Drawer, CssBaseline, List, Divider, ListItem, ListItemIcon, ListItemText, Avatar } from '@material-ui/core';
-import { AccountBox as AccountBoxIcon, Notes as NotesIcon, ExitToApp as ExitToAppIcon } from '@material-ui/icons';
+import { Typography, Box, CircularProgress } from '@material-ui/core';
 import styles from './account.style';
 import { authMiddleWare } from '../../utils/auth';
 import { setUserInvoices } from '../../redux/User/user.actions';
@@ -47,49 +46,6 @@ const Account = (props) => {
 
         return (
             <div>
-                {/* <Drawer
-					className={classes.drawer}
-					variant="permanent"
-					classes={{
-						paper: classes.drawerPaper
-					}}
-				>
-					<div className={classes.toolbar} />
-					<Divider />
-					<center>
-						<Avatar src={''} className={classes.avatar} />
-						<p>
-							{' '}
-							{'Vaibhav'} {'Sharma'}
-						</p>
-					</center>
-					<Divider />
-					<List>
-						<ListItem button key="Todo" onClick={() => {}}>
-							<ListItemIcon>
-								{' '}
-								<NotesIcon />{' '}
-							</ListItemIcon>
-							<ListItemText primary="Todo" />
-						</ListItem>
-
-						<ListItem button key="Account" onClick={() => {}}>
-							<ListItemIcon>
-								{' '}
-								<AccountBoxIcon />{' '}
-							</ListItemIcon>
-							<ListItemText primary="Account" />
-						</ListItem>
-
-						<ListItem button key="Logout" onClick={() => {}}>
-							<ListItemIcon>
-								{' '}
-								<ExitToAppIcon />{' '}
-							</ListItemIcon>
-							<ListItemText primary="Logout" />
-						</ListItem>
-					</List>
-				</Drawer> */}
                 <Typography variant='h3' className={classes.primaryFont}>Your Recent Orders</Typography>
                 {props.userInvoices.map((userInvoice, index) => {
                     return (

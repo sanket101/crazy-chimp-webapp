@@ -43,6 +43,9 @@ const Checkout = (props) => {
     const [isLoading, setLoading] = useState(true);
     const [addAddressApiTriggered, setAddAddressApiTriggered] = useState(false);
     const [cartItems, setCartItems] = useState(cart);
+    const [orderSuccess, setOrderSuccess] = useState(false);
+    const [showAddressDisclaimer, setAddressDisclaimer] = useState(false);
+    const [addNewButtonTriggered, setAddNewButtonTriggered] = useState(false);
 
     const steps = ['Customer Information', 'Shipping & Payment', 'Order Confirmation'];
     let history = useHistory();
@@ -55,6 +58,9 @@ const Checkout = (props) => {
                         selectExistingAddress={selectExistingAddress}
                         selectedAddressIndex={props.selectedAddressIndex}
                         addNewCustomerAddress={addNewCustomerAddress}
+                        addNewButtonTriggered={addNewButtonTriggered}
+                        setAddNewButtonTriggered={setAddNewButtonTriggered}
+                        showAddressDisclaimer={showAddressDisclaimer}
                     />;
         }
         else if(activeStep === 1) {
@@ -263,7 +269,12 @@ const Checkout = (props) => {
                 if(response && response.data && response.data.id) {
                     props.addNewAddress(response.data);
                     selectExistingAddress(props.userAddresses.length);
+                    setAddNewButtonTriggered(false);
                 }
+                setAddressDisclaimer(false);
+            }
+            else{
+                setAddressDisclaimer(true);
             }
             setAddAddressApiTriggered(false);
         }
@@ -280,7 +291,7 @@ const Checkout = (props) => {
             authMiddleWare(history);
             const authToken = localStorage.getItem('AuthToken');
             axios.defaults.headers.common = { Authorization: `${authToken}` };
-            let orderIdArray = [];
+            let ordersArray = [];
             for (let index = 0; index < props.cart.length; index++) {
                 const cartItem = props.cart[index];
                 const requestPayload = {
@@ -291,16 +302,13 @@ const Checkout = (props) => {
                     size: cartItem.size,
                     color: cartItem.color
                 };
-                const response = await axios.post(apiConfig.addOrder, requestPayload);
-                if(response && response.data && response.data.id) {
-                    orderIdArray.push(response.data.id);
-                }
+                ordersArray.push(requestPayload);
             }
 
-            if(orderIdArray.length > 0) {
+            if(ordersArray.length > 0) {
                 const requestPayload = {
-                    addressId: props.userAddresses[props.selectedAddressIndex].addressId,
-                    orders: orderIdArray,
+                    shippingAddress: props.userAddresses[props.selectedAddressIndex],
+                    orders: ordersArray,
                     paymentMethod: paymentMethod,
                     productTotalAmount: getProductTotal(),
                     shippingAmount: getShippingAmount(),
@@ -310,6 +318,7 @@ const Checkout = (props) => {
                 };
                 const response = await axios.post(apiConfig.addInvoice, requestPayload);
                 if(response && response.data && response.data.id) {
+                    setOrderSuccess(true);
                     props.updateCart([]);
                 }
             }
@@ -323,7 +332,7 @@ const Checkout = (props) => {
        callUserDetailsApi(); 
     }, []);
 
-    if(props.cart.length === 0) {
+    if(props.cart.length === 0 && !orderSuccess) {
         history.push(ROUTES.HOME);
         return <></>;
     }
@@ -351,19 +360,20 @@ const Checkout = (props) => {
                                     </Stepper>
                                     {getAppropriateComponent()}
 
-                                    {activeStep !== steps.length - 1 && <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                                        <Button
-                                            color="inherit"
-                                            disabled={activeStep === 0}
+                                    {activeStep !== steps.length - 1 && <Box className={classes.checkoutCta} sx={{ display: 'flex', flexDirection: 'row', pt: 2, padding: '16px 30px' }}>
+                                       {activeStep !== 0 &&  <Button
+                                            variant="outlined"
+                                            //color="inherit"
+                                            disabled={activeStep === 0 ? true: false}
                                             onClick={handleBack}
                                             sx={{ mr: 1 }}
                                         >
                                             Back
-                                        </Button>
+                                        </Button>}
 
                                         <Box sx={{ flex: '1 1 auto' }} />
 
-                                        <Button onClick={handleNext}>
+                                        <Button onClick={handleNext} variant="outlined">
                                             {activeStep === steps.length - 2 ? 'Place Order' : 'Next'}
                                         </Button>
                                     </Box>}

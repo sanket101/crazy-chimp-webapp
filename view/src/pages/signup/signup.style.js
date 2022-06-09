@@ -1,7 +1,7 @@
 const styles = (theme) => ({
     signUpWrapper: {
         minHeight: '100vh',
-        paddingTop: '80px'
+        padding: '80px 0'
     },
 	paper: {
 		marginTop: theme.spacing(8),
@@ -15,7 +15,8 @@ const styles = (theme) => ({
 	},
 	form: {
 		width: '100%', // Fix IE 11 issue.
-		marginTop: theme.spacing(3)
+		marginTop: theme.spacing(3),
+		padding: '30px'
 	},
 	submit: {
 		margin: theme.spacing(3, 0, 2)

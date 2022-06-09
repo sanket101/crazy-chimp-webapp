@@ -14,6 +14,9 @@ const styles = (theme) => ({
     primaryFont: {
         color: CSSConstants.FONT_PRIMARY
     },
+    secondaryFont: {
+        color: CSSConstants.FONT_SECONDARY
+    },
     invoiceDetails: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -38,6 +41,10 @@ const styles = (theme) => ({
         flexWrap: 'wrap',
         justifyContent: 'space-evenly',
         padding: '10px'
+    },
+    issueWrapper: {
+        display: 'flex',
+        justifyContent: 'center'
     }
 });
 

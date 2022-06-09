@@ -52,13 +52,14 @@ const Gallery = (props) => {
                 <>
                 <Box className={classes.hideForMobile}>
                     <div className='adjust-height-desktop'>
-                        <ImageList variant="masonry" cols={3} gap={8}>
+                        <ImageList variant="masonry" cols={4} gap={8}>
                             {props.customerGallery.map((item, index) => (
                                 <ImageListItem key={index}>
                                     <img
                                         src={`${item.img}&w=248&fit=crop&auto=format`}
                                         srcSet={`${item.img}&w=248&fit=crop&auto=format&dpr=2 2x`}
                                         alt={'Customer Image'}
+                                        // height='600px'
                                         loading="lazy"
                                     />
                                 </ImageListItem>

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { Typography, Card, CardContent, Badge, Divider } from '@material-ui/core';
+import { Typography, Card, CardContent, Badge, Divider, Link } from '@material-ui/core';
 import styles from './invoice-display-card.style';
 
 const InvoiceDisplayCard = (props) => {
@@ -41,6 +41,10 @@ const InvoiceDisplayCard = (props) => {
                         <Typography variant='body1'>Shipping Address</Typography>
                         <Typography variant='h6' className={classes.primaryFont}>{shippingAddress}</Typography>
                     </div>
+                    {invoice.trackingLink && <div className={classes.shippingDetails}>
+                        <Typography variant='body1'>Tracking Link</Typography>
+                        <Link variant='h6' className={classes.primaryFont} href={invoice.trackingLink} target="_blank">{invoice.trackingLink}</Link>
+                    </div>}
                     <div className={classes.dividerWrapper}>
                         <Divider />
                     </div>
@@ -59,6 +63,10 @@ const InvoiceDisplayCard = (props) => {
                                 </div>
                             );
                         })}
+                    </div>
+
+                    <div className={classes.issueWrapper}>
+                        <Link variant="body2" className={classes.secondaryFont} href="mailto:support.crazychimp@gmail.com" >Having some trouble with the delivered product? Please click here or mail us at support.crazychimp@gmail.com</Link>
                     </div>
                 </CardContent>
             </Card>

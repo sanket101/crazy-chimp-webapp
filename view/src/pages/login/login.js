@@ -23,6 +23,7 @@ import { setLoginError } from '../../redux/General/general.actions';
 import MuiAlert from '@mui/material/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import { handleApiError } from '../../utils/error-handling';
+import ROUTES from '../../constants/routes-name';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -155,7 +156,7 @@ const Login = (props) => {
 						</Button>
 						<Grid container>
 							<Grid item>
-								<Link href="signup" variant="body2">
+								<Link variant="body2" onClick={() => props.history.push(ROUTES.SIGNUP)}>
 									{"Don't have an account? Sign Up"}
 								</Link>
 							</Grid>

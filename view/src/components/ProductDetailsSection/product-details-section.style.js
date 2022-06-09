@@ -3,17 +3,23 @@ import CSSConstants from '../../constants/css-constants';
 const styles = (themes) => ({
     imageContainer: {
         display: 'block',
-        padding: '30px'
+        padding: '30px',
+        flex: '2 1',
+        textAlign: 'center',
+        '@media (max-width: 540px)': {
+            padding: '30px 10px'
+        }
     },
     imageAttributes: {
         height: '500px',
         '@media (max-width: 540px)': {
-            height: '350px'
+            height: '320px'
         }
     },
     productContainer: {
         color: CSSConstants.FONT_PRIMARY,
-        padding: '30px'
+        padding: '30px',
+        flex: '2 1'
     },
     inputLabel: {
         color: CSSConstants.FONT_PRIMARY

@@ -74,6 +74,10 @@ const styles = (themes) => ({
     },
     hideForDesktop: {
         textAlign: 'center',
+        position: 'fixed',
+        zIndex: '1',
+        marginLeft: '33.33%',
+        marginTop: '-40px',
         '& .MuiButton-outlined': {
             border: `1px solid ${CSSConstants.FONT_PRIMARY}`
         },
@@ -85,10 +89,17 @@ const styles = (themes) => ({
 		}
 	},
 	hideForMobile: {
+        flex: '1 1',
 		'@media (max-width: 540px)' : {
 			display: 'none'
 		}
-	}
+	},
+    fixedPosition: {
+        position: 'fixed'
+    },
+    noProductsFound: {
+        color: CSSConstants.FONT_PRIMARY
+    }
 });
 
 export default styles;

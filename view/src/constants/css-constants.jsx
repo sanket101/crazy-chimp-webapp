@@ -5,7 +5,8 @@ const CSSConstants = {
     FONT_SECONDARY: "#A4A4A4",
     FONT_BLACK: '#000000',
     FONT_HIGHLIGHT: '#8fcaf9',
-    ERROR: '#f44336'
+    ERROR: '#f44336',
+    LANDING_PAGE_HIGHLIGHTER: "#6dcff6"
 };
 
 export default CSSConstants;

@@ -43,35 +43,36 @@ const DiscountSection = (props) => {
     }, []);
 
     return (
-        <div className={classes.collabSectionWrapper}>
-        <Typography variant="h3" className={classes.headerMargin}>Discount Offers</Typography>
-        {
-            isLoading ?
+        // <div className={classes.collabSectionWrapper}>
+        //     <Typography variant="h3" className={classes.headerMargin}>Discount Offers</Typography>
+        //     {
+        //         isLoading ?
 
-                <Box sx={{textAlign: 'center'}}>
-                    <CircularProgress />
-                </Box>
-                :
-                <Rerousel itemRef={collabRef}>
-                    {
-                        items.map((item, i) =>  {
-                            return (
-                                <div key={i} className={classes.collabItem} ref={collabRef}>
-                                    <img
-                                        src={`${item.imgURL}&w=248&fit=crop&auto=format`}
-                                        srcSet={`${item.imgURL}&w=248&fit=crop&auto=format&dpr=2 2x`}
-                                        height="300px"
-                                        // width="500px"
-                                        alt={item.title}
-                                        loading="lazy"
-                                    />
-                                </div>
-                            );                
-                        })
-                    }
-                </Rerousel>
-         }    
-        </div>
+        //             <Box sx={{textAlign: 'center'}}>
+        //                 <CircularProgress />
+        //             </Box>
+        //             :
+        //             <Rerousel itemRef={collabRef}>
+        //                 {
+        //                     items.map((item, i) =>  {
+        //                         return (
+        //                             <div key={i} className={classes.collabItem} ref={collabRef}>
+        //                                 <img
+        //                                     src={`${item.imgURL}&w=248&fit=crop&auto=format`}
+        //                                     srcSet={`${item.imgURL}&w=248&fit=crop&auto=format&dpr=2 2x`}
+        //                                     height="300px"
+        //                                     // width="500px"
+        //                                     alt={item.title}
+        //                                     loading="lazy"
+        //                                 />
+        //                             </div>
+        //                         );                
+        //                     })
+        //                 }
+        //             </Rerousel>
+        //     }    
+        // </div>
+        <></>
     );
 };
 

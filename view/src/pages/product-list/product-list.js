@@ -5,7 +5,7 @@ import { setProductList, setPaginationNumber, setProductType, setGenreType, setP
 import NavigationBar from '../../components/NavigationBar/navigation-bar';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Footer from '../../components/Footer/footer';
-import { FormControl, Button, FormLabel, RadioGroup, FormControlLabel, Radio, ButtonGroup, Drawer, Box, CircularProgress, Typography, Select, MenuItem } from '@material-ui/core';
+import { FormControl, Button, FormLabel, ButtonGroup, Drawer, Box, CircularProgress, Typography, Select, MenuItem, Fab } from '@material-ui/core';
 import { Stack, Pagination } from '@mui/material';
 import ProductCard from '../../components/ProductCard/product-card';
 import styles from './product-list.style';
@@ -144,6 +144,10 @@ const ProductList = (props) => {
                 // Image Loading logic
                 cacheImages(response.data);
             }
+            else {
+                props.setProductList([]);
+                props.setProductsData(0);
+            }
             setLoading(false);
         }
         catch(err) {
@@ -192,27 +196,38 @@ const ProductList = (props) => {
                     :
                     <>
                         <div className={classes.productListWrapper}>
-                            <div className={classes.hideForDesktop}>
-                                <Button variant="outlined" onClick={() => setFilterDrawer(true)}>Categories</Button>
-                            </div>
-
                             <div className={classes.productListContainer}>
                                 <div className={classes.hideForMobile}>
-                                    {renderFilteringSection('desktop')}
+                                    <div className={classes.fixedPosition}>
+                                        {renderFilteringSection('desktop')}
+                                    </div>
                                 </div>
 
                                 <div className={classes.productList}>
-                                    {products.length === 0 && <div>
-                                            <Typography variant='h6'>No Products Found!</Typography>
+                                    {products.length === 0 && <div className={classes.noProductsFound}>
+                                            <Typography variant='h6'>No Products Found in this category!</Typography>
                                         </div>
                                     }
-                                    {products.length > 0 && products.map((product, i) => {
-                                        return (
-                                            <div key={i} onClick={() => onProductClick(product)}>
-                                                <ProductCard product={product}/>
-                                            </div>
-                                        );
-                                    })}
+                                    {products.length > 0 &&
+                                        <>
+                                            <div className={classes.hideForDesktop}>
+                                                <Fab variant="extended" onClick={() => setFilterDrawer(true)}>
+                                                    {/* <NavigationIcon sx={{ mr: 1 }} /> */}
+                                                    Filters
+                                                </Fab>
+                                                {/* <Button variant="outlined" onClick={() => setFilterDrawer(true)}>Categories</Button> */}
+                                            </div> 
+                                            {
+                                                products.map((product, i) => {
+                                                    return (
+                                                        <div key={i} onClick={() => onProductClick(product)}>
+                                                            <ProductCard product={product}/>
+                                                        </div>
+                                                    );
+                                                })
+                                            }
+                                        </>
+                                    }
                                 </div>
                             </div>
                         </div>

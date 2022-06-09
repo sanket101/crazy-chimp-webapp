@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import withStyles from '@material-ui/core/styles/withStyles';
 import styles from './show-orders.style';
-import { Container, CssBaseline, TextField, Typography, Avatar, Button, Modal, CircularProgress, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from "@material-ui/core";
-import ReceiptIcon from '@mui/icons-material/Receipt';
+import { TextField, Typography, Button, Modal, CircularProgress, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Select, MenuItem, Snackbar } from "@material-ui/core";
 import { authMiddleWare } from "../../../utils/auth";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import apiConfig from "../../../api/api-config";
 import { handleApiError } from "../../../utils/error-handling";
 import SendIcon from '@mui/icons-material/Send';
+import MuiAlert from '@mui/material/Alert';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const ShowOrders = (props) => {
     const { classes } = props;
@@ -17,6 +21,10 @@ const ShowOrders = (props) => {
     const [invoices, setInvoices] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [activeInvoice, setActiveInvoice] = useState({});
+    const [activeInvoiceIndex, setActiveInvoiceIndex] = useState('');
+    const [updateSuccess, setUpdateSuccess] = useState(false);
+
+    const orderStatuses = ['RECEIVED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'UNDELIVERED', 'RETURNED', 'ISSUE RAISED'];
 
     let history = useHistory();
 
@@ -28,8 +36,26 @@ const ShowOrders = (props) => {
             const requestPayload = {
                 date
             };
-            const response = await axios.post(apiConfig.getInvoiceByDate, requestPayload);
-            if(response && response.data && response.data.length > 0) {
+            const response = await axios.get(apiConfig.getInvoiceByDate, requestPayload);
+            if(response && response.data && response.data.length >= 0) {
+                //Save Invoice
+                setInvoices(response.data);
+            }
+            setLoading(false);
+        }
+        catch(err) {
+            setLoading(false);
+            handleApiError(history, err);
+        }
+    };
+
+    const callGetAllInvoicesApi = async () => {
+        try {
+            authMiddleWare(history);
+            const authToken = localStorage.getItem('AuthToken');
+            axios.defaults.headers.common = { Authorization: `${authToken}` };
+            const response = await axios.get(apiConfig.getAllInvoices);
+            if(response && response.data && response.data.length >= 0) {
                 //Save Invoice
                 setInvoices(response.data);
             }
@@ -47,6 +73,47 @@ const ShowOrders = (props) => {
 
     const getTotal = () => {
         return +activeInvoice.productTotalAmount + +activeInvoice.shippingAmount + +activeInvoice.codAmount - +activeInvoice.discountAmount;
+    };
+
+    const handleChangeStatus = (event) => {
+        const updatedInvoice = {...activeInvoice, status: event.target.value};
+        setActiveInvoice(updatedInvoice);
+    };
+
+    const handleTrackingChange = (event) => {
+        const updatedInvoice = {...activeInvoice, trackingLink: event.target.value};
+        setActiveInvoice(updatedInvoice);
+    };
+
+    const onInvoiceUpdate = async () => {
+        try {
+            authMiddleWare(history);
+            const authToken = localStorage.getItem('AuthToken');
+            axios.defaults.headers.common = { Authorization: `${authToken}` };
+            const requestPayload = {
+                status: activeInvoice.status,
+                trackingLink: activeInvoice.trackingLink
+            };
+            const response = await axios.put(`${apiConfig.updateInvoice}/${activeInvoice.id}`, requestPayload);
+            if(response?.data?.message) {
+                //Save Invoice
+                const updatedInvoices = [...invoices];
+                updatedInvoices[activeInvoiceIndex] = activeInvoice;
+                setInvoices(updatedInvoices);
+                setUpdateSuccess(true);
+            }
+        }
+        catch(err) {
+            handleApiError(history, err);
+        }
+    };
+
+    const handleAlertClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setUpdateSuccess(false);
     };
 
     const renderModal = () => {
@@ -71,7 +138,15 @@ const ShowOrders = (props) => {
 
                         <div>
                             <Typography variant="body1">Status</Typography>
-                            <Typography variant="h6">{activeInvoice.status}</Typography>
+                            <Select
+                                id="order-status-dropdown"
+                                value={activeInvoice.status}
+                                onChange={handleChangeStatus}
+                            >
+                                {orderStatuses.map((status, index) => {
+                                    return <MenuItem key={index} value={status}>{status}</MenuItem>
+                                })}
+                            </Select>
                         </div>
                     </div>
 
@@ -117,6 +192,10 @@ const ShowOrders = (props) => {
                         <Typography variant="h6">{`${activeInvoice.shippingAddress.address}, ${activeInvoice.shippingAddress.city}, ${activeInvoice.shippingAddress.state} - ${activeInvoice.shippingAddress.pincode}`}</Typography>
                     </div>
 
+                    <div>
+                        <TextField id="tracking-link-field" label="Tracking Link" variant="outlined" onChange={handleTrackingChange} value={activeInvoice.trackingLink} />
+                    </div>
+
                     <TableContainer component={Paper}>
                         <Table sx={{ minWidth: 750 }} aria-label="simple table">
                             <TableHead>
@@ -146,18 +225,27 @@ const ShowOrders = (props) => {
                             </TableBody>
                         </Table>
                     </TableContainer>
+
+                    <Button variant="contained" onClick={onInvoiceUpdate}>Update</Button>
+
+                    {updateSuccess && <Snackbar open={updateSuccess} autoHideDuration={4000} onClose={handleAlertClose}>
+                            <Alert onClose={handleAlertClose} severity="success" sx={{ width: '100%' }}>
+                                Invoice Updated!
+                            </Alert>
+                        </Snackbar>}
                 </Box>
             </Modal>
         );
     };
 
-    const checkInvoiceDetails = (userInvoice) => {
+    const checkInvoiceDetails = (userInvoice, index) => {
         setActiveInvoice(userInvoice);
+        setActiveInvoiceIndex(index);
         setOpenModal(true);
     };
 
     useEffect(() => {
-        callInvoicesByDateApi();
+        callGetAllInvoicesApi();
     }, []);
 
     return (
@@ -178,7 +266,9 @@ const ShowOrders = (props) => {
                         <Button 
                             variant="contained"
                             color="primary"
-                            className={classes.submit}>
+                            className={classes.submit}
+                            disabled
+                            onClick={() => callInvoicesByDateApi()}>
                                 Apply
                         </Button>
                     </div>
@@ -210,7 +300,7 @@ const ShowOrders = (props) => {
                                                 <TableCell align="center">{userInvoice.shippingAddress.name}</TableCell>
                                                 <TableCell align="center">{userInvoice.status}</TableCell>
                                                 <TableCell align="center">
-                                                    <IconButton onClick={() => checkInvoiceDetails(userInvoice)}><SendIcon /></IconButton>
+                                                    <IconButton onClick={() => checkInvoiceDetails(userInvoice, index)}><SendIcon /></IconButton>
                                                 </TableCell>
                                             </TableRow>
                                         )

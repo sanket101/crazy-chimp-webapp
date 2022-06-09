@@ -9,7 +9,7 @@ const styles = (themes) => ({
         '& .adjust-height-desktop': {
             '& .MuiImageList-root': {
                 '& li': {
-                    height: '450px !important'
+                    height: '500px !important'
                 }
             }
         },

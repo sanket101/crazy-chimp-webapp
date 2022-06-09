@@ -252,9 +252,29 @@ const NavigationBar = (props) => {
 								</IconButton>
 
 								{isLoggedIn ? 
-									<IconButton className={classes.navigationIconButton}>
+									<>
+									<IconButton className={classes.navigationIconButton} onClick={handleMenu}>
 										<AccountCircleIcon />
 									</IconButton>
+									<Menu
+											id="menu-appbar"
+											anchorEl={anchorEl}
+											anchorOrigin={{
+											vertical: 'top',
+											horizontal: 'right',
+											}}
+											keepMounted
+											transformOrigin={{
+											vertical: 'top',
+											horizontal: 'right',
+											}}
+											open={Boolean(anchorEl)}
+											onClose={handleClose}
+										>
+											<MenuItem onClick={() => history.push(ROUTES.ACCOUNT)}>My orders</MenuItem>
+											<MenuItem onClick={() => callLogoutApi()}>Logout</MenuItem>
+										</Menu>
+									</>
 									:
 									<div className={classes.navigationIconButton}><Button variant="outlined" className={classes.navigationIconButton} onClick={() => history.push(ROUTES.LOGIN)}>LOGIN</Button></div>
 								}

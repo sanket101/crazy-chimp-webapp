@@ -140,8 +140,6 @@ exports.validateInvoiceData = (data) => {
 	else if(isNaN(data.shippingAmount)) errors.shippingAmount = "Must be number";
 	
 	if(!data.orders || (data.orders && data.orders.length <= 0)) errors.orders = "Must have atleast one order";
-	
-	if(!data.addressId) errors.addressId = "Must not be empty";
 
 	if(!data.paymentMethod) errors.paymentMethod = "Must not be empty";
 

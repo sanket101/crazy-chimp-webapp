@@ -17,7 +17,6 @@ const CustomerInformationSection = (props) => {
     const [addressLine2, setAddressLine2] = useState(customerInformation.addressLine2);
     const [city, setCity] = useState(customerInformation.city);
     const [postalCode, setPostalCode] = useState(customerInformation.postalCode);
-    const [addNewButtonTriggered, setAddNewButtonTriggered] = useState(false);
 
     const countryDropdown = ['India'];
     const stateDropdown = {
@@ -152,7 +151,7 @@ const CustomerInformationSection = (props) => {
     };
 
     const confirmAddress = () => {
-        setAddNewButtonTriggered(false);
+        // props.setAddNewButtonTriggered(false);
         props.addNewCustomerAddress();
     };
 
@@ -188,11 +187,11 @@ const CustomerInformationSection = (props) => {
                             })}
                         </div>
                         <div className={classes.addNewButtonWrapper}>
-                            <Button variant='outlined' onClick={() => setAddNewButtonTriggered(true)}>Add New Address</Button>
+                            <Button variant='outlined' onClick={() => props.setAddNewButtonTriggered(true)}>Add New Address</Button>
                         </div>
                     </>
                 }
-                {(props.userAddresses.length === 0 || addNewButtonTriggered) && 
+                {(props.userAddresses.length === 0 || props.addNewButtonTriggered) && 
                     <>
                         <Typography variant="h5" className={classes.subHeading}>CUSTOMER INFORMATION</Typography>
                         <div>
@@ -207,6 +206,7 @@ const CustomerInformationSection = (props) => {
                                 onBlur={(event) => onBlur('emailId', event.target.value)}
                                 error={errorState.emailId ? true : false}
                                 helperText={errorState.emailId}
+                                autoComplete="new-password"
                             />
 
                             <TextField
@@ -220,6 +220,7 @@ const CustomerInformationSection = (props) => {
                                 onBlur={(event) => onBlur('phoneNumber', event.target.value)}
                                 error={errorState.phoneNumber ? true : false}
                                 helperText={errorState.phoneNumber}
+                                autoComplete="new-password"
                             />
                         </div>
 
@@ -237,6 +238,7 @@ const CustomerInformationSection = (props) => {
                                 onBlur={(event) => onBlur('firstName', event.target.value)}
                                 error={errorState.firstName ? true : false}
                                 helperText={errorState.firstName}
+                                autoComplete="new-password"
                             />
 
                             <TextField
@@ -250,6 +252,7 @@ const CustomerInformationSection = (props) => {
                                 onBlur={(event) => onBlur('secondName', event.target.value)}
                                 error={errorState.secondName ? true : false}
                                 helperText={errorState.secondName}
+                                autoComplete="new-password"
                             />
                         </div>
 
@@ -306,6 +309,7 @@ const CustomerInformationSection = (props) => {
                                 onBlur={(event) => onBlur('addressLine1', event.target.value)}
                                 error={errorState.addressLine1 ? true : false}
                                 helperText={errorState.addressLine1}
+                                autoComplete="new-password"
                             />
 
                             <TextField
@@ -319,6 +323,7 @@ const CustomerInformationSection = (props) => {
                                 onBlur={(event) => onBlur('addressLine2', event.target.value)}
                                 error={errorState.addressLine2 ? true : false}
                                 helperText={errorState.addressLine2}
+                                autoComplete="new-password"
                             />
 
                         </div>
@@ -335,6 +340,7 @@ const CustomerInformationSection = (props) => {
                                 onBlur={(event) => onBlur('city', event.target.value)}
                                 error={errorState.city ? true : false}
                                 helperText={errorState.city}
+                                autoComplete="new-password"
                             />
 
                             <TextField
@@ -348,12 +354,14 @@ const CustomerInformationSection = (props) => {
                                 onBlur={(event) => onBlur('postalCode', event.target.value)}
                                 error={errorState.postalCode ? true : false}
                                 helperText={errorState.postalCode}
+                                autoComplete="new-password"
                             />
 
                         </div>
-
+                        
+                        {props.showAddressDisclaimer ? <Typography variant="subtitle1" className={classes.subHeading}>*Please enter all the above mentioned fields to add new address entry.</Typography> : <></>}
                         <div className={classes.addressButtonContainer}>
-                            <Button variant='outlined' onClick={() => setAddNewButtonTriggered(false)}>CANCEL</Button>
+                            <Button variant='outlined' onClick={() => props.setAddNewButtonTriggered(false)}>CANCEL</Button>
                             <Button variant='outlined' onClick={() => confirmAddress()}>CONFIRM ADDRESS</Button>
                         </div>
                     </>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -16,6 +17,7 @@ import NavigationBar from '../../components/NavigationBar/navigation-bar';
 import Footer from '../../components/Footer/footer';
 import apiConfig from '../../api/api-config';
 import VALIDATION_ERROR from '../../constants/validation-errors';
+import ROUTES from '../../constants/routes-name';
 
 const Signup = (props) => {
 	const { classes } = props;
@@ -40,6 +42,8 @@ const Signup = (props) => {
 		loading: false
 	});
 	const [isFormValid, setFormValid] = useState(false);
+
+	let history = useHistory();
 
 	const handleChange = (event) => {
 		setLocalState(prevState => {
@@ -68,7 +72,7 @@ const Signup = (props) => {
 				setLocalState(prevState => {
 					return {...prevState, loading: false};
 				});	
-				props.history.push('/');
+				history.push(ROUTES.HOME);
 			})
 			.catch((error) => {
 				const exactError = error.response.data;

@@ -49,7 +49,7 @@ const styles = (theme) => ({
 		fontFamily: `Bangers, cursive`,
 		fontSize: '2rem',
 		'@media (max-width: 540px)' : {
-			fontSize: '1.5rem'
+			fontSize: '1.25rem'
 		}
 	}
 });

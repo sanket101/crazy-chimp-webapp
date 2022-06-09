@@ -16,7 +16,8 @@ const {
   deleteInvoice,
   addInvoice,
   getInvoicesByUserId,
-  getInvoicesByDate
+  getInvoicesByDate,
+  getAllInvoices
 } = require('./APIs/invoices');
 
 const {
@@ -28,15 +29,6 @@ const {
   getProductsData,
   getStockAvailability
 } = require('./APIs/products');
-
-const {
-  addOrder,
-  editOrder,
-  deleteOrder,
-  getOrder,
-  getOrdersByProductId,
-  getOrdersByUserId
-} = require('./APIs/orders');
 
 const {
   addProductCategory,
@@ -69,8 +61,10 @@ const {
 const { checkIfAdmin } = require('./APIs/admin');
 
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
+  // res.header("Access-Control-Allow-Origin", "https://crazychimp.org"); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
   next();
 });
 
@@ -100,12 +94,12 @@ app.delete('/product-category/:productCategoryId', verifyAdmin, deleteProductCat
 app.put('/product-category/:productCategoryId', verifyAdmin, editProductCategory);
 
 // orders
-app.get('/order/:orderId', auth, getOrder);
-app.get('/orders', auth, getOrdersByUserId);
-app.get('/product-orders/:productId', verifyAdmin, getOrdersByProductId);
-app.post('/add-order', auth, addOrder);
-app.put('/edit-order/:orderId', verifyAdmin, editOrder);
-app.delete('/delete-order/:orderId', verifyAdmin, deleteOrder);
+// app.get('/order/:orderId', auth, getOrder);
+// app.get('/orders', auth, getOrdersByUserId);
+// app.get('/product-orders/:productId', verifyAdmin, getOrdersByProductId);
+// app.post('/add-order', auth, addOrder);
+// app.put('/edit-order/:orderId', verifyAdmin, editOrder);
+// app.delete('/delete-order/:orderId', verifyAdmin, deleteOrder);
 
 // Invoice
 app.get('/invoice/:invoiceId', auth, getInvoice);
@@ -114,6 +108,7 @@ app.put('/edit-invoice/:invoiceId', verifyAdmin, editInvoice);
 app.delete('/delete-invoice/:invoiceId', verifyAdmin, deleteInvoice);
 app.get('/invoices', auth, getInvoicesByUserId);
 app.post('/invoices-bydate', verifyAdmin, getInvoicesByDate);
+app.get('/get-all-invoices', verifyAdmin, getAllInvoices);
 
 // Products
 app.get('/stock-availability', getStockAvailability);

@@ -20,6 +20,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 const ProductDetails = (props) => {
     const [addToCart, setAddToCart] = useState(false);
+    const [alreadyAdded, setAlreadyAdded] = useState(false);
     const [isLoading, setLoading] = useState(true);
 
     const { classes, productDetails } = props;
@@ -33,6 +34,14 @@ const ProductDetails = (props) => {
         setAddToCart(false);
     };
 
+    const handleErrorClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setAlreadyAdded(false);
+    };
+
     const addToCartButtonHandler = (color, size, qty) => {
         const newOrder = {
             color,
@@ -40,8 +49,19 @@ const ProductDetails = (props) => {
             qty,
             productDetails
         };
-        props.addToCart(newOrder);
-        setAddToCart(true);
+        const checkIfAlreadyExistInCart = props.cart.filter((item, index) => {
+            return item.color === color && item.size === size && item.productDetails?.productId === productDetails?.productId
+        });
+
+        if(checkIfAlreadyExistInCart.length > 0) {
+            setAlreadyAdded(true);
+            setAddToCart(false);
+        }
+        else {
+            props.addToCart(newOrder);
+            setAddToCart(true);
+            setAlreadyAdded(false);
+        }
     };
 
     const callStockAvailabilityApi = async () => {
@@ -122,13 +142,19 @@ const ProductDetails = (props) => {
 
                             <div className={classes.productFeature}>
                                 <Typography variant="h5" className={classes.primaryFont}>ULTIMATE PRINTS</Typography>
-                                <Typography variant="body1" className={classes.secondaryFont}>Inks used here to make sure your printed designs are stretch resistant. No ‘hide and seek’ with the design.</Typography>
+                                <Typography variant="body1" className={classes.secondaryFont}>Special Inks are used here to make sure your printed designs are stretch resistant. No ‘hide and seek’ with the design.</Typography>
                             </div>
                         </div>
 
                         {addToCart && <Snackbar open={addToCart} autoHideDuration={4000} onClose={handleClose}>
                             <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                                 Product added to cart!
+                            </Alert>
+                        </Snackbar>}
+
+                        {alreadyAdded && <Snackbar open={alreadyAdded} autoHideDuration={4000} onClose={handleErrorClose}>
+                            <Alert onClose={handleErrorClose} severity="error" sx={{ width: '100%' }}>
+                                Product already added to cart!
                             </Alert>
                         </Snackbar>}
                     </>

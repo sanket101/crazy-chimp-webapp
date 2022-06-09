@@ -66,7 +66,7 @@ const ProductDetailsSection = (props) => {
                                         srcSet={`${item}&w=248&fit=crop&auto=format&dpr=2 2x`}
                                         className={classes.imageAttributes}
                                         alt={productDetails.name}
-                                        loading="lazy"
+                                        // loading="lazy"
                                     />
                                 </div>
                             );                

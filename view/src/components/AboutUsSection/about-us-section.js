@@ -8,7 +8,7 @@ const AboutUsSection = (props) => {
     const features = [
         {
             title: 'Professional Customer Service',
-            description: 'We support you every step of the way. If there is an issue, our customer service staff are ready to help you over email or a phone call. We value your business!'
+            description: 'We support you at each step of the way. If there is an issue, our customer service staff are ready to help you over email or a phone call. We value your time!'
         },
         {
             title: 'Committed to Quality',

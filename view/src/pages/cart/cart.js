@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import { connect } from 'react-redux';
 import NavigationBar from '../../components/NavigationBar/navigation-bar';
@@ -41,6 +41,10 @@ const Cart = (props) => {
             history.push(ROUTES.LOGIN);
         }
     };
+ 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     if(cartList.length === 0) {
         return (
