@@ -10,7 +10,8 @@ const RouteName = {
     PRIVACY_POLICY: '/privacy-policy',
     ERROR: '/error',
     ACCOUNT: '/account',
-    GALLERY: '/gallery'
+    GALLERY: '/gallery',
+    RETURN_POLICY: '/return-policy'
 };
 
 export default RouteName;
