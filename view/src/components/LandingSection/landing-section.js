@@ -52,7 +52,7 @@ const LandingSection = (props) => {
                             <img src={imageArrayToRender[currentImageIndex]} />
                             <div className={classes.titleSection}>
                                 <Typography variant="h2" className={classes.headingVariationH2}>Welcome to <span className={classes.landingPageHighlighter}>Crazy Chimp</span></Typography>
-                                <Typography variant="h4" className={classes.headingVariationH4}>An Online Marketplace for the <span className={classes.landingPageHighlighter}>best anime merchandise</span>!</Typography>
+                                <Typography variant="h4" className={classes.headingVariationH4}>An Online Store for the <span className={classes.landingPageHighlighter}>best anime merchandise</span>!</Typography>
                                 <Button variant="contained" className={classes.shopNowButton} onClick={onClickShopNow}>SHOP NOW</Button>
                             </div>
                         </div>
