@@ -60,6 +60,8 @@ const {
 } = require('./APIs/users');
 const { checkIfAdmin } = require('./APIs/admin');
 
+const { initiatePaytmTransaction } = require('./APIs/paytm');
+
 app.use(function(req, res, next) {
   // res.header("Access-Control-Allow-Origin", "https://crazychimp.org"); // update to match the domain you will make the request from
   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -129,5 +131,8 @@ app.get('/admin-authentication', verifyAdmin, checkIfAdmin);
 // Discount
 app.get('/get-discount-vouchers', auth, getDiscountCodes);
 app.post('/add-discount-voucher', verifyAdmin, addDiscountVoucher);
+
+// Paytm APIs
+app.post('/initiate-transaction', auth, initiatePaytmTransaction);
 
 exports.api = functions.region('asia-south1').https.onRequest(app);

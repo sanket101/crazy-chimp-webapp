@@ -179,3 +179,22 @@ exports.validateDiscountData = (data) => {
 		valid: Object.keys(errors).length === 0 ? true : false
 	};
 };
+
+exports.validatePaytmTransactionData = (data) => {
+	let errors = {};
+
+	if(isEmpty(data.orderId)) errors.orderId = "Must not be empty";
+	if(isEmpty(data.websiteName)) errors.websiteName = "Must not be empty";
+
+	if(data.websiteName !== 'WEBSTAGING' && data.websiteName !== 'DEFAULT') {
+		errors.websiteName = "Invalid value";
+	}
+
+	if(!data.hasOwnProperty("transactionAmount")) errors.transactionAmount = "Must not be empty";
+	else if(isNaN(data.transactionAmount)) errors.transactionAmount = "Must be number";
+
+	return {
+		errors,
+		valid: Object.keys(errors).length === 0 ? true : false
+	};
+};

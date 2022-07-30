@@ -182,6 +182,7 @@ exports.getAllInvoices = (request, response) => {
     
     db
     .collection('invoices')
+    .orderBy("createdAt", "desc")
 	.get()
 	.then(async(result) => {
         let invoices = await populateInvoiceList(result);
