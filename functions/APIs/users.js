@@ -5,7 +5,7 @@ const firebase = require('firebase');
 
 firebase.initializeApp(config);
 
-const { validateLoginData, validateSignUpData } = require('../utils/validators');
+const { validateLoginData, validateSignUpData, validateResetPasswordData } = require('../utils/validators');
 
 // Login
 exports.loginUser = (request, response) => {
@@ -131,4 +131,24 @@ exports.logoutUser = (request, response) => {
             message: "Something went wrong!"
         });
     });
+};
+
+exports.resetPassword = (request, response) => {
+    const user = { email: request.body.email };
+
+    const { valid, errors } = validateResetPasswordData(user);
+	if (!valid) return response.status(400).json(errors);  
+
+    const actionCodeSettings = {
+        url: "https://crazychimp.org/login"
+    };
+
+    firebase.auth().sendPasswordResetEmail(user.email, actionCodeSettings)
+    .then(() => {
+        return response.json({ message: 'Email sent!' });
+    })
+    .catch((error) => {
+        console.error(error);
+        return response.status(403).json({ general: 'Something went wrong'});
+    })
 };

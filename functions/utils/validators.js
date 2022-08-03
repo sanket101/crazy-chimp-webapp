@@ -198,3 +198,18 @@ exports.validatePaytmTransactionData = (data) => {
 		valid: Object.keys(errors).length === 0 ? true : false
 	};
 };
+
+exports.validateResetPasswordData = (data) => {
+	let errors = {};
+
+	if (isEmpty(data.email)) {
+		errors.email = 'Must not be empty';
+	} else if (!isEmail(data.email)) {
+		errors.email = 'Must be valid email address';
+	}
+
+	return {
+		errors,
+		valid: Object.keys(errors).length === 0 ? true : false
+	};	
+};

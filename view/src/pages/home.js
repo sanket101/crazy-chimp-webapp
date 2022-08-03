@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import { connect } from 'react-redux';
-import { setProductsData, setProductCategories, setGenreCategories } from '../redux/Products/products.actions';
+import { setProductsData, setProductCategories, setGenreCategories, setProductDetails } from '../redux/Products/products.actions';
 import NavigationBar from '../components/NavigationBar/navigation-bar';
 import LandingSection from '../components/LandingSection/landing-section';
 import CollabSection from '../components/CollabSection/collab-section';
@@ -13,6 +13,8 @@ import apiConfig from '../api/api-config';
 import ROUTES from '../constants/routes-name';
 import { handleApiError } from '../utils/error-handling';
 import DiscountSection from '../components/DiscountSection/discount-section';
+import BestSellerSection from '../components/BestSellerSection/best-seller-section';
+import NewArrivalSection from '../components/NewArrivalSection/new-arrival-section';
 
 const Home = (props) => {
 	let history = useHistory();
@@ -52,6 +54,10 @@ const Home = (props) => {
 			<NavigationBar />
 				
 			<LandingSection onClickShopNow={onClickShopNow}/>
+
+			<BestSellerSection setProductDetails={props.setProductDetails} />
+
+			<NewArrivalSection setProductDetails={props.setProductDetails} />
 			
 			<DiscountSection />
 
@@ -77,7 +83,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
 	return {
 		setProductCategories: (productCategories) => dispatch(setProductCategories(productCategories)),
-		setGenreCategories: (genreCategories) => dispatch(setGenreCategories(genreCategories))
+		setGenreCategories: (genreCategories) => dispatch(setGenreCategories(genreCategories)),
+		setProductDetails: (productDetails) => dispatch(setProductDetails(productDetails))
 	};
 };
 

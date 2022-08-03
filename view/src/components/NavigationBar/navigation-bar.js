@@ -163,9 +163,9 @@ const NavigationBar = (props) => {
 						<Toolbar className={classes.toolBar}>
 							<div className={classes.leftNavbar} onClick={() => history.push(ROUTES.HOME)}>
 								<img src={logo} alt="Crazy Chimp Logo" height="50px" />
-								<Typography variant="h6" className={classes.crazyChimpWrapper}>
+								{/* <Typography variant="h6" className={classes.crazyChimpWrapper}>
 									Crazy Chimp
-								</Typography>
+								</Typography> */}
 							</div>
 
 							<div className={classes.rightNavbar}>
@@ -240,7 +240,7 @@ const NavigationBar = (props) => {
 									<MenuIcon />
 								</IconButton>
 								<Typography variant="h6" onClick={() => history.push(ROUTES.HOME)} className={classes.crazyChimpWrapper}>
-									Crazy Chimp
+									<img src={logo} alt="Crazy Chimp Logo" height="30px" />
 								</Typography>
 							</div>
 

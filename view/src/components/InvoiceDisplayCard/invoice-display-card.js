@@ -66,7 +66,7 @@ const InvoiceDisplayCard = (props) => {
                     </div>
 
                     <div className={classes.issueWrapper}>
-                        <Link variant="body2" className={classes.secondaryFont} href="mailto:support.crazychimp@gmail.com" >Having some trouble with the delivered product? Please click here or mail us at support.crazychimp@gmail.com</Link>
+                        <Link variant="body2" className={classes.secondaryFont} href="mailto:assist.crazychimp@gmail.com" >Having some trouble with the delivered product? Please click here or mail us at assist.crazychimp@gmail.com</Link>
                     </div>
                 </CardContent>
             </Card>

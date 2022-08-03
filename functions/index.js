@@ -56,15 +56,16 @@ const {
   signUpUser,
   getUserDetail,
   updateUserDetails,
-  logoutUser
+  logoutUser,
+  resetPassword
 } = require('./APIs/users');
 const { checkIfAdmin } = require('./APIs/admin');
 
 const { initiatePaytmTransaction } = require('./APIs/paytm');
 
 app.use(function(req, res, next) {
-  // res.header("Access-Control-Allow-Origin", "https://crazychimp.org"); // update to match the domain you will make the request from
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Origin", "https://crazychimp.org"); // update to match the domain you will make the request from
+  // res.header("Access-Control-Allow-Origin", "http://localhost:3000");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
   next();
@@ -76,6 +77,7 @@ app.post('/signup', signUpUser);
 app.get('/user', auth, getUserDetail);
 app.post('/user', auth, updateUserDetails);
 app.get('/logout', auth, logoutUser);
+app.post('/reset-password', resetPassword);
 
 // address
 app.get('/addresses', auth, getAllAddresses);

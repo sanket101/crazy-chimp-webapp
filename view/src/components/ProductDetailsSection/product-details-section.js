@@ -6,6 +6,7 @@ import { Typography, InputLabel, Select, MenuItem, Button, Divider, ButtonGroup,
 import styles from './product-details-section.style';
 import SizeChart from '../SizeChart/size-chart';
 import ROUTES from '../../constants/routes-name';
+import LINKS from '../../constants/imp-links';
 
 const ProductDetailsSection = (props) => {
     const { classes, productDetails } = props;
@@ -149,12 +150,20 @@ const ProductDetailsSection = (props) => {
                     <Button variant="outlined" className={classes.addToCartButton} onClick={() => history.push(ROUTES.CART)}>View Cart</Button>
                 </div>}
 
+                <br />
+
+                <Typography variant="body1" className={classes.secondaryFont}>CONTACT US ON <a href={LINKS.CRAZY_CHIMP_INSTAGRAM} target="_blank">INSTAGRAM</a> IF YOU WANT TO ORDER SIZES NOT MENTIONED ABOVE.</Typography>
+
                 <div className={classes.dividerWrapper}>
                     <Divider />
                 </div>
                 
                 <div className={classes.sizeChartWrapper}>
                     <SizeChart productType="T-shirts" />
+                </div>
+
+                <div className={classes.productFeature}>
+                    <Typography variant="body1" className={classes.secondaryFont}>WASH AND CARE Instruction : Always turn your garment INSIDE OUT before washing & drying to prevent fading. Do not iron directly on the print. Hand/Machine wash with similar clothes in COLD water</Typography>
                 </div>
 
             </div>

@@ -14,7 +14,7 @@ const PrivacyPolicyPage = (props) => {
                 <Typography variant="h3" className={classes.primaryFont}>Privacy Policy</Typography>
                 <br />
                 <div className={classes.leftAlignment}>
-                    <Typography variant="body1">At Crazy Chimp, accessible from https://crazychimp.in/, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Crazy Chimp and how we use it.</Typography>
+                    <Typography variant="body1">At Crazy Chimp, accessible from https://crazychimp.org, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Crazy Chimp and how we use it.</Typography>
                     <br />
                     <Typography variant="body1">If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.</Typography>
                     <br />

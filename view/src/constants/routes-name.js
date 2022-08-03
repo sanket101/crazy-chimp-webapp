@@ -11,7 +11,8 @@ const RouteName = {
     ERROR: '/error',
     ACCOUNT: '/account',
     GALLERY: '/gallery',
-    RETURN_POLICY: '/return-policy'
+    RETURN_POLICY: '/return-policy',
+    RESET_PASSWORD: '/reset-password'
 };
 
 export default RouteName;

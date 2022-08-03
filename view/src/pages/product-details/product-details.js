@@ -18,6 +18,14 @@ const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
+const getClothGSM = (productCategory) => {
+    if(productCategory === "HST" || productCategory === "FST") {
+        return 180;
+    }
+
+    return 320;
+}
+
 const ProductDetails = (props) => {
     const [addToCart, setAddToCart] = useState(false);
     const [alreadyAdded, setAlreadyAdded] = useState(false);
@@ -137,12 +145,12 @@ const ProductDetails = (props) => {
 
                             <div className={classes.productFeature}>
                                 <Typography variant="h5" className={classes.primaryFont}>DURABLE FABRIC</Typography>
-                                <Typography variant="body1" className={classes.secondaryFont}>180 gsm bio-washed material for a soft and silky fabric finish, along with superior colour brightness. Lasts up to 30 washes.</Typography>
+                                <Typography variant="body1" className={classes.secondaryFont}>{`${getClothGSM(productDetails.productCategory)} gsm bio-washed material for a soft and silky fabric finish, along with superior colour brightness. Lasts up to 30 washes.`}</Typography>
                             </div>
 
                             <div className={classes.productFeature}>
                                 <Typography variant="h5" className={classes.primaryFont}>ULTIMATE PRINTS</Typography>
-                                <Typography variant="body1" className={classes.secondaryFont}>Special Inks are used here to make sure your printed designs are stretch resistant. No ‘hide and seek’ with the design.</Typography>
+                                <Typography variant="body1" className={classes.secondaryFont}>Special Inks are used here to make sure your printed designs are stretch resistant. We use one of the finest DTF printing method to make designs durable.</Typography>
                             </div>
                         </div>
 

@@ -1,5 +1,5 @@
 const baseURL  = "https://asia-south1-crazy-chimp-48212.cloudfunctions.net/api";
-//const baseURL = 'http://localhost:5001/crazy-chimp-48212/asia-south1/api';
+// const baseURL = 'http://localhost:5001/crazy-chimp-48212/asia-south1/api';
 
 const apiConfig = {
     loginApi: `${baseURL}/login`,
@@ -23,7 +23,9 @@ const apiConfig = {
     addDiscount: `${baseURL}/add-discount-voucher`,
     getStockAvailability: `${baseURL}/stock-availability`,
     updateInvoice: `${baseURL}/edit-invoice`,
-    getAllInvoices: `${baseURL}/get-all-invoices`
+    getAllInvoices: `${baseURL}/get-all-invoices`,
+    initiatePaytmTransaction: `${baseURL}/initiate-transaction`,
+    reserPasswordApi: `${baseURL}/reset-password`
 };
 
 export default apiConfig;
