@@ -137,7 +137,7 @@ const Checkout = (props) => {
         const flatRate = 60;
         if(paymentMethod === "cod") {
             cartItems.forEach(element => {
-                totalCartWeight += +element.productDetails.weightInGms;
+                totalCartWeight += +element.productDetails.weightInGms * +element.qty;
             });
 
             return Math.ceil(+totalCartWeight / 500) * flatRate;
@@ -207,8 +207,8 @@ const Checkout = (props) => {
 
     const applyDiscount = () => {
         if(!discountCode || discountCode.trim() === "") {
-            setDiscountCodeError(VALIDATION_ERROR.FIELD_LEFT_BLANK);
-            setAddDiscount(false);
+           setDiscountCodeError('');
+           setAddDiscount(false);
         }
         // check discount code validation
         else if(!checkDiscountCodeValidity()) {

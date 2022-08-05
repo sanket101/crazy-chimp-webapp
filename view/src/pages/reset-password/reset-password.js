@@ -66,7 +66,7 @@ const ResetPassword = (props) => {
 			email: localState.email
 		};
 		axios
-			.post(apiConfig.reserPasswordApi, userData)
+			.post(apiConfig.resetPasswordApi, userData)
 			.then(() => {
 				setLocalState(prevState => {return {...prevState, loading: false, emailSent: true }});
 			})
