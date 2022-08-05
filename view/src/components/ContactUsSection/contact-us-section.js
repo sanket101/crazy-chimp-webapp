@@ -11,7 +11,7 @@ const ContactUsSection = (props) => {
         <div className={classes.contactUsSectionWrapper}>
             <Typography variant="h3">Contact Us</Typography>
             <div className={classes.contactUsDescription}>
-                <Typography variant="body1" className={classes.contactUsEmail}>Feel free to reach out to us at <a className={classes.emailLink} href='mailto:crazychimpofficial@gmail.com'>crazychimpofficial@gmail.com</a> or call us at <a className={classes.emailLink} href='tel:+919309515415'>+919309515415</a> for any business query, order status or just to say Hi :)</Typography>
+                <Typography variant="body1" className={classes.contactUsEmail}>Feel free to reach out to us at <a className={classes.emailLink} href='mailto:crazychimpofficial@gmail.com'>crazychimpofficial@gmail.com</a> for any business query, order status or just to say Hi :)</Typography>
                 <Typography variant="body1">We are quite active on our social media platforms as well. You can DM us for any queries!</Typography>
                 <div>
                     <IconButton className={classes.socialMediaBtn} href={LINKS.CRAZY_CHIMP_INSTAGRAM} target="_blank">

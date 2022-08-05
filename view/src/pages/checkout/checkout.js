@@ -137,10 +137,10 @@ const Checkout = (props) => {
         const flatRate = 60;
         if(paymentMethod === "cod") {
             cartItems.forEach(element => {
-                totalCartWeight += element.productDetails.weightInGms;
+                totalCartWeight += +element.productDetails.weightInGms;
             });
 
-            return Math.ceil(totalCartWeight / 500) * flatRate;
+            return Math.ceil(+totalCartWeight / 500) * flatRate;
         }
         return 0;
     };

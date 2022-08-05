@@ -28,7 +28,7 @@ const BestSellerSection = (props) => {
                             items.map((item, i) =>  {
                                 return (
                                     <div key={i}  className={classes.bestSellerItem} onClick={() => onProductClick(item)} ref={collabRef}>
-                                        <ProductCard product={item}/>
+                                        <ProductCard product={item} stylingWithoutMaxWidth={true} />
                                     </div>
                                 );                
                             })

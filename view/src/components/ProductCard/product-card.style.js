@@ -9,6 +9,13 @@ const styles = (theme) => ({
             margin: '20px 0'
         }
     },
+    cardWrapperWithoutMaxWidth: {
+        height: 'fit-content',
+        margin: '20px',
+        '@media (max-width: 540px)': {
+            margin: '20px 0'
+        }
+    },
     cardContent: {
         backgroundColor: CSSConstants.BACKGROUND_PRIMARY,
         color: CSSConstants.FONT_PRIMARY
