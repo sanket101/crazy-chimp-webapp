@@ -87,7 +87,7 @@ const Checkout = (props) => {
         if(isActiveStepValid) {
             if(activeStep === 1) {
                 setLoading(true);
-                if(paymentMethod === "cod") {
+                if(paymentMethod === "cod" || paymentMethod === "qr") {
                     await callInvoiceApi(activeStep);
                 }
                 else {

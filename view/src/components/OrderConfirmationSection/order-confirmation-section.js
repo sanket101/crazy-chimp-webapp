@@ -9,7 +9,7 @@ const OrderConfirmationSection = (props) => {
     const { classes, paymentMethod } = props;
 
     const renderConfirmationSection = () => {
-        if (paymentMethod === "cod") {
+        if (paymentMethod === "cod" || paymentMethod === "qr") {
             return (
                 <>
                     <div className={classes.infoIconWrapper}>
