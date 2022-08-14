@@ -1,5 +1,36 @@
 const newArrivalProducts = [
     {
+        "productId": "2ui2eYanKmGQ3j2II8jH",
+        "name": "Eren Titan T-shirt",
+        "actualPrice": "649",
+        "salePrice": "449",
+        "productCategory": "HST",
+        "genreCategory": "AOT",
+        "colorsAvailable": [
+            "Navy Blue",
+            "Black",
+            "White",
+            "Melange Grey",
+            "Olive Green"
+        ],
+        "sizeAvailable": [
+            "S",
+            "M",
+            "L",
+            "XL",
+            "2XL"
+        ],
+        "images": [
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_AOT_ERENTITANT-SHIRT_001%2FHST_AOT_ERENTITANT-SHIRT_001_NAVYBLUE.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_AOT_ERENTITANT-SHIRT_001%2FHST_AOT_ERENTITANT-SHIRT_001_BLACK.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_AOT_ERENTITANT-SHIRT_001%2FHST_AOT_ERENTITANT-SHIRT_001_WHITE.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_AOT_ERENTITANT-SHIRT_001%2FHST_AOT_ERENTITANT-SHIRT_001_MELANGEGREY.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_AOT_ERENTITANT-SHIRT_001%2FHST_AOT_ERENTITANT-SHIRT_001_OLIVEGREEN.Webp?alt=media"
+        ],
+        "weightInGms": "200",
+        "isAvailable": true
+    },
+    {
         "productId": "YeqU3Z6di3cbww4qLZ4A",
         "name": "El Psy Congroo Tshirt",
         "actualPrice": "649",

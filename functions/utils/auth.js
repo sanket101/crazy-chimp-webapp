@@ -18,6 +18,7 @@ module.exports = (request, response, next) => {
 		})
 		.then((doc) => {
 			if(doc.exists) {
+				request.email = doc.data().email;
                 request.uid = uid;
                 return next();
             }

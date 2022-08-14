@@ -13,6 +13,7 @@ exports.addInvoice = (request, response) => {
 
     const newInvoiceItem = {
         userId: request.uid,
+        userEmail: request.email,
         shippingAddress: request.body.shippingAddress,
         orders: request.body.orders,
         paymentMethod: request.body.paymentMethod,
@@ -134,7 +135,8 @@ const populateInvoiceList = async(result) => {
             discountAmount: docSnap.data().discountAmount,
             status: docSnap.data().status,
             shippingAddress : docSnap.data().shippingAddress,
-            trackingLink: docSnap.data().trackingLink
+            trackingLink: docSnap.data().trackingLink,
+            userEmail: docSnap.data().userEmail
         });
     };
 
