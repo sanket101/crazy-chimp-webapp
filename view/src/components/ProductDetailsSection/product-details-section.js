@@ -88,7 +88,7 @@ const ProductDetailsSection = (props) => {
                     <Divider />
                 </div>
                 
-                <Typography variant="body1" className={classes.secondaryFont}>Shipping charges will be calculated at checkout.</Typography>
+                <Typography variant="body1" className={classes.secondaryFont}>Shipping charges will be calculated at checkout. It takes around 5-9 days to deliver your order depending on your location.</Typography>
                 
                 <div className={classes.productFieldsWrapper}>
                     <div className={classes.dropdownWidget}>
