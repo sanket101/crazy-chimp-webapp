@@ -1,4 +1,5 @@
 const newArrivalProducts = [
+    { "productId": "gEbPhOFxSFiSI35en7dw", "name": "Kame Gang Tshirt", "actualPrice": "649", "salePrice": "449", "productCategory": "HST", "genreCategory": "DBZ", "colorsAvailable": ["Black", "White", "Olive Green", "Butter Yellow", "Mustard Yellow"], "sizeAvailable": ["S", "M", "L", "XL", "2XL"], "images": ["https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_DBZ_KAMEGANGTSHIRT_001%2FHST_DBZ_KAMEGANGTSHIRT_001_BUTTERYELLOW.Webp?alt=media", "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_DBZ_KAMEGANGTSHIRT_001%2FHST_DBZ_KAMEGANGTSHIRT_001_WHITE.Webp?alt=media", "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_DBZ_KAMEGANGTSHIRT_001%2FHST_DBZ_KAMEGANGTSHIRT_001_OLIVEGREEN.Webp?alt=media", "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_DBZ_KAMEGANGTSHIRT_001%2FHST_DBZ_KAMEGANGTSHIRT_001_MUSTARDYELLOW.Webp?alt=media", "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_DBZ_KAMEGANGTSHIRT_001%2FHST_DBZ_KAMEGANGTSHIRT_001_BLACK.Webp?alt=media"], "weightInGms": "200", "isAvailable": true },
     {
         "productId": "2ui2eYanKmGQ3j2II8jH",
         "name": "Eren Titan T-shirt",
@@ -52,7 +53,7 @@ const newArrivalProducts = [
             "2XL"
         ],
         "images": [
-            
+
             "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_STEINSGATE_ELPSYCONGROOTSHIRT_001%2FHST_STEINSGATE_ELPSYCONGROOTSHIRT_001_MAROON.Webp?alt=media",
             "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_STEINSGATE_ELPSYCONGROOTSHIRT_001%2FHST_STEINSGATE_ELPSYCONGROOTSHIRT_001_NAVYBLUE.Webp?alt=media",
             "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_STEINSGATE_ELPSYCONGROOTSHIRT_001%2FHST_STEINSGATE_ELPSYCONGROOTSHIRT_001_BLACK.Webp?alt=media",
