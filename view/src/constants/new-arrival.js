@@ -1,4 +1,35 @@
 const newArrivalProducts = [
+    {
+        "productId": "aJEUpyzKK1kNlpoy8925",
+        "name": "Gojo Tshirt",
+        "actualPrice": "649",
+        "salePrice": "449",
+        "productCategory": "HST",
+        "genreCategory": "JJK",
+        "colorsAvailable": [
+            "Navy Blue",
+            "Black",
+            "Maroon",
+            "Olive Green",
+            "Charcoal Grey"
+        ],
+        "sizeAvailable": [
+            "S",
+            "M",
+            "L",
+            "XL",
+            "2XL"
+        ],
+        "images": [
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_JJK_GOJOTSHIRT_001%2FHST_JJK_GOJOTSHIRT_001_NAVYBLUE.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_JJK_GOJOTSHIRT_001%2FHST_JJK_GOJOTSHIRT_001_BLACK.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_JJK_GOJOTSHIRT_001%2FHST_JJK_GOJOTSHIRT_001_MAROON.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_JJK_GOJOTSHIRT_001%2FHST_JJK_GOJOTSHIRT_001_OLIVEGREEN.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_JJK_GOJOTSHIRT_001%2FHST_JJK_GOJOTSHIRT_001_CHARCOALGREY.Webp?alt=media"
+        ],
+        "weightInGms": "200",
+        "isAvailable": true
+    },
     { "productId": "gEbPhOFxSFiSI35en7dw", "name": "Kame Gang Tshirt", "actualPrice": "649", "salePrice": "449", "productCategory": "HST", "genreCategory": "DBZ", "colorsAvailable": ["Black", "White", "Olive Green", "Butter Yellow", "Mustard Yellow"], "sizeAvailable": ["S", "M", "L", "XL", "2XL"], "images": ["https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_DBZ_KAMEGANGTSHIRT_001%2FHST_DBZ_KAMEGANGTSHIRT_001_BUTTERYELLOW.Webp?alt=media", "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_DBZ_KAMEGANGTSHIRT_001%2FHST_DBZ_KAMEGANGTSHIRT_001_WHITE.Webp?alt=media", "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_DBZ_KAMEGANGTSHIRT_001%2FHST_DBZ_KAMEGANGTSHIRT_001_OLIVEGREEN.Webp?alt=media", "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_DBZ_KAMEGANGTSHIRT_001%2FHST_DBZ_KAMEGANGTSHIRT_001_MUSTARDYELLOW.Webp?alt=media", "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_DBZ_KAMEGANGTSHIRT_001%2FHST_DBZ_KAMEGANGTSHIRT_001_BLACK.Webp?alt=media"], "weightInGms": "200", "isAvailable": true },
     {
         "productId": "2ui2eYanKmGQ3j2II8jH",
@@ -146,37 +177,6 @@ const newArrivalProducts = [
             "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_NARUTO_DATTEBAYO_001%2FHST_NARUTO_DATTEBAYO_001_BLACK.Webp?alt=media",
             "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_NARUTO_DATTEBAYO_001%2FHST_NARUTO_DATTEBAYO_001_NAVYBLUE.Webp?alt=media",
             "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_NARUTO_DATTEBAYO_001%2FHST_NARUTO_DATTEBAYO_001_MAROON.Webp?alt=media"
-        ],
-        "weightInGms": "200",
-        "isAvailable": true
-    },
-    {
-        "productId": "OdwWthrzAlYYg6BuVSOI",
-        "name": "Hero For Fun Tshirt",
-        "actualPrice": "649",
-        "salePrice": "449",
-        "productCategory": "HST",
-        "genreCategory": "ONEPUNCHMAN",
-        "colorsAvailable": [
-            "Navy Blue",
-            "Black",
-            "White",
-            "Maroon",
-            "Red"
-        ],
-        "sizeAvailable": [
-            "S",
-            "M",
-            "L",
-            "XL",
-            "2XL"
-        ],
-        "images": [
-            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_ONEPUNCHMAN_HEROFORFUNTSHIRT_001%2FHST_ONEPUNCHMAN_HEROFORFUNTSHIRT_001_NAVYBLUE.Webp?alt=media",
-            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_ONEPUNCHMAN_HEROFORFUNTSHIRT_001%2FHST_ONEPUNCHMAN_HEROFORFUNTSHIRT_001_BLACK.Webp?alt=media",
-            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_ONEPUNCHMAN_HEROFORFUNTSHIRT_001%2FHST_ONEPUNCHMAN_HEROFORFUNTSHIRT_001_WHITE.Webp?alt=media",
-            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_ONEPUNCHMAN_HEROFORFUNTSHIRT_001%2FHST_ONEPUNCHMAN_HEROFORFUNTSHIRT_001_MAROON.Webp?alt=media",
-            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_ONEPUNCHMAN_HEROFORFUNTSHIRT_001%2FHST_ONEPUNCHMAN_HEROFORFUNTSHIRT_001_RED.Webp?alt=media"
         ],
         "weightInGms": "200",
         "isAvailable": true
