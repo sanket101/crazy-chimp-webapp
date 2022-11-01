@@ -174,6 +174,8 @@ exports.validateDiscountData = (data) => {
 
 	if(!data.hasOwnProperty("cartMaxItems")) errors.cartMaxItems = "Must not be empty";
 
+	if(data.hasOwnProperty("discountType") && !isEmpty(data.discountType) && data.discountType === "PERPRODUCT" && !data.productType) errors.productType = "Must not be empty";
+
 	return {
 		errors,
 		valid: Object.keys(errors).length === 0 ? true : false
