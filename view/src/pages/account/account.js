@@ -25,7 +25,11 @@ const Account = (props) => {
             axios.defaults.headers.common = { Authorization: `${authToken}` };
             const response = await axios.get(apiConfig.getUserInvoices);
             if(response && response.data && response.data.length > 0) {
-                props.setUserInvoices(response.data);
+                const tempArray = [...response.data];
+                const sortedArray = tempArray.sort((a, b) => {
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+                });
+                props.setUserInvoices(sortedArray);
             }
             setLoading(false);
         }

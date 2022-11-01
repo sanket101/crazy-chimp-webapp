@@ -14,6 +14,7 @@ const Footer = (props) => {
             <div className={classes.footerLinks}>
                 <Link component="button" variant="body2" className={classes.footerLink} onClick={() => history.push(ROUTES.PRIVACY_POLICY)}>Privacy Policy</Link>
                 <Link component="button" variant="body2" className={classes.footerLink} onClick={() => history.push(ROUTES.TNC)}>Terms and Conditions</Link>
+                <Link component="button" variant="body2" className={classes.footerLink} onClick={() => history.push(ROUTES.RETURN_POLICY)}>Return/Refund Policy</Link>
             </div>
         </div>
     );

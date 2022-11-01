@@ -19,6 +19,7 @@ import { updateCart } from '../../redux/Products/products.actions';
 import { setDiscountCodes, setLoginError } from '../../redux/General/general.actions';
 import { handleApiError } from '../../utils/error-handling';
 import { checkDiscountCodeConstraints } from '../../utils/discount-check';
+import { checkEnvironment } from '../../utils/general-utils';
 
 const Checkout = (props) => {
     const { classes, cart } = props;
@@ -73,7 +74,7 @@ const Checkout = (props) => {
                     />;
         }
         else {
-            return <OrderConfirmationSection />;
+            return <OrderConfirmationSection paymentMethod={paymentMethod} />;
         }
     };
 
@@ -81,13 +82,22 @@ const Checkout = (props) => {
         setActiveStep(activeStep - 1);
     };
     
-    const handleNext = () => {
+    const handleNext = async () => {
         const isActiveStepValid = checkActiveStepValidation();
         if(isActiveStepValid) {
             if(activeStep === 1) {
-                callInvoiceApi();
+                setLoading(true);
+                if(paymentMethod === "cod" || paymentMethod === "qr") {
+                    await callInvoiceApi(activeStep);
+                }
+                else {
+                    // inititate Paytm Transaction
+                    await callInitiatePaytmTransactionApi(activeStep);
+                }
             }
-            setActiveStep(activeStep + 1);
+            else {
+                setActiveStep(activeStep + 1);
+            }
         }
     };
 
@@ -123,31 +133,41 @@ const Checkout = (props) => {
         //     }
         // });
         // return Math.ceil(countOfHST / 2) * shippingAmountHST;
+        let totalCartWeight = 0;
+        const flatRate = 60;
+        if(paymentMethod === "cod") {
+            cartItems.forEach(element => {
+                totalCartWeight += +element.productDetails.weightInGms * +element.qty;
+            });
+
+            return Math.ceil(+totalCartWeight / 500) * flatRate;
+        }
         return 0;
     };
 
     const getCodCharges = () => {
-        let atleastOneEprintProduct = 0;
-        let atleastOnePrintroveProduct = 0;
+        // let atleastOneEprintProduct = 0;
+        // let atleastOnePrintroveProduct = 0;
 
-        for (let index = 0; index < cartItems.length; index++) {
-            const element = cartItems[index];
+        // for (let index = 0; index < cartItems.length; index++) {
+        //     const element = cartItems[index];
 
-            if(element.productDetails.productCategory === "HST" || element.productDetails.productCategory === "FST") {
-                atleastOneEprintProduct += 1;
-            }
-            else {
-                atleastOnePrintroveProduct +=1
-            }
+        //     if(element.productDetails.productCategory === "HST" || element.productDetails.productCategory === "FST") {
+        //         atleastOneEprintProduct += 1;
+        //     }
+        //     else {
+        //         atleastOnePrintroveProduct +=1
+        //     }
                 
-        }
+        // }
 
-        if(atleastOneEprintProduct > 0 && atleastOnePrintroveProduct > 0) {
-            return 100;
-        }
-        else if(atleastOneEprintProduct > 0 || atleastOnePrintroveProduct > 0) {
-            return 50; 
-        } 
+        // if(atleastOneEprintProduct > 0 && atleastOnePrintroveProduct > 0) {
+        //     return 100;
+        // }
+        // else if(atleastOneEprintProduct > 0 || atleastOnePrintroveProduct > 0) {
+        //     return 50; 
+        // } 
+        return 100;
     };
 
     const getOrderTotal = () => {
@@ -187,8 +207,8 @@ const Checkout = (props) => {
 
     const applyDiscount = () => {
         if(!discountCode || discountCode.trim() === "") {
-            setDiscountCodeError(VALIDATION_ERROR.FIELD_LEFT_BLANK);
-            setAddDiscount(false);
+           setDiscountCodeError('');
+           setAddDiscount(false);
         }
         // check discount code validation
         else if(!checkDiscountCodeValidity()) {
@@ -238,6 +258,80 @@ const Checkout = (props) => {
         }
     };
 
+    const callInitiatePaytmTransactionApi = async () => {
+        try {
+            authMiddleWare(history);
+            const authToken = localStorage.getItem('AuthToken');
+		    axios.defaults.headers.common = { Authorization: `${authToken}` };
+            const { isLocal } = checkEnvironment();
+            const orderId =  generateUniqueOrderId();
+            const orderAmount = getOrderTotal();
+            const requestPayload = {
+                orderId: orderId,
+                websiteName: isLocal ? "WEBSTAGING" : "DEFAULT",
+                transactionAmount: orderAmount
+            };
+            const { data } = await axios.post(apiConfig.initiatePaytmTransaction, requestPayload);
+            if(data && data?.txnToken) {
+                paytmScriptLoaded(orderId, data.txnToken, orderAmount, activeStep);
+            }
+        }
+        catch(err) {
+            console.log(err);
+            setLoading(false);
+        }
+    };
+
+    const paytmScriptLoaded = (orderId, token, amount, activeStep) => {
+        const config = {
+            "root": "",
+            "flow": "DEFAULT",
+            "data": {
+             "orderId": orderId /* update order id */,
+             "token": token /* update token value */,
+             "tokenType": "TXN_TOKEN",
+             "amount": amount /* update amount */
+            },
+            "merchant": {
+                "name": "Crazy Chimp",
+                "redirect": false
+            },
+            "payMode":{
+                "order": ['UPI','CARD','NB', 'BALANCE']
+            }, 
+            "handler": {
+                "transactionStatus":function(data){
+                    console.log("payment status ", data);
+                    if(data.STATUS === "TXN_SUCCESS") {
+                        window?.Paytm?.CheckoutJS?.close();
+                        setLoading(true);
+                        callInvoiceApi(activeStep);
+                    }  
+                }, 
+               "notifyMerchant": function(eventName,data){
+                 console.log("notifyMerchant handler function called");
+                 console.log("eventName => ",eventName);
+                 console.log("data => ",data);
+               } 
+             }
+           };
+   
+           if(window.Paytm && window.Paytm.CheckoutJS){
+            window.Paytm.CheckoutJS.init(config).then(function onSuccess() {
+                // after successfully update configuration invoke checkoutjs
+                setLoading(false);
+                window.Paytm.CheckoutJS.invoke();
+             }).catch(function onError(error){
+                 console.log("error => ",error);
+             });
+           } 
+    };
+
+    const generateUniqueOrderId = () => {
+        const date = new Date();
+        return 'INV' + date.getFullYear() + date.getMonth() + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds() + date.getMilliseconds() + (Math.random() * 1000).toFixed();
+    };
+
     const selectExistingAddress = (index) => {
         props.setSelectedAddress(index);
     };
@@ -285,7 +379,7 @@ const Checkout = (props) => {
         }
     };
 
-    const callInvoiceApi = async () => {
+    const callInvoiceApi = async (activeStep) => {
         // call add - order api
         try {
             authMiddleWare(history);
@@ -320,6 +414,8 @@ const Checkout = (props) => {
                 if(response && response.data && response.data.id) {
                     setOrderSuccess(true);
                     props.updateCart([]);
+                    setLoading(false);
+                    setActiveStep(activeStep + 1);
                 }
             }
         }

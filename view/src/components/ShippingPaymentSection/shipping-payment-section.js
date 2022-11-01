@@ -45,15 +45,22 @@ const ShippingPaymentSection = (props) => {
                     >
                         <div className={classes.customerInfoWrapper}>
                             <FormControlLabel value="online" control={<Radio color={'primary'} />} label="Online Payment" />
-                            <Typography variant="body2" className={classes.secondaryFont}>Free</Typography>
+                            <Typography variant="body2" className={classes.secondaryFont}>100% Free shipping on all prepaid (pay online) orders</Typography>
                         </div>
-                        {props.paymentMethod === "online" ? 
+                        <div className={classes.dividerWrapper}>
+                            <Divider />
+                        </div>
+                        <div className={classes.customerInfoWrapper}>
+                            <FormControlLabel value="qr" control={<Radio color={'primary'} />} label="QR Payment" />
+                            <Typography variant="body2" className={classes.secondaryFont}>100% Free shipping on all prepaid (pay online) orders</Typography>
+                        </div>
+                        {props.paymentMethod === "qr" ? 
                             <div style={{ display: 'flex'}}>
                                 <div>
                                     <img alt='qr code' src={qrcode} width='100px' loading="lazy"/>
                                 </div>
                                 <div className={classes.paymentDescription}>
-                                    <Typography variant="body2" className={classes.secondaryFont}>Please scan this QR code or use our UPI ID : crazychimp@ybl to pay the given amount. Once done, please send us a screenshot over <Link href='mailto:crazychimpofficial@gmail.com?Subject=Payment_Screenshot' target='_blank'>mail</Link> or DM it on <Link href={ImpLinks.CRAZY_CHIMP_INSTAGRAM} target='_blank'>Instagram</Link>.</Typography>
+                                    <Typography variant="body2" className={classes.secondaryFont}>Please scan this QR code or use our UPI ID : crazychimp@ybl to pay the given amount. Use this method incase the above Online Payment option is not working for you. </Typography>
                                 </div>
                             </div>
                             :

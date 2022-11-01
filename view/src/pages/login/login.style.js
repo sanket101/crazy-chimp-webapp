@@ -27,6 +27,9 @@ const styles = (theme) => ({
 	},
 	progess: {
 		position: 'absolute'
+	},
+	textAlignCenter: {
+		textAlign: 'center'
 	}
 });
 

@@ -183,8 +183,8 @@ const ShowOrders = (props) => {
                     </div>
 
                     <div>
-                        <Typography variant="body1">Customer Name - Mobile Number</Typography>
-                        <Typography variant="h6">{`${activeInvoice.shippingAddress.name} - ${activeInvoice.shippingAddress.phone}`}</Typography>
+                        <Typography variant="body1">Customer Name - Mobile Number - Email</Typography>
+                        <Typography variant="h6">{`${activeInvoice.shippingAddress.name} - ${activeInvoice.shippingAddress.phone} - ${activeInvoice.userEmail}`}</Typography>
 
                         <br />
 
@@ -201,7 +201,7 @@ const ShowOrders = (props) => {
                             <TableHead>
                                 <TableRow>
                                     <TableCell align="center"></TableCell>
-                                    <TableCell align="center">Product Name</TableCell>
+                                    <TableCell align="center">Product Name (Color)</TableCell>
                                     <TableCell align="center">Size / Qty</TableCell>
                                     <TableCell align="center"></TableCell>
                                 </TableRow>
@@ -216,7 +216,7 @@ const ShowOrders = (props) => {
                                             <TableCell component="th" scope="row" align="center">
                                                 <img src={order.productImage} alt="product-image" width="40px" />
                                             </TableCell>
-                                            <TableCell align="center">{order.productName}</TableCell>
+                                            <TableCell align="center">{`${order.productName}(${order.color})`}</TableCell>
                                             <TableCell align="center">{`${order.size }/${order.quantity}`}</TableCell>
                                             <TableCell align="center"></TableCell>
                                         </TableRow>

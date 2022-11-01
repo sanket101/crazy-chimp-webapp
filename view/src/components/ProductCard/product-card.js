@@ -4,13 +4,13 @@ import { Typography, Card, CardContent, CardMedia, CardActionArea } from '@mater
 import styles from './product-card.style';
 
 const ProductCard = (props) => {
-    const  { classes, product } = props;
+    const  { classes, product, stylingWithoutMaxWidth } = props;
 
     if(!product.isAvailable) {
         return <></>;
     }
     return (
-        <Card className={classes.cardWrapper}>
+        <Card className={!stylingWithoutMaxWidth ? classes.cardWrapper : classes.cardWrapperWithoutMaxWidth}>
             <CardActionArea>
                 <CardMedia
                     component="img"

@@ -10,11 +10,13 @@ import Checkout from './pages/checkout/checkout';
 import TnCPage from './pages/static-pages/tnc';
 import PrivacyPolicyPage from './pages/static-pages/privacy-policy';
 import TechincalErrorPage from './pages/static-pages/error';
+import RefundReturnCancellationPolicyPage from './pages/static-pages/refund-return-cancellation-policy';
 import Account from './pages/account/account';
 import './App.css';
 import { ThemeProvider, createTheme } from '@material-ui/core/styles';
 import AdminPanel from './pages/admin-panel/admin-panel';
 import Gallery from './pages/gallery/gallery';
+import ResetPassword from './pages/reset-password/reset-password';
 
 const theme = createTheme({
   typography: {
@@ -51,6 +53,8 @@ const App = () => {
                 <Route exact path="/account" component={Account} />
                 <Route exact path="/admin-panel" component={AdminPanel} />
                 <Route exact path="/gallery" component={Gallery} />
+                <Route exact path="/return-policy" component={RefundReturnCancellationPolicyPage} />
+                <Route exact path="/reset-password" component={ResetPassword} />
                 <Route exact path="/" component={Home} />
             </Switch>
           </div>

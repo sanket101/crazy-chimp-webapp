@@ -39,6 +39,13 @@ const styles = (themes) => ({
             width: '100%'
         }
     },
+    bestSellerItem: {
+        width: `calc(100%/3)`,
+
+        '@media (max-width: 540px)' : {
+            width: '100%'
+        }
+    },
     headerMargin: {
         marginBottom: '20px'
     }

@@ -161,6 +161,13 @@ const Login = (props) => {
 								</Link>
 							</Grid>
 						</Grid>
+						<Grid container>
+							<Grid item>
+								<Link variant="body2" onClick={() => props.history.push(ROUTES.RESET_PASSWORD)}>
+									{"Forgot password?"}
+								</Link>
+							</Grid>
+						</Grid>
 						{localState.errors.general && (
 							<Typography variant="body2" className={classes.customError}>
 								{localState.errors.general}
