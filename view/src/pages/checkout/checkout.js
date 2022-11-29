@@ -135,13 +135,13 @@ const Checkout = (props) => {
         // return Math.ceil(countOfHST / 2) * shippingAmountHST;
         let totalCartWeight = 0;
         const flatRate = 60;
-        if (paymentMethod === "cod") {
-            cartItems.forEach(element => {
-                totalCartWeight += +element.productDetails.weightInGms * +element.qty;
-            });
+        // if (paymentMethod === "cod") {
+        //     cartItems.forEach(element => {
+        //         totalCartWeight += +element.productDetails.weightInGms * +element.qty;
+        //     });
 
-            return Math.ceil(+totalCartWeight / 500) * flatRate;
-        }
+        //     return Math.ceil(+totalCartWeight / 500) * flatRate;
+        // }
         return 0;
     };
 
