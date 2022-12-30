@@ -219,6 +219,9 @@ const ProductList = (props) => {
                                             </div> 
                                             {
                                                 products.map((product, i) => {
+                                                    if(!product.isAvailable) {
+                                                        return <></>;
+                                                    }
                                                     return (
                                                         <div key={i} onClick={() => onProductClick(product)}>
                                                             <ProductCard product={product}/>

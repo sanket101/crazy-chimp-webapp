@@ -568,7 +568,7 @@ const Checkout = (props) => {
                                                 variant="outlined"
                                                 className={classes.textFieldCss}
                                                 value={discountCode}
-                                                onChange={(event) => setDiscountCode(event.target.value)}
+                                                onChange={(event) => setDiscountCode(event.target.value.trim())}
                                                 error={discountCodeError ? true : false}
                                                 helperText={discountCodeError}
                                             />
