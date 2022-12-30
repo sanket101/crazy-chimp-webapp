@@ -14,7 +14,7 @@ import axios from 'axios';
 import apiConfig from '../../api/api-config';
 import ROUTES from '../../constants/routes-name';
 import { authMiddleWare } from '../../utils/auth';
-import { addNewAddress, setSelectedAddress, setUserAddresses } from '../../redux/User/user.actions';
+import { addNewAddress, setSelectedAddress, setUserAddresses, setUserDetails } from '../../redux/User/user.actions';
 import { updateCart } from '../../redux/Products/products.actions';
 import { setDiscountCodes, setLoginError } from '../../redux/General/general.actions';
 import { handleApiError } from '../../utils/error-handling';
@@ -22,7 +22,7 @@ import { checkDiscountCodeConstraints } from '../../utils/discount-check';
 import { checkEnvironment } from '../../utils/general-utils';
 
 const Checkout = (props) => {
-    const { classes, cart } = props;
+    const { classes, cart, userDetails } = props;
     const [activeStep, setActiveStep] = useState(0);
     const [customerInformation, setCustomerInformation] = useState({
         emailId: '',
@@ -172,12 +172,12 @@ const Checkout = (props) => {
 
     const getOrderTotal = () => {
         if (activeStep === 0) {
-            return getProductTotal() - getDiscount();
+            return getProductTotal() - getTotalDiscountAmountForInvoice();
         }
         if (paymentMethod === "cod") {
-            return getProductTotal() + getShippingAmount() + getCodCharges() - getDiscount();
+            return getProductTotal() + getShippingAmount() + getCodCharges() - getTotalDiscountAmountForInvoice();
         }
-        return getProductTotal() + getShippingAmount() - getDiscount();
+        return getProductTotal() + getShippingAmount() - getTotalDiscountAmountForInvoice();
     };
 
     const getNumberOfCartItems = () => {
@@ -243,19 +243,32 @@ const Checkout = (props) => {
         }
     };
 
+    const getLoyaltyPointDiscount = () => {
+        if(userDetails?.loyaltyPoints > 0) {
+            return userDetails.loyaltyPoints;
+        }
+        return 0;
+    };
+
     const callUserDetailsApi = async () => {
         try {
             authMiddleWare(history);
             const authToken = localStorage.getItem('AuthToken');
             axios.defaults.headers.common = { Authorization: `${authToken}` };
-            const response = await axios.get(apiConfig.getAllSavedAddress);
-            if (response && response.data && response.data.length > 0) {
-                props.setUserAddresses(response.data);
 
-                const discountVouchers = await axios.get(apiConfig.getDiscountCodes);
+            const responseUserDetails = await axios.get(apiConfig.getUserDetails);
 
-                if (discountVouchers && discountVouchers.data && discountVouchers.data.length > 0) {
-                    props.setDiscountCodes(discountVouchers.data);
+            if(responseUserDetails && responseUserDetails.data && responseUserDetails.data.userCredentials) {
+                props.setUserDetails(responseUserDetails.data.userCredentials);
+                const response = await axios.get(apiConfig.getAllSavedAddress);
+                if (response && response.data && response.data.length > 0) {
+                    props.setUserAddresses(response.data);
+    
+                    const discountVouchers = await axios.get(apiConfig.getDiscountCodes);
+    
+                    if (discountVouchers && discountVouchers.data && discountVouchers.data.length > 0) {
+                        props.setDiscountCodes(discountVouchers.data);
+                    }
                 }
             }
             setLoading(false);
@@ -392,6 +405,34 @@ const Checkout = (props) => {
         }
     };
 
+    const getTotalDiscountAmountForInvoice = () => {
+        let totalDiscount = 0;
+
+        if(addDiscount) {
+            totalDiscount += getDiscount();
+        }
+        
+        if(userDetails?.loyaltyPoints > 0) {
+            totalDiscount += getLoyaltyPointDiscount();
+        }
+
+        return totalDiscount;
+    };
+
+    const getCompleteDiscountCode = () => {
+        let discountCodeText = '';
+
+        if(discountCode) {
+            discountCodeText += discountCode;
+        }
+        
+        if(userDetails?.loyaltyPoints > 0) {
+            discountCodeText += '_LP';
+        }
+
+        return discountCodeText;
+    };
+
     const callInvoiceApi = async (activeStep) => {
         // call add - order api
         try {
@@ -420,11 +461,14 @@ const Checkout = (props) => {
                     productTotalAmount: getProductTotal(),
                     shippingAmount: getShippingAmount(),
                     codAmount: paymentMethod === "cod" ? getCodCharges() : 0,
-                    discountAmount: addDiscount ? getDiscount() : 0,
-                    discountCode: discountCode ? discountCode : ''
+                    discountAmount: getTotalDiscountAmountForInvoice(),
+                    discountCode: getCompleteDiscountCode()
                 };
                 const response = await axios.post(apiConfig.addInvoice, requestPayload);
                 if (response && response.data && response.data.id) {
+                    if(userDetails?.loyaltyPoints > 0) {
+                        await axios.post(apiConfig.updateUserDetails, { loyaltyPoints: 0 });
+                    }
                     setOrderSuccess(true);
                     props.updateCart([]);
                     setLoading(false);
@@ -548,6 +592,11 @@ const Checkout = (props) => {
                                     <Typography variant="body1">{`-₹ ${getDiscount()}`}</Typography>
                                 </div>}
 
+                                {userDetails?.loyaltyPoints > 0 && <div className={classes.shoppingCartItem}>
+                                    <Typography variant="body1">Feedback Discount</Typography>
+                                    <Typography variant="body1">{`-₹ ${getLoyaltyPointDiscount()}`}</Typography>
+                                </div>}
+
                                 <div className={classes.shoppingCartItem}>
                                     <Typography variant="body1">Shipping</Typography>
                                     <Typography variant="body1">{activeStep === 0 ? 'Calculated at next step' : `₹ ${getShippingAmount()}`}</Typography>
@@ -591,7 +640,8 @@ const mapStateToProps = (state) => {
         cart: reduxState.cart,
         userAddresses: reduxStateUser.userAddresses,
         selectedAddressIndex: reduxStateUser.selectedAddressIndex,
-        discountCodes: reduxStateGeneral.discountCodes
+        discountCodes: reduxStateGeneral.discountCodes,
+        userDetails: reduxStateUser.userDetails
     };
 };
 
@@ -602,7 +652,8 @@ const mapDispatchToProps = dispatch => {
         addNewAddress: (address) => dispatch(addNewAddress(address)),
         updateCart: (newCart) => dispatch(updateCart(newCart)),
         setLoginError: (msg) => dispatch(setLoginError(msg)),
-        setDiscountCodes: (discountCodes) => dispatch(setDiscountCodes(discountCodes))
+        setDiscountCodes: (discountCodes) => dispatch(setDiscountCodes(discountCodes)),
+        setUserDetails: (userDetails) => dispatch(setUserDetails(userDetails))
     };
 };
 
