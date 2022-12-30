@@ -25,7 +25,9 @@ const apiConfig = {
     updateInvoice: `${baseURL}/edit-invoice`,
     getAllInvoices: `${baseURL}/get-all-invoices`,
     initiatePaytmTransaction: `${baseURL}/initiate-transaction`,
-    resetPasswordApi: `${baseURL}/reset-password`
+    resetPasswordApi: `${baseURL}/reset-password`,
+    getUserDetails: `${baseURL}/user`,
+    updateUserDetails: `${baseURL}/user`
 };
 
 export default apiConfig;

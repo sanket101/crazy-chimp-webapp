@@ -10,12 +10,13 @@ import apiConfig from "../../../api/api-config";
 import axios from "axios";
 import { handleApiError } from "../../../utils/error-handling";
 import MuiAlert from '@mui/material/Alert';
+import PRODUCT_TYPE from "../../../constants/product-constants";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const DISCOUNT_TYPES = ['FLAT', 'PERCENT'];
+const DISCOUNT_TYPES = ['FLAT', 'PERCENT', 'PERPRODUCT'];
 
 const AddDiscount = (props) => {
     const { classes } = props;
@@ -23,6 +24,7 @@ const AddDiscount = (props) => {
     const [description , setDescription] = useState('');
     const [discount, setDiscount] = useState('');
     const [discountType, setDiscountType] = useState('');
+	const [productType, setProductType] = useState('');
     const [validFrom, setValidFrom] = useState('');
     const [validUntil, setValidUntil] = useState('');
     const [frequencyPerUser, setFrequencyPerUser] = useState('');
@@ -62,6 +64,10 @@ const AddDiscount = (props) => {
             return false;
         }
 
+		if(discountType && !productType) {
+			return false;
+		}
+
         return true;
     };
 
@@ -82,7 +88,8 @@ const AddDiscount = (props) => {
                 cartMinValue: !cartMinValue ? 'NA' : +cartMinValue,
                 cartMaxValue: !cartMaxValue ? 'NA' : +cartMaxValue,
                 cartMinItems: !cartMinItems ? 'NA' : +cartMinItems,
-                cartMaxItems: !cartMaxItems ? 'NA' : +cartMaxItems
+                cartMaxItems: !cartMaxItems ? 'NA' : +cartMaxItems,
+				productType
 			};
 			const response = await axios.post(apiConfig.addDiscount, requestPayload);
 			if(response && response.data && response.data.id) {
@@ -92,6 +99,7 @@ const AddDiscount = (props) => {
                 setDescription('');
                 setDiscount('');
                 setDiscountType('');
+				setProductType('');
                 setValidFrom('');
                 setValidUntil('');
                 setFrequencyPerUser('');
@@ -278,6 +286,27 @@ const AddDiscount = (props) => {
                                     value={frequencyPerUser}
 									onChange={(event) => setFrequencyPerUser(event.target.value)}
 								/>
+                            </Grid>
+
+							<Grid item xs={12} sm={6}>
+								<FormControl component="fieldset" >
+									<FormLabel component="legend">Product Type</FormLabel>
+									<Select
+										labelId="demo-simple-select-label"
+										id="demo-simple-select"
+										value={productType}
+										label="Product Type"
+										onChange={(event) => setProductType(event.target.value)}
+									>
+										{
+											Object.keys(PRODUCT_TYPE).map((category, i) => {
+												return (
+													<MenuItem value={category}>{category}</MenuItem>
+												);
+											})
+										}
+									</Select>
+								</FormControl>
                             </Grid>
 						</Grid>
 						{showGenericError && <Typography variant="body1">Please check again!</Typography>}

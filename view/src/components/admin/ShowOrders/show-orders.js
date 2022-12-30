@@ -24,7 +24,7 @@ const ShowOrders = (props) => {
     const [activeInvoiceIndex, setActiveInvoiceIndex] = useState('');
     const [updateSuccess, setUpdateSuccess] = useState(false);
 
-    const orderStatuses = ['RECEIVED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'UNDELIVERED', 'RETURNED', 'ISSUE RAISED'];
+    const orderStatuses = ['RECEIVED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'UNDELIVERED', 'RETURNED', 'ISSUE RAISED', 'CANCELLED'];
 
     let history = useHistory();
 

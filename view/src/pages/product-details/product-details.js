@@ -13,13 +13,14 @@ import ROUTES from '../../constants/routes-name';
 import axios from 'axios';
 import apiConfig from '../../api/api-config';
 import { handleApiError } from '../../utils/error-handling';
+import PRODUCT_TYPE from '../../constants/product-constants';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 const getClothGSM = (productCategory) => {
-    if(productCategory === "HST" || productCategory === "FST") {
+    if(productCategory === PRODUCT_TYPE.HST || productCategory === PRODUCT_TYPE.FST) {
         return 180;
     }
 

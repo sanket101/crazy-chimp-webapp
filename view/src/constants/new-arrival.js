@@ -1,5 +1,134 @@
 const newArrivalProducts = [
     {
+        "productId": "xk0oG0JYqhYBZZtcQJ5g",
+        "name": "Gear 5 Hoodie",
+        "actualPrice": "1399",
+        "salePrice": "1099",
+        "productCategory": "HOODIES",
+        "genreCategory": "ONEPIECE",
+        "colorsAvailable": [
+            "Navy Blue",
+            "Black",
+            "Olive Green"
+        ],
+        "sizeAvailable": [
+            "XS",
+            "S",
+            "M",
+            "L",
+            "XL",
+            "2XL"
+        ],
+        "images": [
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHOODIES%2FHOODIES_ONEPIECE_GEAR5HOODIE_001%2FHOODIES_ONEPIECE_GEAR5HOODIE_001_NAVYBLUE.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHOODIES%2FHOODIES_ONEPIECE_GEAR5HOODIE_001%2FHOODIES_ONEPIECE_GEAR5HOODIE_001_BLACK.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHOODIES%2FHOODIES_ONEPIECE_GEAR5HOODIE_001%2FHOODIES_ONEPIECE_GEAR5HOODIE_001_OLIVEGREEN.Webp?alt=media"
+        ],
+        "weightInGms": "950",
+        "isAvailable": true
+    },
+    {
+        "productId": "xS3BMEneuHrmpTUOcfwO",
+        "name": "Chainsaw Man Hoodie",
+        "actualPrice": "1399",
+        "salePrice": "1099",
+        "productCategory": "HOODIES",
+        "genreCategory": "CHAINSAW",
+        "colorsAvailable": [
+            "Navy Blue",
+            "Black",
+            "White",
+            "Baby Blue",
+            "Golden Yellow",
+            "Iris Lavender",
+            "Mint Green",
+            "Olive Green"
+        ],
+        "sizeAvailable": [
+            "XS",
+            "S",
+            "M",
+            "L",
+            "XL",
+            "2XL"
+        ],
+        "images": [
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHOODIES%2FHOODIES_CHAINSAW_CHAINSAWMANHOODIE_001%2FHOODIES_CHAINSAW_CHAINSAWMANHOODIE_001_NAVYBLUE.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHOODIES%2FHOODIES_CHAINSAW_CHAINSAWMANHOODIE_001%2FHOODIES_CHAINSAW_CHAINSAWMANHOODIE_001_BLACK.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHOODIES%2FHOODIES_CHAINSAW_CHAINSAWMANHOODIE_001%2FHOODIES_CHAINSAW_CHAINSAWMANHOODIE_001_WHITE.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHOODIES%2FHOODIES_CHAINSAW_CHAINSAWMANHOODIE_001%2FHOODIES_CHAINSAW_CHAINSAWMANHOODIE_001_BABYBLUE.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHOODIES%2FHOODIES_CHAINSAW_CHAINSAWMANHOODIE_001%2FHOODIES_CHAINSAW_CHAINSAWMANHOODIE_001_GOLDENYELLOW.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHOODIES%2FHOODIES_CHAINSAW_CHAINSAWMANHOODIE_001%2FHOODIES_CHAINSAW_CHAINSAWMANHOODIE_001_IRISLAVENDER.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHOODIES%2FHOODIES_CHAINSAW_CHAINSAWMANHOODIE_001%2FHOODIES_CHAINSAW_CHAINSAWMANHOODIE_001_MINTGREEN.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHOODIES%2FHOODIES_CHAINSAW_CHAINSAWMANHOODIE_001%2FHOODIES_CHAINSAW_CHAINSAWMANHOODIE_001_OLIVEGREEN.Webp?alt=media"
+        ],
+        "weightInGms": "950",
+        "isAvailable": true
+    },
+    {
+        "productId": "0FygOVt6tu5DBifDtXwv",
+        "name": "Bleach Hoodie",
+        "actualPrice": "1399",
+        "salePrice": "1099",
+        "productCategory": "HOODIES",
+        "genreCategory": "BLEACH",
+        "colorsAvailable": [
+            "White",
+            "Baby Blue",
+            "Golden Yellow",
+            "Iris Lavender",
+            "Mint Green"
+        ],
+        "sizeAvailable": [
+            "XS",
+            "S",
+            "M",
+            "L",
+            "XL",
+            "2XL"
+        ],
+        "images": [
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHOODIES%2FHOODIES_BLEACH_BLEACHHOODIE_001%2FHOODIES_BLEACH_BLEACHHOODIE_001_WHITE.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHOODIES%2FHOODIES_BLEACH_BLEACHHOODIE_001%2FHOODIES_BLEACH_BLEACHHOODIE_001_BABYBLUE.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHOODIES%2FHOODIES_BLEACH_BLEACHHOODIE_001%2FHOODIES_BLEACH_BLEACHHOODIE_001_GOLDENYELLOW.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHOODIES%2FHOODIES_BLEACH_BLEACHHOODIE_001%2FHOODIES_BLEACH_BLEACHHOODIE_001_IRISLAVENDER.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHOODIES%2FHOODIES_BLEACH_BLEACHHOODIE_001%2FHOODIES_BLEACH_BLEACHHOODIE_001_MINTGREEN.Webp?alt=media"
+        ],
+        "weightInGms": "950",
+        "isAvailable": true
+    },
+    {
+        "productId": "aJEUpyzKK1kNlpoy8925",
+        "name": "Gojo Tshirt",
+        "actualPrice": "649",
+        "salePrice": "449",
+        "productCategory": "HST",
+        "genreCategory": "JJK",
+        "colorsAvailable": [
+            "Navy Blue",
+            "Black",
+            "Maroon",
+            "Olive Green",
+            "Charcoal Grey"
+        ],
+        "sizeAvailable": [
+            "S",
+            "M",
+            "L",
+            "XL",
+            "2XL"
+        ],
+        "images": [
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_JJK_GOJOTSHIRT_001%2FHST_JJK_GOJOTSHIRT_001_NAVYBLUE.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_JJK_GOJOTSHIRT_001%2FHST_JJK_GOJOTSHIRT_001_BLACK.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_JJK_GOJOTSHIRT_001%2FHST_JJK_GOJOTSHIRT_001_MAROON.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_JJK_GOJOTSHIRT_001%2FHST_JJK_GOJOTSHIRT_001_OLIVEGREEN.Webp?alt=media",
+            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_JJK_GOJOTSHIRT_001%2FHST_JJK_GOJOTSHIRT_001_CHARCOALGREY.Webp?alt=media"
+        ],
+        "weightInGms": "200",
+        "isAvailable": true
+    },
+    {
         "productId": "2ui2eYanKmGQ3j2II8jH",
         "name": "Eren Titan T-shirt",
         "actualPrice": "649",
@@ -52,7 +181,7 @@ const newArrivalProducts = [
             "2XL"
         ],
         "images": [
-            
+
             "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_STEINSGATE_ELPSYCONGROOTSHIRT_001%2FHST_STEINSGATE_ELPSYCONGROOTSHIRT_001_MAROON.Webp?alt=media",
             "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_STEINSGATE_ELPSYCONGROOTSHIRT_001%2FHST_STEINSGATE_ELPSYCONGROOTSHIRT_001_NAVYBLUE.Webp?alt=media",
             "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_STEINSGATE_ELPSYCONGROOTSHIRT_001%2FHST_STEINSGATE_ELPSYCONGROOTSHIRT_001_BLACK.Webp?alt=media",
@@ -118,64 +247,6 @@ const newArrivalProducts = [
             "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_ONEPIECE_NAKAMATSHIRT_001%2FHST_ONEPIECE_NAKAMATSHIRT_001_NAVYBLUE.Webp?alt=media",
             "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_ONEPIECE_NAKAMATSHIRT_001%2FHST_ONEPIECE_NAKAMATSHIRT_001_BLACK.Webp?alt=media",
             "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_ONEPIECE_NAKAMATSHIRT_001%2FHST_ONEPIECE_NAKAMATSHIRT_001_OLIVEGREEN.Webp?alt=media"
-        ],
-        "weightInGms": "200",
-        "isAvailable": true
-    },
-    {
-        "productId": "thFp9B4DbgH4gVLLoHcs",
-        "name": "Dattebayo",
-        "actualPrice": "649",
-        "salePrice": "449",
-        "productCategory": "HST",
-        "genreCategory": "NARUTO",
-        "colorsAvailable": [
-            "Navy Blue",
-            "Black",
-            "Maroon"
-        ],
-        "sizeAvailable": [
-            "S",
-            "M",
-            "L",
-            "XL",
-            "2XL"
-        ],
-        "images": [
-            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_NARUTO_DATTEBAYO_001%2FHST_NARUTO_DATTEBAYO_001_BLACK.Webp?alt=media",
-            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_NARUTO_DATTEBAYO_001%2FHST_NARUTO_DATTEBAYO_001_NAVYBLUE.Webp?alt=media",
-            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_NARUTO_DATTEBAYO_001%2FHST_NARUTO_DATTEBAYO_001_MAROON.Webp?alt=media"
-        ],
-        "weightInGms": "200",
-        "isAvailable": true
-    },
-    {
-        "productId": "OdwWthrzAlYYg6BuVSOI",
-        "name": "Hero For Fun Tshirt",
-        "actualPrice": "649",
-        "salePrice": "449",
-        "productCategory": "HST",
-        "genreCategory": "ONEPUNCHMAN",
-        "colorsAvailable": [
-            "Navy Blue",
-            "Black",
-            "White",
-            "Maroon",
-            "Red"
-        ],
-        "sizeAvailable": [
-            "S",
-            "M",
-            "L",
-            "XL",
-            "2XL"
-        ],
-        "images": [
-            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_ONEPUNCHMAN_HEROFORFUNTSHIRT_001%2FHST_ONEPUNCHMAN_HEROFORFUNTSHIRT_001_NAVYBLUE.Webp?alt=media",
-            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_ONEPUNCHMAN_HEROFORFUNTSHIRT_001%2FHST_ONEPUNCHMAN_HEROFORFUNTSHIRT_001_BLACK.Webp?alt=media",
-            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_ONEPUNCHMAN_HEROFORFUNTSHIRT_001%2FHST_ONEPUNCHMAN_HEROFORFUNTSHIRT_001_WHITE.Webp?alt=media",
-            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_ONEPUNCHMAN_HEROFORFUNTSHIRT_001%2FHST_ONEPUNCHMAN_HEROFORFUNTSHIRT_001_MAROON.Webp?alt=media",
-            "https://firebasestorage.googleapis.com/v0/b/crazy-chimp-48212.appspot.com/o/Products%2FHST%2FHST_ONEPUNCHMAN_HEROFORFUNTSHIRT_001%2FHST_ONEPUNCHMAN_HEROFORFUNTSHIRT_001_RED.Webp?alt=media"
         ],
         "weightInGms": "200",
         "isAvailable": true

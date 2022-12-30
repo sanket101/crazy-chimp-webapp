@@ -12,7 +12,7 @@ exports.addDiscountVoucher = (request, response) => {
         code: request.body.code,
         description : request.body.description,
         discount: request.body.discount,
-        discountType: request.body.discountType, //FLAT OR PERCENT
+        discountType: request.body.discountType, //FLAT OR PERCENT OR PERPRODUCT
         isEnabled: request.body.isEnabled,
         validFrom: new Date(request.body.validFrom).toISOString(),
         validUntil: new Date(request.body.validUntil).toISOString(),
@@ -20,7 +20,8 @@ exports.addDiscountVoucher = (request, response) => {
         cartMinValue: request.body.cartMinValue,
         cartMaxValue: request.body.cartMaxValue,
         cartMinItems: request.body.cartMinItems,
-        cartMaxItems: request.body.cartMaxItems
+        cartMaxItems: request.body.cartMaxItems,
+        productType: request.body.productType
     };
 
     db.collection('discounts').add(newDiscountCode)

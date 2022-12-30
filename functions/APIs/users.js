@@ -67,6 +67,7 @@ exports.signUpUser = (request, response) => {
                 country: newUser.country,
                 email: newUser.email,
                 createdAt: new Date().toISOString(),
+                loyaltyPoints: 0
             };
             return db
                     .doc(`/users/${userId}`)
