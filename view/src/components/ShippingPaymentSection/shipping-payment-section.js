@@ -47,13 +47,13 @@ const ShippingPaymentSection = (props) => {
                             <FormControlLabel value="online" control={<Radio color={'primary'} />} label="Online Payment" />
                             <Typography variant="body2" className={classes.secondaryFont}>100% Free shipping on all prepaid (pay online) orders</Typography>
                         </div>
-                        <div className={classes.dividerWrapper}>
+                        {/* <div className={classes.dividerWrapper}>
                             <Divider />
                         </div>
-                        <div className={classes.customerInfoWrapper}>
+                         <div className={classes.customerInfoWrapper}>
                             <FormControlLabel value="qr" control={<Radio color={'primary'} />} label="QR Payment" />
                             <Typography variant="body2" className={classes.secondaryFont}>100% Free shipping on all prepaid (pay online) orders</Typography>
-                        </div>
+                        </div> */}
                         {props.paymentMethod === "qr" ? 
                             <div style={{ display: 'flex'}}>
                                 <div>

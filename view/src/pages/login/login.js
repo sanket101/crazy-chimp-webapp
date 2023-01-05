@@ -23,6 +23,8 @@ import MuiAlert from '@mui/material/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import { handleApiError } from '../../utils/error-handling';
 import ROUTES from '../../constants/routes-name';
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../../firebase/firebase";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -52,7 +54,8 @@ const Login = (props) => {
 			.post(apiConfig.loginApi, userData)
 			.then((response) => {
 				localStorage.setItem('AuthToken', `Bearer ${response.data.token}`);
-				setLocalState(prevState => {return {...prevState, loading: false }});	
+				setLocalState(prevState => {return {...prevState, loading: false }});
+				logEvent(analytics, 'login', { method: 'manual'});
 				props.history.push('/');
 			})
 			.catch((error) => {

@@ -13,6 +13,8 @@ import ROUTES from '../../constants/routes-name';
 import axios from 'axios';
 import apiConfig from '../../api/api-config';
 import { handleApiError } from '../../utils/error-handling';
+import { logEvent } from 'firebase/analytics';
+import { analytics } from '../../firebase/firebase';
 
 const defaultGenreType = 'AG';
 const defaultProductType = 'AP';
@@ -127,6 +129,18 @@ const ProductList = (props) => {
 
     const onProductClick = (product) => {
         props.setProductDetails(product);
+        logEvent(analytics, "view_item", {
+            currency: "INR",
+            value: product.salePrice,
+            items: [{
+                item_id: product.productId,
+                item_name: product.name,
+                currency: "INR",
+                item_category: product.productCategory,
+                item_category2: product.genreCategory,
+                price: product.salePrice
+            }]
+        })
         history.push(ROUTES.PRODUCT_DETAILS);
     };
 
@@ -171,6 +185,11 @@ const ProductList = (props) => {
     };
 
     useEffect(() => {
+        logEvent(analytics, "screen_view", {
+            firebase_screen: "Apparel Page",
+            firebase_screen_class: "ProductList"
+        });
+        
         if(props.productList.length === 0) {
             callProductsApi();
         }

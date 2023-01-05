@@ -14,6 +14,8 @@ import axios from 'axios';
 import apiConfig from '../../api/api-config';
 import { handleApiError } from '../../utils/error-handling';
 import PRODUCT_TYPE from '../../constants/product-constants';
+import { logEvent } from 'firebase/analytics';
+import { analytics } from '../../firebase/firebase';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -112,6 +114,10 @@ const ProductDetails = (props) => {
 
     useEffect(() => {
         callStockAvailabilityApi();
+        logEvent(analytics, "screen_view", {
+            firebase_screen: "Product Details Page",
+            firebase_screen_class: "ProductDetails"
+        });
     }, []);
 
     if(Object.keys(productDetails).length === 0) {

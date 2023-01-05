@@ -1,12 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import withStyles from '@material-ui/core/styles/withStyles';
 import styles from './common.style';
 import { Typography } from "@material-ui/core";
 import NavigationBar from "../../components/NavigationBar/navigation-bar";
 import Footer from "../../components/Footer/footer";
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../../firebase/firebase";
 
 const PrivacyPolicyPage = (props) => {
     const { classes } = props;
+
+    useEffect(() => {
+        logEvent(analytics, "screen_view", {
+            firebase_screen: "Privacy Policy Page",
+            firebase_screen_class: "PrivacyPolicyPage"
+        });
+    }, []);
+
     return (
         <>
             <NavigationBar />

@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import withStyles from '@material-ui/core/styles/withStyles';
 import styles from './common.style';
 import { Typography, List, ListItem, ListItemText } from "@material-ui/core";
 import NavigationBar from "../../components/NavigationBar/navigation-bar";
 import Footer from "../../components/Footer/footer";
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../../firebase/firebase";
 
 const TnCPage = (props) => {
     const { classes } = props;
@@ -19,6 +21,13 @@ const TnCPage = (props) => {
         'Orders when placed will be delivered to the given address by at most 15 days. Delivery time may vary depending upon the shipping address and other factors (public holidays, extreme weather conditions, etc.). Whenever a delivery is delayed, Crazy Chimp will notify you as soon as possible.',
         'Customers can exchange their order within 2 days after an order has been delivered. In the interest of hygiene, we refuse returns where it\'s obvious that the item has been worn, washed or soiled. In case you have received a defective product, send us images at crazychimpofficial@gmail.com and we will get back to you. Once confirmed by the Team the refund will be provided either into your bank account.'
     ];
+
+    useEffect(() => {
+        logEvent(analytics, "screen_view", {
+            firebase_screen: "Terms and Conditions Page",
+            firebase_screen_class: "TnCPage"
+        });
+    }, []);
 
     return (
         <>

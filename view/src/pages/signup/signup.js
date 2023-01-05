@@ -18,6 +18,8 @@ import Footer from '../../components/Footer/footer';
 import apiConfig from '../../api/api-config';
 import VALIDATION_ERROR from '../../constants/validation-errors';
 import ROUTES from '../../constants/routes-name';
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../../firebase/firebase";
 
 const Signup = (props) => {
 	const { classes } = props;
@@ -72,6 +74,7 @@ const Signup = (props) => {
 				setLocalState(prevState => {
 					return {...prevState, loading: false};
 				});	
+				logEvent(analytics, 'sign_up', { method: 'manual'});
 				history.push(ROUTES.HOME);
 			})
 			.catch((error) => {
