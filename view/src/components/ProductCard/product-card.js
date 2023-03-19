@@ -6,9 +6,6 @@ import styles from './product-card.style';
 const ProductCard = (props) => {
     const  { classes, product, stylingWithoutMaxWidth } = props;
 
-    if(!product.isAvailable) {
-        return <></>;
-    }
     return (
         <Card className={!stylingWithoutMaxWidth ? classes.cardWrapper : classes.cardWrapperWithoutMaxWidth}>
             <CardActionArea>

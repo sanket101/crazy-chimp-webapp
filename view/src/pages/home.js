@@ -15,6 +15,8 @@ import { handleApiError } from '../utils/error-handling';
 import DiscountSection from '../components/DiscountSection/discount-section';
 import BestSellerSection from '../components/BestSellerSection/best-seller-section';
 import NewArrivalSection from '../components/NewArrivalSection/new-arrival-section';
+import { logEvent } from 'firebase/analytics';
+import { analytics } from '../firebase/firebase';
 
 const Home = (props) => {
 	let history = useHistory();
@@ -47,6 +49,10 @@ const Home = (props) => {
 
 	useEffect(() => {
 		getProductAndGenreCategories();
+		logEvent(analytics, "screen_view", {
+			firebase_screen: "Home Page",
+			firebase_screen_class: "Home"
+		});
 	}, []);
 
     return(

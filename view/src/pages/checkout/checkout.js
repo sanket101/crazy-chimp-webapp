@@ -20,6 +20,8 @@ import { setDiscountCodes, setLoginError } from '../../redux/General/general.act
 import { handleApiError } from '../../utils/error-handling';
 import { checkDiscountCodeConstraints } from '../../utils/discount-check';
 import { checkEnvironment } from '../../utils/general-utils';
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../../firebase/firebase";
 
 const Checkout = (props) => {
     const { classes, cart, userDetails } = props;
@@ -433,6 +435,34 @@ const Checkout = (props) => {
         return discountCodeText;
     };
 
+    const getPurchaseAnalyticsObject = (cartItems) => {
+        const getItemsArray = () => {
+            let populatedArray = [];
+
+            for (let index = 0; index < cartItems.length; index++) {
+                const newObject = {
+                    item_id: cartItems[index].productDetails.productId,
+                    item_name: cartItems[index].productDetails.name,
+                    item_category: cartItems[index].productDetails.productCategory,
+                    item_category2: cartItems[index].productDetails.genreCategory,
+                    quantity: cartItems[index].quantity,
+                    item_variant: cartItems[index].color
+                }
+                populatedArray.push(newObject);
+            }
+
+            return populatedArray;
+        };
+
+        return {
+            transaction_id: generateUniqueOrderId(),
+            currency: "INR",
+            value: getOrderTotal(),
+            coupon: getCompleteDiscountCode(),
+            items: getItemsArray()
+        }
+    };
+
     const callInvoiceApi = async (activeStep) => {
         // call add - order api
         try {
@@ -470,6 +500,7 @@ const Checkout = (props) => {
                         await axios.post(apiConfig.updateUserDetails, { loyaltyPoints: 0 });
                     }
                     setOrderSuccess(true);
+                    logEvent(analytics, 'purchase', getPurchaseAnalyticsObject(props.cart));
                     props.updateCart([]);
                     setLoading(false);
                     setActiveStep(activeStep + 1);
@@ -483,6 +514,10 @@ const Checkout = (props) => {
 
     useEffect(() => {
         callUserDetailsApi();
+        logEvent(analytics, "screen_view", {
+            firebase_screen: "Checkout Page",
+            firebase_screen_class: "Checkout"
+        });
     }, []);
 
     if (props.cart.length === 0 && !orderSuccess) {
@@ -568,7 +603,7 @@ const Checkout = (props) => {
                                                 variant="outlined"
                                                 className={classes.textFieldCss}
                                                 value={discountCode}
-                                                onChange={(event) => setDiscountCode(event.target.value)}
+                                                onChange={(event) => setDiscountCode(event.target.value.trim())}
                                                 error={discountCodeError ? true : false}
                                                 helperText={discountCodeError}
                                             />

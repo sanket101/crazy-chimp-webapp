@@ -11,6 +11,8 @@ import ROUTES from '../../constants/routes-name';
 import { updateCart } from '../../redux/Products/products.actions';
 import { setLoginError } from '../../redux/General/general.actions';
 import ValidationError from '../../constants/validation-errors';
+import { logEvent } from 'firebase/analytics';
+import { analytics } from '../../firebase/firebase';
 
 const Cart = (props) => {
     const { classes, cart: cartList } = props;
@@ -25,15 +27,47 @@ const Cart = (props) => {
     const deleteCartItem = (index) => {
         const newCartList = cartList.filter((item, i) => i !== index);
         props.updateCart(newCartList);
+        logEvent(analytics, "remove_from_cart", {
+            currency: "INR",
+            value: getTotal(),
+            items: getCartItems()
+        });
     };
 
     const getTotal = () => {
         return cartList.reduce((total, item) => { return total + item.productDetails.salePrice * item.qty; }, 0);
     };
+
+    const getCartItems = () => {
+        let analyticsItems = [];
+
+        for (let index = 0; index < cartList.length; index++) {
+            const item = cartList[index];
+            const newItem = {
+                item_id: item.productDetails.productId,
+                item_name: item.productDetails.name,
+                item_category: item.productDetails.productCategory,
+                item_category2: item.productDetails.genreCategory,
+                item_variant: item.color,
+                quantity: item.qty,
+                price: item.productDetails.salePrice,
+                currency: "INR"
+            };
+
+            analyticsItems.push(newItem);
+        }
+
+        return analyticsItems;
+    };
     
     const checkoutHandler = () => {
         const isLoggedIn = localStorage.getItem('AuthToken');
         if(isLoggedIn) {
+            logEvent(analytics, "begin_checkout", {
+                currency: "INR",
+                value: getTotal(),
+                items: getCartItems()
+            })
             history.push(ROUTES.CHECKOUT);
         }
         else {
@@ -44,6 +78,12 @@ const Cart = (props) => {
  
     useEffect(() => {
         window.scrollTo(0, 0);
+
+        logEvent(analytics, "screen_view", {
+            firebase_screen: "Cart Page",
+            firebase_screen_class: "Cart"
+        });
+
     }, []);
 
     if(cartList.length === 0) {

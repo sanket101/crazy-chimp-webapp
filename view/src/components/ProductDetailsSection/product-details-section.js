@@ -7,6 +7,8 @@ import styles from './product-details-section.style';
 import SizeChart from '../SizeChart/size-chart';
 import ROUTES from '../../constants/routes-name';
 import LINKS from '../../constants/imp-links';
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../../firebase/firebase";
 
 const ProductDetailsSection = (props) => {
     const { classes, productDetails } = props;
@@ -22,6 +24,20 @@ const ProductDetailsSection = (props) => {
         setAddToCartTriggered(true);
         if(color && size) {
             props.setAddToCart(color, size, qty);
+            logEvent(analytics, "add_to_cart", {
+                currency: "INR",
+                value: productDetails.salePrice,
+                items: [
+                    {
+                        item_id: productDetails.productId,
+                        item_name: productDetails.name,
+                        item_category: productDetails.productCategory,
+                        item_category2: productDetails.genreCategory,
+                        item_variant: color,
+                        quantity: qty
+                    }
+                ]
+            })
         }
     };
 
