@@ -511,7 +511,7 @@ const extractStockInformation = (list) => {
 };
 
 const populateStockData = async (token) => {
-    const productList = [{ name: 'HST', code: '460'}, { name: 'FST', code: '461'}, {name: 'HOODIES', code: '463'}, {name: 'SWTS', code: '1012'}];
+    const productList = [{ name: 'HST', code: '460'}, { name: 'FST', code: '461'}, {name: 'HOODIES', code: '463'}, {name: 'SWTS', code: '1012'}, {name: 'OST', code: '1216'}];
 
     let result = {};
 
