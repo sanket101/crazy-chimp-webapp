@@ -213,7 +213,8 @@ exports.getAllProducts = (request, response) => {
                             sizeAvailable: doc.data().sizeAvailable,
                             images: doc.data().images,
                             weightInGms: doc.data().weightInGms,
-                            isAvailable: doc.data().isAvailable
+                            isAvailable: doc.data().isAvailable,
+                            productCode: doc.data().productCode
                         });
                     });
                     return response.json(products);
@@ -242,7 +243,8 @@ exports.getAllProducts = (request, response) => {
                             sizeAvailable: doc.data().sizeAvailable,
                             images: doc.data().images,
                             weightInGms: doc.data().weightInGms,
-                            isAvailable: doc.data().isAvailable
+                            isAvailable: doc.data().isAvailable,
+                            productCode: doc.data().productCode
                         });
                     });
                     return response.json(products);
@@ -271,7 +273,8 @@ exports.getAllProducts = (request, response) => {
                             sizeAvailable: doc.data().sizeAvailable,
                             images: doc.data().images,
                             weightInGms: doc.data().weightInGms,
-                            isAvailable: doc.data().isAvailable
+                            isAvailable: doc.data().isAvailable,
+                            productCode: doc.data().productCode
                         });
                     });
                     return response.json(products);
@@ -299,7 +302,8 @@ exports.getAllProducts = (request, response) => {
                             sizeAvailable: doc.data().sizeAvailable,
                             images: doc.data().images,
                             weightInGms: doc.data().weightInGms,
-                            isAvailable: doc.data().isAvailable
+                            isAvailable: doc.data().isAvailable,
+                            productCode: doc.data().productCode
                         });
                     });
                     return response.json(products);
@@ -341,7 +345,8 @@ exports.getAllProducts = (request, response) => {
                                 sizeAvailable: doc.data().sizeAvailable,
                                 images: doc.data().images,
                                 weightInGms: doc.data().weightInGms,
-                                isAvailable: doc.data().isAvailable
+                                isAvailable: doc.data().isAvailable,
+                                productCode: doc.data().productCode
                             });
                         });
                         return response.json(products);
@@ -384,7 +389,8 @@ exports.getAllProducts = (request, response) => {
                                 sizeAvailable: doc.data().sizeAvailable,
                                 images: doc.data().images,
                                 weightInGms: doc.data().weightInGms,
-                                isAvailable: doc.data().isAvailable
+                                isAvailable: doc.data().isAvailable,
+                                productCode: doc.data().productCode
                             });
                         });
                         return response.json(products);
@@ -427,7 +433,8 @@ exports.getAllProducts = (request, response) => {
                                 sizeAvailable: doc.data().sizeAvailable,
                                 images: doc.data().images,
                                 weightInGms: doc.data().weightInGms,
-                                isAvailable: doc.data().isAvailable
+                                isAvailable: doc.data().isAvailable,
+                                productCode: doc.data().productCode
                             });
                         });
                         return response.json(products);
@@ -468,7 +475,8 @@ exports.getAllProducts = (request, response) => {
                                 sizeAvailable: doc.data().sizeAvailable,
                                 images: doc.data().images,
                                 weightInGms: doc.data().weightInGms,
-                                isAvailable: doc.data().isAvailable
+                                isAvailable: doc.data().isAvailable,
+                                productCode: doc.data().productCode
                             });
                         });
                         return response.json(products);

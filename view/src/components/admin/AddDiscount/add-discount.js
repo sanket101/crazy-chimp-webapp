@@ -64,7 +64,7 @@ const AddDiscount = (props) => {
             return false;
         }
 
-		if(discountType && !productType) {
+		if(discountType && discountType === "PERPRODUCT" && !productType) {
 			return false;
 		}
 
