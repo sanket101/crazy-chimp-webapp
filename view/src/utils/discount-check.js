@@ -1,4 +1,4 @@
-export const checkDiscountCodeConstraints = (discountObj, cartTotal, cartItems) => {
+export const checkDiscountCodeConstraints = (discountObj, cartTotal, cartTotalItems, cartItems) => {
     if(!discountObj.isEnabled) {
         return false;
     }
@@ -25,12 +25,26 @@ export const checkDiscountCodeConstraints = (discountObj, cartTotal, cartItems) 
         return false;
     }
 
-    if(discountObj.cartMinItems !== 'NA' && cartItems < +discountObj.cartMinItems) {
+    if(discountObj.cartMinItems !== 'NA' && cartTotalItems < +discountObj.cartMinItems) {
         return false;
     }
 
-    if(discountObj.cartMaxItems !== 'NA' && cartItems > +discountObj.cartMaxItems) {
+    if(discountObj.cartMaxItems !== 'NA' && cartTotalItems > +discountObj.cartMaxItems) {
         return false;
+    }
+
+    if(discountObj.specificProductCode) {
+        let isProductMatch = false;
+        for (let index = 0; index < cartItems.length; index++) {
+            const element = cartItems[index];
+            if(element.productDetails.productCode === discountObj.specificProductCode) {
+                isProductMatch = true;
+            }   
+        }
+
+        if(!isProductMatch) {
+            return false;
+        }
     }
 
     return true;

@@ -206,7 +206,7 @@ const Checkout = (props) => {
         const discountCodeName = discountCode.toUpperCase();
         const applicableCodes = props.discountCodes.filter((discountCode, i) => discountCode.code === discountCodeName);
         if (applicableCodes.length > 0) {
-            const isValid = checkDiscountCodeConstraints(applicableCodes[0], getProductTotal(), getNumberOfCartItems());
+            const isValid = checkDiscountCodeConstraints(applicableCodes[0], getProductTotal(), getNumberOfCartItems(), cartItems);
             if (isValid) {
                 if (applicableCodes[0].discountType === "FLAT") {
                     setDiscountAmount(applicableCodes[0].discount);

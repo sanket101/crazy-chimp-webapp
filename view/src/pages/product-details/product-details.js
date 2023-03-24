@@ -22,7 +22,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 const getClothGSM = (productCategory) => {
-    if(productCategory === PRODUCT_TYPE.HST || productCategory === PRODUCT_TYPE.FST) {
+    if(productCategory === PRODUCT_TYPE.HST || productCategory === PRODUCT_TYPE.FST || productCategory === PRODUCT_TYPE.OST) {
         return 180;
     }
 
