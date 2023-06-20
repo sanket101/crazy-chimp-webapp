@@ -28,50 +28,6 @@ const ContactUsPage = (props) => {
                         </IconButton>
                     </div>
                 </div>
-
-                <div>
-                <Typography variant="h6" className={classes.primaryFont}>Contact our Support Team to know what you want</Typography>
-                <TextField
-                                id="outlined-email-input"
-                                label="Name"
-                                type="text"
-                                variant="outlined"
-                                className={classes.textFieldCss}
-                                // value={emailId}
-                                // onChange={(event) => setEmailId(event.target.value)}
-                                // onBlur={(event) => onBlur('emailId', event.target.value)}
-                                // error={errorState.emailId ? true : false}
-                                // helperText={errorState.emailId}
-                                autoComplete="new-password"
-                            />
-
-<TextField
-                                id="outlined-email-input"
-                                label="Email Address"
-                                type="email"
-                                variant="outlined"
-                                className={classes.textFieldCss}
-                                // value={emailId}
-                                // onChange={(event) => setEmailId(event.target.value)}
-                                // onBlur={(event) => onBlur('emailId', event.target.value)}
-                                // error={errorState.emailId ? true : false}
-                                // helperText={errorState.emailId}
-                                autoComplete="new-password"
-                            />
-
-<TextField
-                                id="outlined-multiline-static"
-                                label="Message"
-                                multiline
-                                rows={4}
-                            />
-
-                            
-                </div>
-                <div>
-                    <br />
-                    <Button variant="contained">Submit</Button>
-                </div>
             </div>
             <Footer />
         </>
