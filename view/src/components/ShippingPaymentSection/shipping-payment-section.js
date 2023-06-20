@@ -43,13 +43,13 @@ const ShippingPaymentSection = (props) => {
                         value={props.paymentMethod}
                         onChange={handlePaymentChange}
                     >
-                        {/* <div className={classes.customerInfoWrapper}>
+                        <div className={classes.customerInfoWrapper}>
                             <FormControlLabel value="online" control={<Radio color={'primary'} />} label="Online Payment" />
                             <Typography variant="body2" className={classes.secondaryFont}>100% Free shipping on all prepaid (pay online) orders</Typography>
                         </div>
                         <div className={classes.dividerWrapper}>
                             <Divider />
-                        </div> */}
+                        </div>
                          <div className={classes.customerInfoWrapper}>
                             <FormControlLabel value="qr" control={<Radio color={'primary'} />} label="QR Payment" />
                             <Typography variant="body2" className={classes.secondaryFont}>100% Free shipping on all prepaid (pay online) orders</Typography>

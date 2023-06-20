@@ -17,6 +17,7 @@ import { ThemeProvider, createTheme } from '@material-ui/core/styles';
 import AdminPanel from './pages/admin-panel/admin-panel';
 import Gallery from './pages/gallery/gallery';
 import ResetPassword from './pages/reset-password/reset-password';
+import ContactUs from './pages/contact-us/contact-us';
 
 const theme = createTheme({
   typography: {
@@ -55,6 +56,7 @@ const App = () => {
                 <Route exact path="/gallery" component={Gallery} />
                 <Route exact path="/return-policy" component={RefundReturnCancellationPolicyPage} />
                 <Route exact path="/reset-password" component={ResetPassword} />
+                <Route exact path="/contact-us" component={ContactUs} />
                 <Route exact path="/" component={Home} />
             </Switch>
           </div>

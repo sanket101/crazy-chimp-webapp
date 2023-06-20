@@ -15,6 +15,7 @@ const Footer = (props) => {
                 <Link component="button" variant="body2" className={classes.footerLink} onClick={() => history.push(ROUTES.PRIVACY_POLICY)}>Privacy Policy</Link>
                 <Link component="button" variant="body2" className={classes.footerLink} onClick={() => history.push(ROUTES.TNC)}>Terms and Conditions</Link>
                 <Link component="button" variant="body2" className={classes.footerLink} onClick={() => history.push(ROUTES.RETURN_POLICY)}>Return/Refund Policy</Link>
+                <Link component="button" variant="body2" className={classes.footerLink} onClick={() => history.push(ROUTES.CONTACT_US)}>Contact Us</Link>
             </div>
         </div>
     );

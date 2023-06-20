@@ -55,35 +55,64 @@ const Signup = (props) => {
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		setLocalState(prevState => {
-			return {...prevState, loading: true};
-		});
-		const newUserData = {
-			firstName: localState.firstName,
-			lastName: localState.lastName,
-			phoneNumber: localState.phoneNumber,
-			country: localState.country,
-			email: localState.email,
-			password: localState.password,
-			confirmPassword: localState.confirmPassword
-		};
-		axios
-			.post(apiConfig.signUpApi, newUserData)
-			.then((response) => {
-				localStorage.setItem('AuthToken', `Bearer ${response.data.token}`);
-				setLocalState(prevState => {
-					return {...prevState, loading: false};
-				});	
-				logEvent(analytics, 'sign_up', { method: 'manual'});
-				history.push(ROUTES.HOME);
-			})
-			.catch((error) => {
-				const exactError = error.response.data;
-				const newErrors = {...localState.errors, ...exactError};
-				setLocalState(prevState => {
-					return {...prevState, errors: newErrors, loading: false};
-				});
+
+		if(isFormValid) {
+			setLocalState(prevState => {
+				return {...prevState, loading: true};
 			});
+			const newUserData = {
+				firstName: localState.firstName,
+				lastName: localState.lastName,
+				phoneNumber: localState.phoneNumber,
+				country: localState.country,
+				email: localState.email,
+				password: localState.password,
+				confirmPassword: localState.confirmPassword
+			};
+			axios
+				.post(apiConfig.signUpApi, newUserData)
+				.then((response) => {
+					localStorage.setItem('AuthToken', `Bearer ${response.data.token}`);
+					setLocalState(prevState => {
+						return {...prevState, loading: false};
+					});	
+					logEvent(analytics, 'sign_up', { method: 'manual'});
+					history.push(ROUTES.HOME);
+				})
+				.catch((error) => {
+					const exactError = error.response.data;
+					const newErrors = {...localState.errors, ...exactError};
+					setLocalState(prevState => {
+						return {...prevState, errors: newErrors, loading: false};
+					});
+				});
+		}
+		else {
+			const firstNameValid = checkFieldValidation("firstName", localState["firstName"]);
+			if(firstNameValid) {
+				const lastNameValid = checkFieldValidation("lastName", localState["lastName"]);
+
+				if(lastNameValid) {
+					const phoneNumberValid = checkFieldValidation("phoneNumber", localState["phoneNumber"]);
+
+					if(phoneNumberValid) {
+						const emailValid = checkFieldValidation("email", localState["email"]);	
+
+						if(emailValid) {
+							const countryValid = checkFieldValidation("country", localState["country"]);
+
+							if(countryValid) {
+								const passwordValid = checkFieldValidation("password", localState["password"]);
+
+								if(passwordValid) {
+								 	checkFieldValidation("confirmPassword", localState["confirmPassword"]);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	};
 
 	const checkFieldValidation = (fieldName, value) => {
@@ -350,7 +379,7 @@ const Signup = (props) => {
 							color="primary"
 							className={classes.submit}
 							onClick={handleSubmit}
-                            disabled={localState.loading || !isFormValid}
+                            disabled={localState.loading}
 						>
 							Sign Up
 							{localState.loading && <CircularProgress size={30} className={classes.progess} />}
