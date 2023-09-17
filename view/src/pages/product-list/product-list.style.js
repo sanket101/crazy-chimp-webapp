@@ -2,9 +2,9 @@ import CSSConstants from '../../constants/css-constants';
 
 const styles = (themes) => ({
     productListWrapper: {
-        backgroundColor: CSSConstants.BACKGROUND_SECONDARY,
+        backgroundColor: CSSConstants.BACKGROUND_PRIMARY,
         minHeight: '100vh',
-        paddingTop: '80px',
+        paddingTop: '110px',
         '@media (max-width: 540px)': {
             height: 'auto'
         } 
@@ -27,8 +27,9 @@ const styles = (themes) => ({
         flexWrap: 'wrap',
         '@media (max-width: 540px)': {
             padding: '30px 20px',
-            flexDirection: 'column',
-            alignContent: 'center'
+            // flexDirection: 'column',
+            alignContent: 'center',
+            justifyContent: 'space-between'
         }
     },
     selectWrapper: {
@@ -45,6 +46,11 @@ const styles = (themes) => ({
         },
         '& .MuiInput-underline:before': {
             borderBottom: `1px solid ${CSSConstants.FONT_SECONDARY}`
+        },
+        '& .MuiSelect-selectMenu': {
+            backgroundColor: CSSConstants.FONT_PRIMARY,
+            color: CSSConstants.FONT_BLACK,
+            padding: '5px'
         }
     },
     selectWrapperMobile: {
@@ -60,7 +66,8 @@ const styles = (themes) => ({
             border: `1px solid ${CSSConstants.FONT_PRIMARY}`
         },
         '& .MuiButton-root': {
-            color: CSSConstants.FONT_PRIMARY
+            color: CSSConstants.FONT_PRIMARY,
+            backgroundColor: CSSConstants.FONT_SECONDARY
         }
     },
     buttonWrapperMobile: {
@@ -72,17 +79,36 @@ const styles = (themes) => ({
             color: CSSConstants.FONT_BLACK
         }
     },
+    scrollToTop: {
+        textAlign: 'center',
+        position: 'fixed',
+        zIndex: '1',
+        left: '10px',
+        top: '75%',
+        '& .MuiFab-extended': {
+            padding: '0px'
+        },
+        '& .MuiFab-label': {
+            fontSize: '0.6rem'
+        },
+    },
     hideForDesktop: {
         textAlign: 'center',
         position: 'fixed',
         zIndex: '1',
-        marginLeft: '33.33%',
-        marginTop: '-40px',
+        left: '10px',
+        top: '85%',
         '& .MuiButton-outlined': {
             border: `1px solid ${CSSConstants.FONT_PRIMARY}`
         },
         '& .MuiButton-root': {
             color: CSSConstants.FONT_PRIMARY
+        },
+        '& .MuiFab-extended': {
+            padding: '0px'
+        },
+        '& .MuiFab-label': {
+            fontSize: '0.6rem'
         },
 		'@media (min-width: 540px)' : {
 			display: 'none'
@@ -99,6 +125,15 @@ const styles = (themes) => ({
     },
     noProductsFound: {
         color: CSSConstants.FONT_PRIMARY
+    },
+    marketingWrapper: {
+        margin: '0px 0.5rem',
+        padding: "5px 10px",
+        border: `1px solid ${CSSConstants.FONT_SECONDARY}`,
+        display: "flex",
+        '@media (max-width: 540px)' : {
+			flexDirection: 'column'
+		}
     }
 });
 

@@ -9,6 +9,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';
 import ShopIcon from '@material-ui/icons/Shop';
+import LoginIcon from '@material-ui/icons/ExitToApp';
 import LogoutIcon from '@mui/icons-material/Logout';
 import withStyles from '@material-ui/core/styles/withStyles';
 import styles from './navigation-bar.style';
@@ -19,12 +20,14 @@ import apiConfig from '../../api/api-config';
 import { authMiddleWare } from '../../utils/auth';
 import { handleApiError } from '../../utils/error-handling';
 import CollectionsIcon from '@mui/icons-material/Collections';
+import cartIcon from "../../assets/Buy.png";
+import profileIcon from "../../assets/Profile.png";
 
 const NavigationBar = (props) => {
 	const [showDrawer, setShowDrawer] = useState(false);
 	const [anchorEl, setAnchorEl] = useState(null);
 
-	const listOne = ['Home', 'Apparel', 'Gallery', 'Cart'];
+	const listOne = ['Home', 'Product', 'Gallery', 'Cart', 'Login'];
 	const listTwo = ['My Orders', 'Logout'];
 	const { classes, cart } = props;
 	const isLoggedIn = localStorage.getItem('AuthToken');
@@ -39,7 +42,7 @@ const NavigationBar = (props) => {
 			case 'Home':
 				history.push(ROUTES.HOME);
 				break;
-			case 'Apparel':
+			case 'Product':
 				callProductsDataApi();
 				break;
 			case 'Cart':
@@ -48,11 +51,14 @@ const NavigationBar = (props) => {
 			case 'My Orders':
 				history.push(ROUTES.ACCOUNT);
 				break;
-			case 'Logout': 
+			case 'Logout':
 				callLogoutApi();
 				break;
 			case 'Gallery':
 				history.push(ROUTES.GALLERY);
+				break;
+			case 'Login':
+				history.push(ROUTES.LOGIN);
 				break;
 			default:
 				break;
@@ -63,16 +69,18 @@ const NavigationBar = (props) => {
 		switch (name) {
 			case 'Home':
 				return <HomeIcon />;
-			case 'Apparel':
+			case 'Product':
 				return <ShopIcon />;
 			case 'Cart':
 				return <ShoppingCartIcon />;
 			case 'My Orders':
 				return <AccountCircleIcon />;
-			case 'Logout': 
+			case 'Logout':
 				return <LogoutIcon />;
 			case 'Gallery':
 				return <CollectionsIcon />;
+			case 'Login':
+				return <LoginIcon />;
 			default:
 				return <></>;
 		}
@@ -80,95 +88,88 @@ const NavigationBar = (props) => {
 
 	const list = () => (
 		<Box
-		  sx={{ width: 250 }}
-		  role="presentation"
-		  onClick={closeDrawer}
-		  onKeyDown={closeDrawer}
+			sx={{ width: 250 }}
+			role="presentation"
+			onClick={closeDrawer}
+			onKeyDown={closeDrawer}
 		>
-		  <List>
-			{listOne.map((text, index) => (
-			  <ListItem button key={text} onClick={() => redirectToRoute(text)}>
-				<ListItemIcon>
-				  {getIcon(text)}
-				</ListItemIcon>
-				<ListItemText primary={text} />
-			  </ListItem>
-			))}
-		  </List>
-		  {isLoggedIn ?
-		  	<>
-		  	  <Divider />
-			  <List>
-				{listTwo.map((text, index) => (
-				  <ListItem button key={text} onClick={() => redirectToRoute(text)}>
-					<ListItemIcon>
-					  {getIcon(text)}
-					</ListItemIcon>
-					<ListItemText primary={text} />
-				  </ListItem>
+			<List>
+				{listOne.map((text, index) => (
+					<ListItem button key={text} onClick={() => redirectToRoute(text)}>
+						<ListItemIcon>
+							{getIcon(text)}
+						</ListItemIcon>
+						<ListItemText primary={text} />
+					</ListItem>
 				))}
-			  </List>
-			</>
-			:
-			<></>
-		  }
+			</List>
+			{isLoggedIn ?
+				<>
+					<Divider />
+					<List>
+						{listTwo.map((text, index) => (
+							<ListItem button key={text} onClick={() => redirectToRoute(text)}>
+								<ListItemIcon>
+									{getIcon(text)}
+								</ListItemIcon>
+								<ListItemText primary={text} />
+							</ListItem>
+						))}
+					</List>
+				</>
+				:
+				<></>
+			}
 		</Box>
 	);
 
 	const callProductsDataApi = async () => {
 		try {
 			const response = await axios.get(apiConfig.productData);
-			if(response && response.data && response.data.numberOfProducts) {
+			if (response && response.data && response.data.numberOfProducts) {
 				props.setProductsData(response.data.numberOfProducts);
 			}
 			history.push(ROUTES.SHOP);
 		}
-		catch(err) {
+		catch (err) {
 			// redirect to error page
 			handleApiError(history, err);
 		}
 	};
-	
+
 	const handleMenu = (event) => {
 		setAnchorEl(event.currentTarget);
 	};
-	
+
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
 
-	const callLogoutApi = async() => {
+	const callLogoutApi = async () => {
 		try {
 			authMiddleWare(history);
-            const authToken = localStorage.getItem('AuthToken');
-		    axios.defaults.headers.common = { Authorization: `${authToken}` };
+			const authToken = localStorage.getItem('AuthToken');
+			axios.defaults.headers.common = { Authorization: `${authToken}` };
 			const response = await axios.get(apiConfig.logoutApi);
-			if(response && response.data) {
+			if (response && response.data) {
 				localStorage.removeItem('AuthToken');
 				setAnchorEl(null);
 			}
 		}
-		catch(err) {
+		catch (err) {
 			// redirect to error page
 			setAnchorEl(null);
 			handleApiError(history, err);
 		}
 	}
 
-    return (
-        <>
+	return (
+		<>
 			<div className={classes.hideForMobile}>
 				<Box sx={{ flexGrow: 1 }}>
 					<AppBar position="fixed" className={classes.appBar}>
 						<Toolbar className={classes.toolBar}>
-							<div className={classes.leftNavbar} onClick={() => history.push(ROUTES.HOME)}>
-								<img src={logo} alt="Crazy Chimp Logo" height="50px" />
-								{/* <Typography variant="h6" className={classes.crazyChimpWrapper}>
-									Crazy Chimp
-								</Typography> */}
-							</div>
-
-							<div className={classes.rightNavbar}>
+							<div className={classes.leftNavbar}>
 								<Typography variant="h6" className={classes.navigationTypographyH6} onClick={() => history.push(ROUTES.HOME)}>
 									Home
 								</Typography>
@@ -176,35 +177,41 @@ const NavigationBar = (props) => {
 								<Typography variant="h6" className={classes.navigationTypographyH6} onClick={() => {
 									callProductsDataApi();
 								}}>
-									Apparel
+									Product
 								</Typography>
 
 								<Typography variant="h6" className={classes.navigationTypographyH6} onClick={() => history.push(ROUTES.GALLERY)}>
 									Gallery
 								</Typography>
+							</div>
+							<div onClick={() => history.push(ROUTES.HOME)} style={{marginLeft: "-10%"}}>
+								<img src={logo} alt="Crazy Chimp Logo" height="50px" />
+							</div>
+
+							<div className={classes.rightNavbar}>
 
 								<IconButton className={classes.navigationIconButton} onClick={() => history.push(ROUTES.CART)}>
 									<Badge color="primary" badgeContent={cart.length}>
-										<ShoppingCartIcon />
+										<img src={cartIcon} />
 									</Badge>
 								</IconButton>
 
-								{isLoggedIn ? 
+								{isLoggedIn ?
 									<>
 										<IconButton className={classes.navigationIconButton} onClick={handleMenu}>
-											<AccountCircleIcon />
+											<img src={profileIcon} />
 										</IconButton>
 										<Menu
 											id="menu-appbar"
 											anchorEl={anchorEl}
 											anchorOrigin={{
-											vertical: 'top',
-											horizontal: 'right',
+												vertical: 'top',
+												horizontal: 'right',
 											}}
 											keepMounted
 											transformOrigin={{
-											vertical: 'top',
-											horizontal: 'right',
+												vertical: 'top',
+												horizontal: 'right',
 											}}
 											open={Boolean(anchorEl)}
 											onClose={handleClose}
@@ -218,6 +225,12 @@ const NavigationBar = (props) => {
 								}
 							</div>
 						</Toolbar>
+						{props.promotionBar ?
+							<div className={classes.promotionBar}>
+								<Typography variant='body1'>Free delivery on all prepaid orders!</Typography> 
+							</div>
+							: <></>
+						}
 					</AppBar>
 				</Box>
 			</div>
@@ -238,35 +251,36 @@ const NavigationBar = (props) => {
 									sx={{ mr: 2 }}
 								>
 									<MenuIcon />
-								</IconButton>
-								<Typography variant="h6" onClick={() => history.push(ROUTES.HOME)} className={classes.crazyChimpWrapper}>
-									<img src={logo} alt="Crazy Chimp Logo" height="30px" />
-								</Typography>
+								</IconButton>								
+							</div>
+							
+							<div onClick={() => history.push(ROUTES.HOME)}>
+								<img src={logo} alt="Crazy Chimp Logo" height="30px" />
 							</div>
 
 							<div className={classes.rightNavbar}>
 								<IconButton className={classes.navigationIconButton} onClick={() => history.push(ROUTES.CART)}>
 									<Badge color="primary" badgeContent={cart.length}>
-										<ShoppingCartIcon />
+										<img src={cartIcon} />
 									</Badge>
 								</IconButton>
 
-								{isLoggedIn ? 
+								{/* {isLoggedIn ?
 									<>
-									<IconButton className={classes.navigationIconButton} onClick={handleMenu}>
-										<AccountCircleIcon />
-									</IconButton>
-									<Menu
+										<IconButton className={classes.navigationIconButton} onClick={handleMenu}>
+											<AccountCircleIcon />
+										</IconButton>
+										<Menu
 											id="menu-appbar"
 											anchorEl={anchorEl}
 											anchorOrigin={{
-											vertical: 'top',
-											horizontal: 'right',
+												vertical: 'top',
+												horizontal: 'right',
 											}}
 											keepMounted
 											transformOrigin={{
-											vertical: 'top',
-											horizontal: 'right',
+												vertical: 'top',
+												horizontal: 'right',
 											}}
 											open={Boolean(anchorEl)}
 											onClose={handleClose}
@@ -277,9 +291,15 @@ const NavigationBar = (props) => {
 									</>
 									:
 									<div className={classes.navigationIconButton}><Button variant="outlined" className={classes.navigationIconButton} onClick={() => history.push(ROUTES.LOGIN)}>LOGIN</Button></div>
-								}
+								} */}
 							</div>
 						</Toolbar>
+						{props.promotionBar ?
+							<div className={classes.promotionBar}>
+								<Typography variant='body1'>Free delivery on all prepaid orders!</Typography>
+							</div>
+							: <></>
+						}
 					</AppBar>
 				</Box>
 
@@ -292,7 +312,7 @@ const NavigationBar = (props) => {
 				</Drawer>
 			</div>
 		</>
-    );
+	);
 };
 
 const mapStateToProps = (state) => {
@@ -301,11 +321,11 @@ const mapStateToProps = (state) => {
 		cart: reduxState.cart
 	};
 };
-  
+
 const mapDispatchToProps = dispatch => {
 	return {
 		setProductsData: (productData) => dispatch(setProductsData(productData))
 	};
 };
 
-export default  connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(NavigationBar));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(NavigationBar));

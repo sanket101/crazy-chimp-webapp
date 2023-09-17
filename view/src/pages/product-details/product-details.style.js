@@ -12,8 +12,11 @@ const styles = (themes) => ({
     },
     productDetailsContainer: {
         display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
+        '@media (max-width: 540px)': {
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+        }
+       
     },
     secondaryFont: {
         color: CSSConstants.FONT_SECONDARY
@@ -31,7 +34,14 @@ const styles = (themes) => ({
     productFeature: {
         padding: '20px',
         textAlign: 'center'
-    }
+    },
+    productCard: {
+        width: `calc(100%/3)`,
+
+        '@media (max-width: 540px)' : {
+            width: '100%'
+        }
+    },
 });
 
 export default styles;

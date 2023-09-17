@@ -1,9 +1,11 @@
 const functions = require('firebase-functions');
-const app = require('express')();
+const express = require("express");
 const auth = require('./utils/auth');
 const verifyAdmin = require('./utils/verify-admin');
 
-const { getDiscountCodes, addDiscountVoucher } = require('./APIs/discount');
+const cors = require("cors");
+
+const { getDiscountCodes, addDiscountVoucher, getFreeProductDiscount } = require('./APIs/discount');
 
 const {
   getAllCollaborations,
@@ -27,7 +29,9 @@ const {
   getProduct,
   getAllProducts,
   getProductsData,
-  getStockAvailability
+  getStockAvailability,
+  getBestSellingProducts,
+  getWeeklyDrop
 } = require('./APIs/products');
 
 const {
@@ -57,15 +61,26 @@ const {
   getUserDetail,
   updateUserDetails,
   logoutUser,
-  resetPassword
+  resetPassword,
+  updateInvoiceWithReview
 } = require('./APIs/users');
 const { checkIfAdmin } = require('./APIs/admin');
 
 const { initiatePaytmTransaction } = require('./APIs/paytm');
+const { addContactList } = require('./APIs/contact-list');
+const { sendEmail } = require('./APIs/email');
+
+const app = express();
+
+app.use(cors());
 
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "https://crazychimp.org"); // update to match the domain you will make the request from
-  // res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  const allowedOrigins = [ "https://crazychimp.org", "https://crazy-chimp-48212.web.app"];
+  const origin = req.headers.origin;
+  console.log("Header", origin);
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
   next();
@@ -78,6 +93,7 @@ app.get('/user', auth, getUserDetail);
 app.post('/user', auth, updateUserDetails);
 app.get('/logout', auth, logoutUser);
 app.post('/reset-password', resetPassword);
+app.post('/update-invoice-with-review', auth, updateInvoiceWithReview);
 
 // address
 app.get('/addresses', auth, getAllAddresses);
@@ -122,6 +138,8 @@ app.get('/product/:productId', getProduct);
 app.post('/add-product', verifyAdmin, addProduct);
 app.put('/edit-product', verifyAdmin, editProduct);
 app.delete('/delete-product', verifyAdmin, deleteProduct);
+app.get('/get-best-sellers', getBestSellingProducts);
+app.get('/get-weekly-drop', getWeeklyDrop);
 
 // Collaborations
 app.get('/get-collaboration-data', getAllCollaborations);
@@ -131,10 +149,17 @@ app.get('/get-customer-gallery', getAllCustomerGalleryImages);
 app.get('/admin-authentication', verifyAdmin, checkIfAdmin);
 
 // Discount
-app.get('/get-discount-vouchers', auth, getDiscountCodes);
+app.get('/get-discount-vouchers', getDiscountCodes);
 app.post('/add-discount-voucher', verifyAdmin, addDiscountVoucher);
+app.get('/free-product-discount', auth, getFreeProductDiscount);
 
 // Paytm APIs
 app.post('/initiate-transaction', auth, initiatePaytmTransaction);
+
+// Contact List
+app.post('/contact-list', addContactList);
+
+// Email
+app.post('/send-email', auth, sendEmail);
 
 exports.api = functions.region('asia-south1').https.onRequest(app);

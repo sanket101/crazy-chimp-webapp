@@ -1,0 +1,18 @@
+{
+    "recipients": [
+        {
+            "to": [
+                {
+                    "name": "Sanket Giri",
+                    "email": "sanketgiri48@gmail.com"
+                }
+            ]
+        }
+    ],
+    "from": {
+        "name": "Crazy Chimp",
+        "email": "sender@mail.crazychimp.org"
+    },
+    "domain": "mail.crazychimp.org",
+    "template_id": "TEST_CRAZY_CHIMP_EMAIL"
+}

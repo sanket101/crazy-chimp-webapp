@@ -6,7 +6,8 @@ const styles = (theme) => ({
         maxWidth: '250px',
         margin: '20px',
         '@media (max-width: 540px)': {
-            margin: '20px 0'
+            margin: '5px 0',
+            maxWidth: '160px',
         }
     },
     cardWrapperWithoutMaxWidth: {
@@ -18,10 +19,19 @@ const styles = (theme) => ({
     },
     cardContent: {
         backgroundColor: CSSConstants.BACKGROUND_PRIMARY,
-        color: CSSConstants.FONT_PRIMARY
+        color: CSSConstants.FONT_PRIMARY,
+        '@media (max-width: 540px)': {
+            '& .MuiTypography-h5': {
+               fontSize: '1rem'
+            },
+            '& .MuiTypography-body1': {
+                fontSize: '0.8rem'
+            }
+        }
     },
     priceContent: {
         display: 'flex',
+        justifyContent: 'center',
         '& .MuiTypography-body1': {
             marginRight: '10px'
         }

@@ -20,8 +20,13 @@ const reducer = (state = INITIAL_STATE, action) => {
         case userActionTypes.ADD_NEW_ADDRESS:
             const _state = state.toJS();
             let newAddressArray = [..._state.userAddresses];
-            newAddressArray.push(action.payload);
-            return state.set("userAddresses", newAddressArray);
+            let updatedArray = [];
+            updatedArray.push(action.payload);
+            for (let index = 0; index < newAddressArray.length; index++) {
+                const element = newAddressArray[index];
+                updatedArray.push(element);
+            }
+            return state.set("userAddresses", updatedArray);
         case userActionTypes.SET_USER_INVOICES:
             return state.set("userInvoices", action.payload);
         default: 

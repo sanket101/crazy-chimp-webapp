@@ -13,11 +13,13 @@ import { setLoginError } from '../../redux/General/general.actions';
 import ValidationError from '../../constants/validation-errors';
 import { logEvent } from 'firebase/analytics';
 import { analytics } from '../../firebase/firebase';
+import useCheckMobileScreen from '../../utils/isMobile';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const Cart = (props) => {
     const { classes, cart: cartList } = props;
     const history = useHistory();
-
+    const isMobile = useCheckMobileScreen();
     const updateCart = (index, fieldName, value) => {
         const newCartList = [...cartList];
         newCartList[index][fieldName] = value;
@@ -59,10 +61,10 @@ const Cart = (props) => {
 
         return analyticsItems;
     };
-    
+
     const checkoutHandler = () => {
         const isLoggedIn = localStorage.getItem('AuthToken');
-        if(isLoggedIn) {
+        if (isLoggedIn) {
             logEvent(analytics, "begin_checkout", {
                 currency: "INR",
                 value: getTotal(),
@@ -75,7 +77,7 @@ const Cart = (props) => {
             history.push(ROUTES.LOGIN);
         }
     };
- 
+
     useEffect(() => {
         window.scrollTo(0, 0);
 
@@ -86,13 +88,13 @@ const Cart = (props) => {
 
     }, []);
 
-    if(cartList.length === 0) {
+    if (cartList.length === 0) {
         return (
             <>
                 <NavigationBar />
-                    <div className={classes.cartWrapper}>
-                        <Typography variant="body1">No products added!</Typography>
-                    </div>
+                <div className={classes.cartWrapper}>
+                    <Typography variant="body1">No products added!</Typography>
+                </div>
                 <Footer />
             </>
         );
@@ -100,9 +102,9 @@ const Cart = (props) => {
     return (
         <>
             <NavigationBar />
-                <div className={classes.cartWrapper}>
-                    <Typography variant="h3">Your Cart</Typography>
-                    <div className={classes.cartItemsWrapper}>
+            <div className={classes.cartWrapper}>
+                <Typography variant="h3" className={classes.textAlignCenter}>Your Cart</Typography>
+                <div className={classes.cartItemsWrapper}>
                     {
                         cartList.map((item, index) => {
                             return (
@@ -110,33 +112,65 @@ const Cart = (props) => {
                             );
                         })
                     }
-                    </div>
-                    <div className={classes.bottomNavigation}>
-                        <Typography variant="h6">{`Total : ₹ ${getTotal()}`}</Typography>
-
-                        <Typography variant="body1" className={classes.secondaryFont}>Taxes and shipping will be calculated at checkout.</Typography>
-                        
-                        <Button variant="contained" className={classes.checkoutButton} onClick={checkoutHandler}>CHECKOUT</Button>
-                    </div>
-                    
                 </div>
+
+                <div>
+                    <hr className={classes.horizontalBar} />
+                </div>
+
+                {isMobile ? <div className={classes.bottomNavigation}>
+                    <Typography variant="h6">{`Total : ₹ ${getTotal()}`}</Typography>
+
+                    <Typography variant="body1" className={classes.secondaryFont}>Taxes and shipping will be calculated at checkout.</Typography>
+
+                    <Button variant="contained" className={classes.checkoutButton} onClick={checkoutHandler}>CHECKOUT</Button>
+                    <Button variant="outlined" className={classes.clearCartButton} onClick={() => {props.updateCart([])}}>Clear Cart</Button>
+                </div>
+                    : 
+                    <div>
+                        <div className={classes.bottomNavigationDesktop} >
+                        <div style={{flex: 1}}>
+                            <Typography variant="h5">{`Total`}</Typography>
+                        </div>
+                        <div style={{flex: 1}}>
+                            <Typography variant="h6">{" "}</Typography>
+                        </div>
+                        <div style={{flex: 3}}>
+                            <Typography variant="h6">{" "}</Typography>
+                        </div>
+                        <div style={{flex: 1}}>
+                            <Typography variant="h6">{`₹ ${getTotal()}`}</Typography>
+                        </div>
+                        <div style={{flex: 1}}>
+                        </div>
+                    </div>
+                        <div style={{textAlign: "right"}}>
+                            <Typography variant="body1" className={classes.secondaryFont}>* Taxes and shipping will be calculated at checkout.</Typography> 
+                        </div>
+                        <div style={{textAlign: "right"}}>
+                            <Button variant="contained" className={classes.checkoutButton} onClick={checkoutHandler}>CHECKOUT</Button>
+                            <Button variant="outlined" className={classes.clearCartButton} onClick={() => {props.updateCart([])}}>Clear Cart</Button>
+                        </div>
+                    </div>}
+
+            </div>
             <Footer />
         </>
     );
 };
 
 const mapStateToProps = (state) => {
-	const reduxState = state.productDetails.toJS();
-	return {
-		cart: reduxState.cart
-	};
+    const reduxState = state.productDetails.toJS();
+    return {
+        cart: reduxState.cart
+    };
 };
-  
+
 const mapDispatchToProps = dispatch => {
-	return {
+    return {
         updateCart: (newCart) => dispatch(updateCart(newCart)),
         setLoginError: (msg) => dispatch(setLoginError(msg))
-	};
+    };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Cart));

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import { connect } from 'react-redux';
-import { setProductList, setPaginationNumber, setProductType, setGenreType, setProductsData, setProductDetails } from '../../redux/Products/products.actions';
+import { setProductList, setPaginationNumber, setProductType, setGenreType, setProductsData, setProductDetails, setWeeklyDrop } from '../../redux/Products/products.actions';
 import NavigationBar from '../../components/NavigationBar/navigation-bar';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Footer from '../../components/Footer/footer';
@@ -15,6 +15,10 @@ import apiConfig from '../../api/api-config';
 import { handleApiError } from '../../utils/error-handling';
 import { logEvent } from 'firebase/analytics';
 import { analytics } from '../../firebase/firebase';
+import WeeklyDrop from '../../components/WeeklyDrop/weekly-drop';
+import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
+import FreeProductDiscountSection from '../../components/FreeProductDiscountSection/free-product-discount-section';
+import { setFreeProductInfo } from '../../redux/General/general.actions';
 
 const defaultGenreType = 'AG';
 const defaultProductType = 'AP';
@@ -89,7 +93,7 @@ const ProductList = (props) => {
                         </Select>
                     </FormControl>
                     
-                    <ButtonGroup variant="outlined" aria-label="outlined button group" className={deviceType === 'mobile' ? classes.buttonWrapperMobile : classes.buttonWrapper}>
+                    <ButtonGroup variant="contained" aria-label="outlined button group" className={deviceType === 'mobile' ? classes.buttonWrapperMobile : classes.buttonWrapper}>
                         <Button onClick={onApplyFilter}>Apply</Button>
                         <Button onClick={onClearSelection}>Clear</Button>
                     </ButtonGroup>
@@ -170,6 +174,18 @@ const ProductList = (props) => {
         }
     };
 
+    const callWeeklyDropApi = async () => {
+        try {
+            const response = await axios.get(apiConfig.getWeeklyDrop);
+            if(response && response.data && response.data.length > 0) {
+                props.setWeeklyDropProduct(response.data[0]);
+            }
+        }
+        catch(err) {
+
+        }
+    };
+
     const cacheImages = async (srcArray) => {
         const promises = await srcArray.map((src) => {
             return new Promise((resolve, reject) => {
@@ -189,9 +205,16 @@ const ProductList = (props) => {
             firebase_screen: "Apparel Page",
             firebase_screen_class: "ProductList"
         });
-        
+        if(!props.weeklyDropProduct) {
+            callWeeklyDropApi();
+        }
         if(props.productList.length === 0) {
             callProductsApi();
+        }
+        else if(window.location.search) {
+            const productCategory = window.location.search.split("=")[1];
+            setProductType(productCategory);
+            callProductsApi(productCategory, "");
         }
         else {
             setLoading(false);
@@ -205,7 +228,7 @@ const ProductList = (props) => {
 
     return (
         <>
-            <NavigationBar />
+            <NavigationBar promotionBar={true} />
 
             {
                 isLoading ?
@@ -215,9 +238,13 @@ const ProductList = (props) => {
                     :
                     <>
                         <div className={classes.productListWrapper}>
+                                 <div className={classes.marketingWrapper}>
+                                    <FreeProductDiscountSection freeProductInfo={props.freeProductInfo} setFreeProductInfo={setFreeProductInfo} />
+                                    <WeeklyDrop weeklyDropProduct={props.weeklyDropProduct} onProductClick={onProductClick} />
+                                </div>
                             <div className={classes.productListContainer}>
                                 <div className={classes.hideForMobile}>
-                                    <div className={classes.fixedPosition}>
+                                    <div>
                                         {renderFilteringSection('desktop')}
                                     </div>
                                 </div>
@@ -229,12 +256,15 @@ const ProductList = (props) => {
                                     }
                                     {products.length > 0 &&
                                         <>
+                                            <div className={classes.scrollToTop}>
+                                                <Fab variant="extended" onClick={() => window.scrollTo(0,0)}>
+                                                    <ArrowCircleUpIcon />
+                                                </Fab>
+                                            </div>
                                             <div className={classes.hideForDesktop}>
                                                 <Fab variant="extended" onClick={() => setFilterDrawer(true)}>
-                                                    {/* <NavigationIcon sx={{ mr: 1 }} /> */}
                                                     Filters
                                                 </Fab>
-                                                {/* <Button variant="outlined" onClick={() => setFilterDrawer(true)}>Categories</Button> */}
                                             </div> 
                                             {
                                                 products.map((product, i) => {
@@ -274,6 +304,7 @@ const ProductList = (props) => {
 
 const mapStateToProps = (state) => {
     const reduxState = state.productDetails.toJS();
+    const reduxGeneralState = state.generalDetails.toJS();
 	return {
         productData: reduxState.productData,
         paginationNumber: reduxState.paginationNumber,
@@ -281,7 +312,9 @@ const mapStateToProps = (state) => {
         productType: reduxState.productType,
         genreType: reduxState.genreType,
         productCategories: reduxState.productCategories,
-		genreCategories: reduxState.genreCategories
+		genreCategories: reduxState.genreCategories,
+        weeklyDropProduct: reduxState.weeklyDropProduct,
+        freeProductInfo: reduxGeneralState.freeProductInfo
     };
 };
   
@@ -292,7 +325,9 @@ const mapDispatchToProps = dispatch => {
         setPaginationNumber: (paginationNumber) => dispatch(setPaginationNumber(paginationNumber)),
         setProductType: (productType) => dispatch(setProductType(productType)),
         setGenreType: (genreType) => dispatch(setGenreType(genreType)),
-        setProductDetails: (productDetails) => dispatch(setProductDetails(productDetails))
+        setProductDetails: (productDetails) => dispatch(setProductDetails(productDetails)),
+        setWeeklyDropProduct: (productData) => dispatch(setWeeklyDrop(productData)),
+        setFreeProductInfo: (data) => dispatch(setFreeProductInfo(data))
 	};
 };
 

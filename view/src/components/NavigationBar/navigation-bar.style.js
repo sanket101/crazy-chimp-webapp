@@ -51,6 +51,10 @@ const styles = (theme) => ({
 		'@media (max-width: 540px)' : {
 			fontSize: '1.25rem'
 		}
+	},
+	promotionBar: {
+		textAlign: 'center',
+		backgroundColor: CSSConstants.HIGHLIGHTER
 	}
 });
 

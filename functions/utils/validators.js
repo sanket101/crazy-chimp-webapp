@@ -215,3 +215,33 @@ exports.validateResetPasswordData = (data) => {
 		valid: Object.keys(errors).length === 0 ? true : false
 	};	
 };
+
+exports.validateContactListData = (data) => {
+	let errors = {};
+
+	if(isEmpty(data.fullName)) {
+		errors.fullName = 'Must not be empty';
+	}
+
+	if (isEmpty(data.email)) {
+		errors.email = 'Must not be empty';
+	} else if (!isEmail(data.email)) {
+		errors.email = 'Must be valid email address';
+	}
+
+	if (isEmpty(data.phoneNumber)) errors.phoneNumber = 'Must not be empty';
+
+	if (isEmpty(data.message)) errors.message = 'Must not be empty';
+
+	if(isEmpty(data.type)) {
+		errors.type = 'Must not be empty';
+	}
+	else if(data.type !== 'CONTACT' && data.type !== 'JOIN') {
+		errors.type = 'Not a valid type';
+	}
+
+	return {
+		errors,
+		valid: Object.keys(errors).length === 0 ? true : false
+	};
+};

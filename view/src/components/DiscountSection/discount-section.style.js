@@ -5,7 +5,7 @@ const styles = (themes) => ({
         backgroundColor: CSSConstants.BACKGROUND_SECONDARY,
         color: CSSConstants.FONT_PRIMARY,
         textAlign: 'center',
-        padding: '30px 20px',
+        padding: '10px 20px',
         height: 'auto'
     },
     carouselWrapper: {
@@ -47,7 +47,8 @@ const styles = (themes) => ({
         }
     },
     headerMargin: {
-        marginBottom: '20px'
+        marginBottom: '20px',
+        color: CSSConstants.FONT_SECONDARY,
     }
 });
 

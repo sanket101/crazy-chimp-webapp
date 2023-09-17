@@ -7,7 +7,7 @@ import Footer from '../../components/Footer/footer';
 import CustomerInformationSection from '../../components/CustomerInformationSection/customer-information-section';
 import ShippingPaymentSection from '../../components/ShippingPaymentSection/shipping-payment-section';
 import OrderConfirmationSection from '../../components/OrderConfirmationSection/order-confirmation-section';
-import { Stepper, Step, StepLabel, Typography, Box, Button, Badge, Divider, TextField, CircularProgress, Backdrop } from '@material-ui/core';
+import { Stepper, Step, StepLabel, Typography, Box, Button, Badge, Divider, TextField, CircularProgress, Backdrop, Accordion, AccordionSummary, AccordionDetails, FormGroup, FormControlLabel, Checkbox, FormHelperText } from '@material-ui/core';
 import styles from './checkout.style';
 import VALIDATION_ERROR from '../../constants/validation-errors';
 import axios from 'axios';
@@ -22,6 +22,8 @@ import { checkDiscountCodeConstraints } from '../../utils/discount-check';
 import { checkEnvironment } from '../../utils/general-utils';
 import { logEvent } from "firebase/analytics";
 import { analytics } from "../../firebase/firebase";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import CSSConstants from '../../constants/css-constants';
 
 const Checkout = (props) => {
     const { classes, cart, userDetails } = props;
@@ -49,73 +51,57 @@ const Checkout = (props) => {
     const [orderSuccess, setOrderSuccess] = useState(false);
     const [showAddressDisclaimer, setAddressDisclaimer] = useState(false);
     const [addNewButtonTriggered, setAddNewButtonTriggered] = useState(false);
+    const [shippingDetailsAccordion, setShippingDetailsAccordion] = useState(true);
+    const [paymentModeAccordion, setPaymentModeAccordion] = useState(true);
+    const [confirmationDialog, setConfirmationDialog] = useState(false);
+    const [shippingDetailsAccordionError, setShippingDetailsAccordionError] = useState(false);
+    const [paymentModeAccordionError, setPaymentModeAccordionError] = useState(false);
+    const [agreeTnc, setAgreeTnc] = useState(false);
+    const [agreeTncError, setAgreeTncError] = useState(false);
 
     const steps = ['Customer Information', 'Shipping & Payment', 'Order Confirmation'];
     let history = useHistory();
-    const getAppropriateComponent = () => {
-        if (activeStep === 0) {
-            return <CustomerInformationSection
-                customerInformation={customerInformation}
-                setCustomerInformation={setCustomerInformation}
-                userAddresses={props.userAddresses}
-                selectExistingAddress={selectExistingAddress}
-                selectedAddressIndex={props.selectedAddressIndex}
-                addNewCustomerAddress={addNewCustomerAddress}
-                addNewButtonTriggered={addNewButtonTriggered}
-                setAddNewButtonTriggered={setAddNewButtonTriggered}
-                showAddressDisclaimer={showAddressDisclaimer}
-            />;
-        }
-        else if (activeStep === 1) {
-            return <ShippingPaymentSection
-                customerInformation={props.userAddresses[props.selectedAddressIndex]}
-                handleBack={handleBack}
-                getCodCharges={getCodCharges}
-                setPaymentMethod={setPaymentMethod}
-                paymentMethod={paymentMethod}
-            />;
-        }
-        else {
-            return <OrderConfirmationSection paymentMethod={paymentMethod} />;
-        }
-    };
 
     const handleBack = () => {
         setActiveStep(activeStep - 1);
     };
 
-    const handleNext = async () => {
-        const isActiveStepValid = checkActiveStepValidation();
+    const handleOrderPlacement = async () => {
+        const isActiveStepValid = checkCompleteFormValidation();
         if (isActiveStepValid) {
-            if (activeStep === 1) {
-                setLoading(true);
+            setLoading(true);
                 if (paymentMethod === "cod" || paymentMethod === "qr") {
                     await callInvoiceApi(activeStep);
                 }
                 else {
                     // inititate Paytm Transaction
-                    await callInitiatePaytmTransactionApi(activeStep);
+                    await callInitiatePaytmTransactionApi();
                 }
+        }
+        else {
+            if(!props.selectedAddressIndex) {
+                setShippingDetailsAccordionError(true);
+                document.getElementById("shippingDetailsAccordion").scrollIntoView();
+            }
+            else if(discountCodeError) {
+                document.getElementById("discountWrapper").scrollIntoView();
+            }
+            else if(!agreeTnc) {
+                setAgreeTncError(true);
+                document.getElementById("checkBoxWrapper").scrollIntoView();
             }
             else {
-                setActiveStep(activeStep + 1);
+                setPaymentModeAccordionError(true);
+                document.getElementById("paymentModeAccordion").scrollIntoView();
             }
         }
     };
 
-    const checkActiveStepValidation = () => {
-        if (activeStep === 0) {
-            if (props.selectedAddressIndex >= 0) {
-                return true;
-            }
-            return false;
+    const checkCompleteFormValidation = () => {
+        if(props.selectedAddressIndex >= 0 && (!discountCodeError || (discountCodeError && !discountCode)) && paymentMethod && agreeTnc) {
+            return true;
         }
-        if (activeStep === 1) {
-            if (!discountCodeError && paymentMethod) {
-                return true;
-            }
-            return false;
-        }
+        return false;
     }
 
     const getProductTotal = () => {
@@ -173,9 +159,9 @@ const Checkout = (props) => {
     };
 
     const getOrderTotal = () => {
-        if (activeStep === 0) {
-            return getProductTotal() - getTotalDiscountAmountForInvoice();
-        }
+        // if (activeStep === 0) {
+        //     return getProductTotal() - getTotalDiscountAmountForInvoice();
+        // }
         if (paymentMethod === "cod") {
             return getProductTotal() + getShippingAmount() + getCodCharges() - getTotalDiscountAmountForInvoice();
         }
@@ -266,11 +252,11 @@ const Checkout = (props) => {
                 if (response && response.data && response.data.length > 0) {
                     props.setUserAddresses(response.data);
     
-                    const discountVouchers = await axios.get(apiConfig.getDiscountCodes);
+                    // const discountVouchers = await axios.get(apiConfig.getDiscountCodes);
     
-                    if (discountVouchers && discountVouchers.data && discountVouchers.data.length > 0) {
-                        props.setDiscountCodes(discountVouchers.data);
-                    }
+                    // if (discountVouchers && discountVouchers.data && discountVouchers.data.length > 0) {
+                    //     props.setDiscountCodes(discountVouchers.data);
+                    // }
                 }
             }
             setLoading(false);
@@ -301,7 +287,7 @@ const Checkout = (props) => {
             };
             const { data } = await axios.post(apiConfig.initiatePaytmTransaction, requestPayload);
             if (data && data?.txnToken) {
-                paytmScriptLoaded(orderId, data.txnToken, orderAmount, activeStep);
+                paytmScriptLoaded(orderId, data.txnToken, orderAmount);
             }
         }
         catch (err) {
@@ -310,7 +296,7 @@ const Checkout = (props) => {
         }
     };
 
-    const paytmScriptLoaded = (orderId, token, amount, activeStep) => {
+    const paytmScriptLoaded = (orderId, token, amount) => {
         const config = {
             "root": "",
             "flow": "DEFAULT",
@@ -333,7 +319,7 @@ const Checkout = (props) => {
                     if (data.STATUS === "TXN_SUCCESS") {
                         window?.Paytm?.CheckoutJS?.close();
                         setLoading(true);
-                        callInvoiceApi(activeStep);
+                        callInvoiceApi();
                     }
                 },
                 "notifyMerchant": function (eventName, data) {
@@ -390,8 +376,9 @@ const Checkout = (props) => {
                 const response = await axios.post(apiConfig.addAddress, requestPayload);
                 if (response && response.data && response.data.id) {
                     props.addNewAddress(response.data);
-                    selectExistingAddress(props.userAddresses.length);
+                    selectExistingAddress(0);
                     setAddNewButtonTriggered(false);
+                    window.scrollTo(0,0);
                 }
                 setAddressDisclaimer(false);
             }
@@ -463,7 +450,7 @@ const Checkout = (props) => {
         }
     };
 
-    const callInvoiceApi = async (activeStep) => {
+    const callInvoiceApi = async () => {
         // call add - order api
         try {
             authMiddleWare(history);
@@ -502,14 +489,45 @@ const Checkout = (props) => {
                     setOrderSuccess(true);
                     logEvent(analytics, 'purchase', getPurchaseAnalyticsObject(props.cart));
                     props.updateCart([]);
+                    try {
+                        await axios.post(apiConfig.sendEmail, { name : props.userAddresses[props.selectedAddressIndex].name, paymentMode: paymentMethod === "online" ? "ONLINE" : "OFFLINE" });
+                    }
+                    catch(err) {
+                        // ignore the error even if the send mail api fails
+                    }
                     setLoading(false);
-                    setActiveStep(activeStep + 1);
+                    // setActiveStep(activeStep + 1);
+                    setConfirmationDialog(true);
                 }
             }
         }
         catch (err) {
             handleApiError(history, err);
         }
+    };
+
+    const deleteAddress = async (addressId) => {
+        try {
+            authMiddleWare(history);
+            const authToken = localStorage.getItem('AuthToken');
+            axios.defaults.headers.common = { Authorization: `${authToken}` };
+            await axios.delete(`${apiConfig.addAddress}/${addressId}`);
+        }
+        catch(err) {
+
+        }
+    };
+
+    const onChangeCheckbox = (event) => {
+        if(event.target.value) {
+            setAgreeTncError(false);
+        }
+        setAgreeTnc(!agreeTnc);
+    }
+
+    const getLabelData = () => {
+        const data = `* Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our <a target="_blank" href="/privacy-policy" class='pp-link'>privacy policy.</a>`;
+        return <div dangerouslySetInnerHTML={{ __html: data }}/>;
     };
 
     useEffect(() => {
@@ -520,10 +538,24 @@ const Checkout = (props) => {
         });
     }, []);
 
+    useEffect(() => {
+        if(props.selectedAddressIndex >=0) {
+            setShippingDetailsAccordionError(false);
+        }
+    }, [props.selectedAddressIndex]);
+
+    useEffect(() => {
+        if(paymentMethod) {
+            setPaymentModeAccordionError(false);
+        }
+    }, [paymentMethod]);
+
     if (props.cart.length === 0 && !orderSuccess) {
         history.push(ROUTES.HOME);
         return <></>;
     }
+
+    console.log('Addresses', props.userAddresses, props.selectedAddressIndex)
 
     return (
         <>
@@ -537,18 +569,76 @@ const Checkout = (props) => {
                         :
                         <>
                             <div className={classes.multiStep}>
-                                <Stepper activeStep={activeStep}>
-                                    {steps.map((label, index) => {
-                                        return (
-                                            <Step key={label}>
-                                                <StepLabel>{label}</StepLabel>
-                                            </Step>
-                                        )
-                                    })}
-                                </Stepper>
-                                {getAppropriateComponent()}
+                                <div className={classes.accordionWrapper} id="shippingDetailsAccordion">
+                                    <Accordion expanded={shippingDetailsAccordion}>
+                                        <AccordionSummary
+                                            expandIcon={<ExpandMoreIcon />}
+                                            onClick={() => setShippingDetailsAccordion(!shippingDetailsAccordion)}
+                                        >
+                                            <div>
+                                                <Typography variant='h5'>SHIPPING DETAILS</Typography>
+                                            </div>
+                                        </AccordionSummary>
+                                        <AccordionDetails>
+                                            <div>
+                                                {shippingDetailsAccordionError ? <Typography variant='subtitle2'>* Please select one of the address or add a new address.</Typography> : <></>}
+                                                <CustomerInformationSection
+                                                    customerInformation={customerInformation}
+                                                    setCustomerInformation={setCustomerInformation}
+                                                    userAddresses={props.userAddresses}
+                                                    selectExistingAddress={selectExistingAddress}
+                                                    selectedAddressIndex={props.selectedAddressIndex}
+                                                    addNewCustomerAddress={addNewCustomerAddress}
+                                                    addNewButtonTriggered={addNewButtonTriggered}
+                                                    setAddNewButtonTriggered={setAddNewButtonTriggered}
+                                                    showAddressDisclaimer={showAddressDisclaimer}
+                                                    setUserAddresses={props.setUserAddresses}
+                                                    deleteAddress={deleteAddress}
+                                                />
+                                            </div>
+                                        </AccordionDetails>
+                                    </Accordion>
+                                    {props.userAddresses[props.selectedAddressIndex] ? <div style={{color: CSSConstants.FONT_PRIMARY, margin: '1rem'}}>
+                                        <div>
+                                            <Typography variant='subtitle2'>Selected Address :</Typography>
+                                        </div>
+                                        <div>
+                                            <Typography variant='subtitle2'>{props.userAddresses[props.selectedAddressIndex]?.name}</Typography>
+                                            <Typography variant='subtitle2'>{props.userAddresses[props.selectedAddressIndex]?.address}</Typography>
+                                            <Typography variant='subtitle2'>{`Contact: ${props.userAddresses[props.selectedAddressIndex]?.phone}`}</Typography>
+                                        </div>
+                                    </div> : <></>}
+                                    
+                                </div>
+                                <br />
+                                <br />
+                                <div className={classes.accordionWrapper} id="paymentModeAccordion">
+                                    <Accordion expanded={paymentModeAccordion}>
+                                        <AccordionSummary
+                                            expandIcon={<ExpandMoreIcon />}
+                                            onClick={() => setPaymentModeAccordion(!paymentModeAccordion)}>
+                                                <div>
+                                                    <Typography variant='h5'>PAYMENT DETAILS</Typography>
+                                                    {paymentMethod ? <Typography variant='subtitle2'>{`Selected Payment Mode : ${paymentMethod.toLocaleUpperCase()}`}</Typography> : <></>}
+                                                </div>
+                                        </AccordionSummary>
+                                        <AccordionDetails>
+                                            <div>
+                                                {paymentModeAccordionError ? <Typography variant='subtitle2'>* Please select one of the address or add a new address.</Typography> : <></>}
+                                                <ShippingPaymentSection
+                                                    customerInformation={props.userAddresses[props.selectedAddressIndex]}
+                                                    handleBack={handleBack}
+                                                    getCodCharges={getCodCharges}
+                                                    setPaymentMethod={setPaymentMethod}
+                                                    paymentMethod={paymentMethod}
+                                                />
+                                            </div>
+                                        </AccordionDetails>
+                                    </Accordion>
+                                </div>
+                                {/* {getAppropriateComponent()} */}
 
-                                {activeStep !== steps.length - 1 && <Box className={classes.checkoutCta} sx={{ display: 'flex', flexDirection: 'row', pt: 2, padding: '16px 30px' }}>
+                                {/* {activeStep !== steps.length - 1 && <Box className={classes.checkoutCta} sx={{ display: 'flex', flexDirection: 'row', pt: 2, padding: '16px 30px' }}>
                                     {activeStep !== 0 && <Button
                                         variant="outlined"
                                         //color="inherit"
@@ -564,10 +654,11 @@ const Checkout = (props) => {
                                     <Button onClick={handleNext} variant="outlined">
                                         {activeStep === steps.length - 2 ? 'Place Order' : 'Next'}
                                     </Button>
-                                </Box>}
+                                </Box>} */}
                             </div>
                             <div className={classes.shoppingCart}>
                                 <Typography variant="h5" className={classes.shoppingCartHeading}>YOUR ORDER</Typography>
+                                <hr className={classes.horizontalBar} />
                                 {cartItems.map((item, index) => {
                                     return (
                                         <div key={index}>
@@ -586,16 +677,17 @@ const Checkout = (props) => {
                                                     <Typography variant="body1">{`₹ ${item.productDetails.salePrice}`}</Typography>
                                                 </div>
                                             </div>
-                                            <div className={classes.dividerWrapper}>
+                                            <br />
+                                            {/* <div className={classes.dividerWrapper}>
                                                 <Divider />
-                                            </div>
+                                            </div> */}
                                         </div>
                                     );
                                 })}
 
                                 {activeStep !== 2 &&
                                     <>
-                                        <div className={classes.discountWrapper}>
+                                        <div className={classes.discountWrapper} id="discountWrapper">
                                             <TextField
                                                 id="outlined-street-input"
                                                 label="Discount Code"
@@ -608,7 +700,7 @@ const Checkout = (props) => {
                                                 helperText={discountCodeError}
                                             />
 
-                                            <Button variant="contained" onClick={applyDiscount}>
+                                            <Button variant="contained" className={classes.placeOrderButton} onClick={applyDiscount}>
                                                 Apply
                                             </Button>
                                         </div>
@@ -634,10 +726,10 @@ const Checkout = (props) => {
 
                                 <div className={classes.shoppingCartItem}>
                                     <Typography variant="body1">Shipping</Typography>
-                                    <Typography variant="body1">{activeStep === 0 ? 'Calculated at next step' : `₹ ${getShippingAmount()}`}</Typography>
+                                    <Typography variant="body1">{`₹ ${getShippingAmount()}`}</Typography>
                                 </div>
 
-                                {activeStep !== 0 && paymentMethod === "cod" && <div className={classes.shoppingCartItem}>
+                                {paymentMethod === "cod" && <div className={classes.shoppingCartItem}>
                                     <Typography variant="body1">COD Charges</Typography>
                                     <Typography variant="body1">{`₹ ${getCodCharges()}`}</Typography>
                                 </div>}
@@ -650,7 +742,22 @@ const Checkout = (props) => {
                                     <Typography variant="h6">Total</Typography>
                                     <Typography variant="h6">{`₹ ${getOrderTotal()}`}</Typography>
                                 </div>
+
+                                <br />
+
+                                <div className={classes.checkBoxWrapper} id="checkBoxWrapper">
+                                    <FormGroup>
+                                        <FormControlLabel control={<Checkbox value={agreeTnc} onChange={(event) => onChangeCheckbox(event)} />} label={getLabelData()} />
+                                        {agreeTncError && <FormHelperText>Please click this!</FormHelperText>}
+                                    </FormGroup>
+                                </div>
+
+                                <div className={classes.placeOrderButtonWrapper}>
+                                    <Button variant='contained' className={classes.placeOrderButton} onClick={handleOrderPlacement}>Place Order</Button>
+                                </div>
+
                             </div>
+                            <OrderConfirmationSection paymentMethod={paymentMethod} confirmationDialog={confirmationDialog} />
                         </>
                 }
             </div>

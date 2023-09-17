@@ -11,7 +11,7 @@ const styles = (theme) => ({
     infoIconWrapper: {
         padding: '20px',
         '& .MuiSvgIcon-root': {
-            fill: CSSConstants.FONT_PRIMARY,
+            fill: CSSConstants.FONT_BLACK,
             fontSize: '50px'
         }
     },
@@ -19,12 +19,21 @@ const styles = (theme) => ({
         padding: '20px',
     },
     primaryFont: {
-        color: CSSConstants.FONT_PRIMARY,
+        color: CSSConstants.FONT_BLACK,
         margin: '20px 0'
     },
     secondaryFont: {
         color: CSSConstants.FONT_SECONDARY
-    }
+    },
+    placeOrderButton: {
+        padding: '10px 20px',
+        minHeight: '50px',
+        backgroundColor: CSSConstants.FONT_SECONDARY,
+        color: CSSConstants.FONT_PRIMARY,
+        '& span' : {
+            fontWeight: 700
+        }
+    },
 });
 
 export default styles;

@@ -124,6 +124,7 @@ exports.getProductsData = (request, response) => {
         db.collection('products')
         .where('productCategory', '==', productCategory)
         .where('genreCategory', '==', genreCategory)
+        .where('isAvailable', '==', true)
         .get()
         .then((data) => {
             docsLength = data.docs.length;
@@ -140,6 +141,7 @@ exports.getProductsData = (request, response) => {
     else if(productCategory) {
         db.collection('products')
         .where('productCategory', '==', productCategory)
+        .where('isAvailable', '==', true)
         .get()
         .then((data) => {
             docsLength = data.docs.length;
@@ -156,6 +158,7 @@ exports.getProductsData = (request, response) => {
     else if(genreCategory) {
         db.collection('products')
         .where('genreCategory', '==', genreCategory)
+        .where('isAvailable', '==', true)
         .get()
         .then((data) => {
             docsLength = data.docs.length;
@@ -171,6 +174,7 @@ exports.getProductsData = (request, response) => {
     }
     else {
         db.collection('products')
+        .where('isAvailable', '==', true)
         .get()
         .then((data) => {
             docsLength = data.docs.length;
@@ -196,6 +200,7 @@ exports.getAllProducts = (request, response) => {
                 db.collection('products')
                 .where('productCategory', '==', productCategory)
                 .where('genreCategory', '==', genreCategory)
+                .where('isAvailable', '==', true)
                 .limit(100)
                 .get()
                 .then((data) => {
@@ -227,6 +232,7 @@ exports.getAllProducts = (request, response) => {
             else if(productCategory) {
                 db.collection('products')
                 .where('productCategory', '==', productCategory)
+                .where('isAvailable', '==', true)
                 .limit(100)
                 .get()
                 .then((data) => {
@@ -257,6 +263,7 @@ exports.getAllProducts = (request, response) => {
             else if(genreCategory) {
                 db.collection('products')
                 .where('genreCategory', '==', genreCategory)
+                .where('isAvailable', '==', true)
                 .limit(100)
                 .get()
                 .then((data) => {
@@ -286,6 +293,7 @@ exports.getAllProducts = (request, response) => {
             }
             else {
                 db.collection('products')
+                .where('isAvailable', '==', true)
                 .limit(100)
                 .get()
                 .then((data) => {
@@ -319,6 +327,7 @@ exports.getAllProducts = (request, response) => {
                 db.collection('products')
                 .where('productCategory', '==', productCategory)
                 .where('genreCategory', '==', genreCategory)
+                .where('isAvailable', '==', true)
                 .limit(100*(paginationId - 1))
                 .get()
                 .then((data) => {
@@ -328,6 +337,7 @@ exports.getAllProducts = (request, response) => {
                     db.collection('products')
                     .where('productCategory', '==', productCategory)
                     .where('genreCategory', '==', genreCategory)
+                    .where('isAvailable', '==', true)
                     .startAfter(lastVisible)
                     .limit(100)
                     .get()
@@ -364,6 +374,7 @@ exports.getAllProducts = (request, response) => {
             else if(productCategory) {
                 db.collection('products')
                 .where('productCategory', '==', productCategory)
+                .where('isAvailable', '==', true)
                 .limit(100*(paginationId - 1))
                 .get()
                 .then((data) => {
@@ -372,6 +383,7 @@ exports.getAllProducts = (request, response) => {
 
                     db.collection('products')
                     .where('productCategory', '==', productCategory)
+                    .where('isAvailable', '==', true)
                     .startAfter(lastVisible)
                     .limit(100)
                     .get()
@@ -408,6 +420,7 @@ exports.getAllProducts = (request, response) => {
             else if(genreCategory) {
                 db.collection('products')
                 .where('genreCategory', '==', genreCategory)
+                .where('isAvailable', '==', true)
                 .limit(100*(paginationId - 1))
                 .get()
                 .then((data) => {
@@ -416,6 +429,7 @@ exports.getAllProducts = (request, response) => {
 
                     db.collection('products')
                     .where('genreCategory', '==', genreCategory)
+                    .where('isAvailable', '==', true)
                     .startAfter(lastVisible)
                     .limit(100)
                     .get()
@@ -451,6 +465,7 @@ exports.getAllProducts = (request, response) => {
             }
             else {
                 db.collection('products')
+                .where('isAvailable', '==', true)
                 .limit(100*(paginationId - 1))
                 .get()
                 .then((data) => {
@@ -458,6 +473,7 @@ exports.getAllProducts = (request, response) => {
                     const lastVisible = data.docs[docsLength - 1];
 
                     db.collection('products')
+                    .where('isAvailable', '==', true)
                     .startAfter(lastVisible)
                     .limit(100)
                     .get()
@@ -578,3 +594,66 @@ exports.getStockAvailability = (request, response) => {
         return response.status(500).json({ error: err.code});
     });    
 }
+
+exports.getBestSellingProducts = (request, response) => {
+    db.collection('products')
+                .where("isBestSeller", "==", true)
+                .where('isAvailable', '==', true)
+                .get()
+                .then((data) => {
+                    let products = [];
+                    data.forEach((doc) => {
+                        products.push({
+                            productId: doc.id,
+                            name: doc.data().name,
+                            actualPrice: doc.data().actualPrice,
+                            salePrice: doc.data().salePrice,
+                            productCategory: doc.data().productCategory,
+                            genreCategory: doc.data().genreCategory,
+                            colorsAvailable: doc.data().colorsAvailable,
+                            sizeAvailable: doc.data().sizeAvailable,
+                            images: doc.data().images,
+                            weightInGms: doc.data().weightInGms,
+                            isAvailable: doc.data().isAvailable,
+                            productCode: doc.data().productCode
+                        });
+                    });
+                    return response.json(products);
+                })
+                .catch((err) => {
+                    console.error(err);
+                    return response.status(500).json({ error: err.code});
+                });
+};
+
+exports.getWeeklyDrop = (request, response) => {
+    db
+    .collection('products')
+    .orderBy("createdAt", "desc")
+    .limit(1)
+	.get()
+	.then((data) => {
+        let products = [];
+        data.forEach((doc) => {
+            products.push({
+                productId: doc.id,
+                name: doc.data().name,
+                actualPrice: doc.data().actualPrice,
+                salePrice: doc.data().salePrice,
+                productCategory: doc.data().productCategory,
+                genreCategory: doc.data().genreCategory,
+                colorsAvailable: doc.data().colorsAvailable,
+                sizeAvailable: doc.data().sizeAvailable,
+                images: doc.data().images,
+                weightInGms: doc.data().weightInGms,
+                isAvailable: doc.data().isAvailable,
+                productCode: doc.data().productCode
+            });
+        });
+        return response.json(products);
+	})
+	.catch((err) => {
+		console.error(err);
+		return response.status(500).json({ error: err.code});
+	});
+};

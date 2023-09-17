@@ -76,3 +76,17 @@ export const setStockAvailability = (data) => {
         payload: data
     }
 };
+
+export const setBestSellers = (data) => {
+    return {
+        type: productActionTypes.SET_BEST_SELLERS,
+        payload: data
+    }
+}
+
+export const setWeeklyDrop = (data) => {
+    return {
+        type: productActionTypes.SET_WEEKLY_DROP,
+        payload: data
+    }
+}

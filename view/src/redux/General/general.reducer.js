@@ -22,6 +22,8 @@ const reducer = (state = INITIAL_STATE, action) => {
             return state.set("customerGallery", action.payload);
         case generalActionTypes.SET_DISCOUNT_CODES:
             return state.set("discountCodes", action.payload);
+        case generalActionTypes.SET_FREE_PRODUCT_INFO:
+            return state.set("freeProductInfo", action.payload);
         default: 
             return state;
     }

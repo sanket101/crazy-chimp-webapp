@@ -9,11 +9,15 @@ const styles = (theme) => ({
         padding: '120px 80px',
         '@media (max-width: 540px)': {
             padding: '80px 20px',
-            flexWrap: 'wrap'
+            flexWrap: 'wrap',
+            flexDirection: 'column'
+        },
+        '& .MuiDialog-paperWidthSm': {
+            backgroundColor: CSSConstants.BACKGROUND_SECONDARY
         }
     },
     multiStep: {
-        padding: '30px 0',
+        // padding: '30px 0',
         flex: '4 1',
         '& .MuiPaper-root': {
             backgroundColor: CSSConstants.BACKGROUND_SECONDARY
@@ -56,22 +60,23 @@ const styles = (theme) => ({
         }
     },
     shoppingCart: {
-        padding: '30px',
+        padding: '0px 30px',
         flex: '2 1',
         borderLeft: `1px solid ${CSSConstants.FONT_SECONDARY}`,
         color: CSSConstants.FONT_PRIMARY,
         '@media (max-width: 540px)': {
-            borderLeft: 'none'
+            borderLeft: 'none',
+            padding: '30px 0px',
         }
     },
     shoppingCartHeading: {
-        padding: '15px 0', 
+        padding: '15px 16px', 
     },
     shoppingCartItem: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        color: CSSConstants.FONT_SECONDARY
+        color: CSSConstants.FONT_PRIMARY
     },
     shoppingCartItemLeft: {
         display: 'flex',
@@ -86,10 +91,10 @@ const styles = (theme) => ({
         flexWrap: 'wrap',
         justifyContent: 'space-between',
         '& .MuiFormLabel-root': {
-            color: CSSConstants.FONT_SECONDARY
+            color: CSSConstants.FONT_PRIMARY
         },
         '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: CSSConstants.FONT_SECONDARY
+            borderColor: CSSConstants.FONT_PRIMARY
         },
         '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
             borderColor: CSSConstants.FONT_PRIMARY
@@ -103,17 +108,58 @@ const styles = (theme) => ({
     },
     textFieldCss: {
         marginRight: '20px',
-        width: '60%',
-        '@media (max-width: 540px)': {
-            width: '100%',
-            margin: '20px 0px'
-        }
+        width: '60%'
     },
     checkoutCta: {
         '& .MuiButton-outlined': {
             border: `1px solid ${CSSConstants.FONT_SECONDARY}`
         }
-    }
+    },
+    accordionWrapper: {
+        '& .MuiAccordion-root': {
+            backgroundColor: CSSConstants.BACKGROUND_SECONDARY
+        },
+        '& .MuiAccordionSummary-root': {
+            color: CSSConstants.FONT_PRIMARY,
+            borderBottom: `1px solid ${CSSConstants.FONT_SECONDARY}`
+        },
+        '& .MuiIconButton-label': {
+            color: CSSConstants.FONT_PRIMARY
+        },
+        '& .MuiAccordionDetails-root': {
+            color: CSSConstants.FONT_PRIMARY
+        }
+    },
+    placeOrderButton: {
+        padding: '10px 20px',
+        minHeight: '50px',
+        backgroundColor: CSSConstants.FONT_SECONDARY,
+        color: CSSConstants.FONT_PRIMARY,
+        '& span' : {
+            fontWeight: 700
+        }
+    },
+    placeOrderButtonWrapper: {
+        marginTop: "20px",
+        textAlign: "end",
+        '& button': {
+            width: "100%"
+        }
+    },
+    checkBoxWrapper: {
+        '& .MuiSvgIcon-root': {
+            fill: CSSConstants.FONT_SECONDARY
+        },
+        '& .MuiFormHelperText-root': {
+            color: CSSConstants.ERROR
+        },
+        '& .pp-link': {
+            color: CSSConstants.FONT_SECONDARY
+        }
+    },
+    horizontalBar : {
+        border: `1px solid ${CSSConstants.FONT_SECONDARY}`
+    },
 });
 
 export default styles;

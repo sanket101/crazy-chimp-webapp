@@ -7,7 +7,7 @@ const styles = (theme) => ({
         padding: '80px 120px',
         '@media (max-width: 540px)': {
             height: 'auto',
-            padding: '80px 30px',
+            padding: '80px 10px',
         }
     },
     primaryFont: {
@@ -28,6 +28,18 @@ const styles = (theme) => ({
 		flexGrow: 0,
 		marginTop: 20
 	},
+    fontPrimary: {
+        color: `${CSSConstants.FONT_PRIMARY} !important`,
+        '& .Mui-selected': {
+            color: `${CSSConstants.FONT_SECONDARY} !important`,
+            borderBottom: `2px solid ${CSSConstants.FONT_SECONDARY}`
+        }
+    },
+    tabpanel: {
+        '& .MuiBox-root': {
+            padding: '1.5rem 1rem'
+        }
+    }
 });
 
 export default styles;

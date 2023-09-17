@@ -27,7 +27,13 @@ const apiConfig = {
     initiatePaytmTransaction: `${baseURL}/initiate-transaction`,
     resetPasswordApi: `${baseURL}/reset-password`,
     getUserDetails: `${baseURL}/user`,
-    updateUserDetails: `${baseURL}/user`
+    updateUserDetails: `${baseURL}/user`,
+    addContactList: `${baseURL}/contact-list`,
+    getBestSellers: `${baseURL}/get-best-sellers`,
+    getWeeklyDrop: `${baseURL}/get-weekly-drop`,
+    updateInvoiceWithReview: `${baseURL}/update-invoice-with-review`,
+    getFreeProductDiscountInfo : `${baseURL}/free-product-discount`,
+    sendEmail: `${baseURL}/send-email`
 };
 
 export default apiConfig;

@@ -11,16 +11,20 @@ const ProductCard = (props) => {
             <CardActionArea>
                 <CardMedia
                     component="img"
-                    height="300"
+                    // height="160"
                     image={product.images[0]}
                     alt={product.name}
                     loading='lazy'
                 />
                 <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5" component="div">
+                    <Typography gutterBottom variant="h6" component="div" style={{textAlign: "center"}}>
                         {product.name}
                     </Typography>
+                    <hr /> 
                     <div className={classes.priceContent}>
+                        {/* <Typography variant="body1">
+                            {product.productCategory}
+                        </Typography> */}
                         <Typography variant="body1">
                             ₹{' '}<del>{`${product.actualPrice}`}</del>{` ${product.salePrice}`}
                         </Typography>

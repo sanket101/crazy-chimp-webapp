@@ -12,7 +12,11 @@ const RouteName = {
     ACCOUNT: '/account',
     GALLERY: '/gallery',
     RETURN_POLICY: '/return-policy',
-    RESET_PASSWORD: '/reset-password'
+    RESET_PASSWORD: '/reset-password',
+    ABOUTUS: '/about-us',
+    CONTACT: '/contact',
+    FAQ: '/faq',
+    DISCOUNT: '/discount'
 };
 
 export default RouteName;

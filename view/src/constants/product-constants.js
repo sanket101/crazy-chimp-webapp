@@ -6,4 +6,12 @@ const PRODUCT_TYPE = {
     OST: "OST"
 };
 
+export const PRODUCT_NAME = {
+    HST: "Regular Tees",
+    FST: "Full Sleeve Tees",
+    HOODIES: "Hoodies",
+    SWTS: "Sweatshirts",
+    OST: "Oversize Tees"
+}
+
 export default PRODUCT_TYPE;

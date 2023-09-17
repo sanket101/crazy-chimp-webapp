@@ -17,11 +17,15 @@ import { ThemeProvider, createTheme } from '@material-ui/core/styles';
 import AdminPanel from './pages/admin-panel/admin-panel';
 import Gallery from './pages/gallery/gallery';
 import ResetPassword from './pages/reset-password/reset-password';
+import AboutUsPage from './pages/about-us/about-us';
+import FaqPage from './pages/faq/faq';
+import ContactUsPage from './pages/contact/contact';
+import DiscountPage from './pages/static-pages/discount';
 
 const theme = createTheme({
   typography: {
     fontFamily: [
-      'Signika',
+      'Comfortaa',
       'sans-serif'
     ].join(','),
 },});
@@ -55,6 +59,10 @@ const App = () => {
                 <Route exact path="/gallery" component={Gallery} />
                 <Route exact path="/return-policy" component={RefundReturnCancellationPolicyPage} />
                 <Route exact path="/reset-password" component={ResetPassword} />
+                <Route exact path="/about-us" component={AboutUsPage} />
+                <Route exact path="/faq" component={FaqPage} />
+                <Route exact path="/contact" component={ContactUsPage} />
+                <Route exact path="/discount" component={DiscountPage} />
                 <Route exact path="/" component={Home} />
             </Switch>
           </div>

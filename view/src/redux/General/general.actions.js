@@ -34,3 +34,10 @@ export const setDiscountCodes = (data) => {
         payload: data
     };
 };
+
+export const setFreeProductInfo = (data) => {
+    return {
+        type: generalActionTypes.SET_FREE_PRODUCT_INFO,
+        payload: data
+    };
+};

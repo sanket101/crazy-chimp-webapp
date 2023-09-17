@@ -11,7 +11,8 @@ const INITIAL_STATE = Immutable.fromJS({
     genreCategories: [],
     productDetails: {},
     cart: [],
-    stockAvailability: {}
+    stockAvailability: {},
+    bestSellerProducts: [],
 });
 
 const reducer = (state = INITIAL_STATE, action) => {
@@ -42,6 +43,10 @@ const reducer = (state = INITIAL_STATE, action) => {
             return state.set("cart", action.payload);
         case productActionTypes.SET_STOCK_AVAILABILITY:
             return state.set("stockAvailability", action.payload);
+        case productActionTypes.SET_BEST_SELLERS:
+            return state.set("bestSellerProducts", action.payload);
+        case productActionTypes.SET_WEEKLY_DROP:
+            return state.set("weeklyDropProduct", action.payload);
         default: 
             return state;
     }

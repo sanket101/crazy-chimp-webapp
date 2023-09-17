@@ -24,7 +24,9 @@ exports.addInvoice = (request, response) => {
         discountCode: request.body.discountCode ? request.body.discountCode : '',
         createdAt: currentDate.toISOString().split('T')[0],
         status: 'RECEIVED',
-        trackingLink: ''
+        trackingLink: '',
+        query: {},
+        review: {}
     };
 
     db.collection('invoices')
@@ -136,7 +138,9 @@ const populateInvoiceList = async(result) => {
             status: docSnap.data().status,
             shippingAddress : docSnap.data().shippingAddress,
             trackingLink: docSnap.data().trackingLink,
-            userEmail: docSnap.data().userEmail
+            userEmail: docSnap.data().userEmail,
+            review: docSnap.data().review ? docSnap.data().review : null,
+            query: docSnap.data().query ? docSnap.data().query : null
         });
     };
 

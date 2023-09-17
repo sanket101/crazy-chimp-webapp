@@ -2,16 +2,20 @@ import CSSConstants from '../../constants/css-constants';
 
 const styles = (theme) => ({
     customerInformationSectionWrapper: {
-        padding: '30px',
+        // padding: '30px',
         color: '#f7f7f7 !important',
         '& .MuiInputBase-input': {
-            color: CSSConstants.FONT_SECONDARY
+            color: CSSConstants.FONT_BLACK,
+            backgroundColor: "white"
         },
         '& .MuiPaper-root': {
             backgroundColor: `${CSSConstants.BACKGROUND_PRIMARY} !important`
         },
         '& .MuiCardContent-root': {
-            color: CSSConstants.FONT_SECONDARY
+            color: CSSConstants.FONT_PRIMARY,
+            width: '400px',
+            '@media (max-width: 540px)': {
+                width: 'auto'            }
         },
         '& .MuiButton-outlined': {
             border: `1px solid ${CSSConstants.FONT_SECONDARY}`
@@ -20,14 +24,14 @@ const styles = (theme) => ({
     addressWrapper: {
         display: 'flex',
         flexWrap: 'wrap',
-        margin: '20px'
+        margin: '20px 0px'
     },
     textFieldCss: {
         margin: '20px',
         width: '40%',
         '@media (max-width: 540px)': {
             width: '100%',
-            margin: '20px 0px'
+            margin: '5px 0px'
         }
     },
     subHeading:{
@@ -38,21 +42,21 @@ const styles = (theme) => ({
         flexWrap: 'wrap',
     },
     inputLabel: {
-        color: CSSConstants.FONT_PRIMARY
+        color: `${CSSConstants.FONT_PRIMARY} !important`
     },
     dropdownWidget: {
         margin: '20px',
         width: '40%',
         '& .MuiSelect-icon': {
-            color: CSSConstants.FONT_PRIMARY
+            color: CSSConstants.FONT_BLACK
         },
         '@media (max-width: 540px)': {
             width: '100%',
-            margin: '20px 0px'
+            margin: '5px 0px'
         }
     },
     selectLabel: {
-        color: CSSConstants.FONT_SECONDARY,
+        color: CSSConstants.FONT_PRIMARY,
         backgroundColor: CSSConstants.BACKGROUND_PRIMARY,
         width: '100%',
         padding: '5px',
@@ -71,7 +75,14 @@ const styles = (theme) => ({
     },
     addressCardWrapper: {
         width: '100%',
-        margin: '10px 0'
+        margin: '10px 0',
+        backgroundColor: CSSConstants.BACKGROUND_SECONDARY,
+        // border: `1px solid ${CSSConstants.FONT_SECONDARY}`,
+        '& .card-action-section': {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+        }
     }
 });
 
